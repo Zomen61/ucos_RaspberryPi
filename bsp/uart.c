@@ -1,6 +1,8 @@
 #include "regs.h"
 #include "interrupts.h"
 
+extern INTERRUPT_VECTOR g_VectorTable[BCM2835_INTC_TOTAL_IRQ];
+
 extern void PUT32 ( unsigned int, unsigned int );
 extern unsigned int GET32 ( unsigned int );
 extern void dummy ( unsigned int );
@@ -77,7 +79,7 @@ void uart_init ( void )
     PUT32(AUX_MU_CNTL_REG,0);
     PUT32(AUX_MU_LCR_REG,3);
     PUT32(AUX_MU_MCR_REG,0);
-    PUT32(AUX_MU_IER_REG,0);
+    PUT32(AUX_MU_IER_REG,0x5);
     PUT32(AUX_MU_IIR_REG,0xC6);
     PUT32(AUX_MU_BAUD_REG,270);
     ra=GET32(GPFSEL1);
@@ -103,7 +105,14 @@ void uart_init ( void )
     PUT32(GPPUDCLK0,0);
     PUT32(AUX_MU_CNTL_REG,3);
 
-	//RegisterInterrupt(72,uart_irq_handler,(void *)0);
+    DisableInterrupt(29);
+
+    g_VectorTable[29].pfnHandler = uart_irq_handler;
+
+    EnableInterrupt(29);
+
+	//RegisterInterrupt(83,uart_irq_handler,(void *)0);
+    //EnableInterrupt(83);
 }
 
 void uart_string (char* s)

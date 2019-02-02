@@ -1,6 +1,7 @@
 
 #include "interrupts.h"
 #include "regs.h"
+#include "uart.h"
 
 INTERRUPT_VECTOR g_VectorTable[BCM2835_INTC_TOTAL_IRQ];
 
@@ -46,7 +47,14 @@ void OS_CPU_IRQ_ISR_Handler() {
 	ulMaskedStatus = intcRegs->IRQBasic;
 	tmp = ulMaskedStatus & 0x00000300;			// Check if anything pending in pr1/pr2.   
 
+	if(ulMaskedStatus & 0x00080000){
+		uart_string("uart_int");
+	}
+
+	hexstring(ulMaskedStatus);
+
 	if(ulMaskedStatus & ~0xFFFFF300) {			// Note how we mask out the GPU interrupt Aliases.
+		//uart_string("other");
 		irqNumber = 64 + 31;						// Shifting the basic ARM IRQs to be IRQ# 64 +
 		goto emit_interrupt;
 	}
@@ -54,6 +62,7 @@ void OS_CPU_IRQ_ISR_Handler() {
 	if(tmp & 0x100) {
 		ulMaskedStatus = intcRegs->Pending1;
 		irqNumber = 0 + 31;
+		uart_string("Pending1");
 		// Clear the interrupts also available in basic IRQ pending reg.
 		//ulMaskedStatus &= ~((1 << 7) | (1 << 9) | (1 << 10) | (1 << 18) | (1 << 19));
 		if(ulMaskedStatus) {
@@ -64,6 +73,7 @@ void OS_CPU_IRQ_ISR_Handler() {
 	if(tmp & 0x200) {
 		ulMaskedStatus + intcRegs->Pending2;
 		irqNumber = 32 + 31;
+		uart_string("Pending1");
 		// Don't clear the interrupts in the basic pending, simply allow them to processed here!
 		if(ulMaskedStatus) {
 			goto emit_interrupt;
@@ -84,6 +94,7 @@ emit_interrupt:
 	//__asm volatile("clz	r7,r5");				// r5 is the ulMaskedStatus register. Leaving result in r6!
 	//__asm volatile("sub r6,r7");
 
+	//uart_string(irqNumber-lz);
 
 	if(g_VectorTable[irqNumber-lz].pfnHandler) {
 		g_VectorTable[irqNumber-lz].pfnHandler(irqNumber, g_VectorTable[irqNumber].pParam);
@@ -97,6 +108,9 @@ static void stubHandler(int nIRQ, void *pParam) {
 	 *	otherwise we could lock up this system, as there is nothing to 
 	 *	ackknowledge the interrupt.
 	 **/   
+	uart_send(nIRQ);
+	uart_send(0x0D);
+    uart_send(0x0A);
 }
 
 int InitInterruptController() {
@@ -123,15 +137,13 @@ int RegisterInterrupt(int nIRQ, FN_INTERRUPT_HANDLER pfnHandler, void *pParam) {
 
 int EnableInterrupt(int nIRQ) {
 
-	unsigned long	ulTMP;
-
-	ulTMP = intcRegs->EnableBasic;
-
-	if(nIRQ >= 64 && nIRQ <= 72) {	// Basic IRQ enables
+	if(nIRQ >=0 && nIRQ<=31){
+		intcRegs->Enable1 |= 1 << nIRQ;
+	}else if(nIRQ >=32 && nIRQ<=63){
+		intcRegs->Enable2 |= 1 << (nIRQ - 32);
+	}else if(nIRQ >= 64 && nIRQ <= 72) {	// Basic IRQ enables
 		intcRegs->EnableBasic = 1 << (nIRQ - 64);
 	}
-
-	ulTMP = intcRegs->EnableBasic;
 
 	// Otherwise its a GPU interrupt, and we're not supporting those...yet!
 
@@ -139,8 +151,13 @@ int EnableInterrupt(int nIRQ) {
 }
 
 int DisableInterrupt(int nIRQ) {
-	if(nIRQ >= 64 && nIRQ <= 72) {
-		intcRegs->DisableBasic = 1 << (nIRQ - 64);
+
+	if(nIRQ >=0 && nIRQ<=31){
+		intcRegs->Enable1 &= ~(1 << nIRQ);
+	}else if(nIRQ >=32 && nIRQ<=63){
+		intcRegs->Enable2 &= ~(1 << (nIRQ - 32));
+	}else if(nIRQ >= 64 && nIRQ <= 72) {
+		intcRegs->DisableBasic &= ~(1 << (nIRQ - 64));
 	}
 
 	// I'm currently only supporting the basic IRQs.

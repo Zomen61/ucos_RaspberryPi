@@ -11,15 +11,18 @@ extern void userApp2(void *);
 
 void main()
 {
-	uart_init();
-
+	
 	InitInterruptController();
 
 	DisableInterrupts();
 
+	uart_init();
+
 	timer_init();
 
 	OSInit();
+
+	EnableInterrupts();
 
 	OSTaskCreate(userApp1, (void *) 0, &userAppTaskStk1[1000-1],5);
 

@@ -2,7 +2,7 @@
 #ifndef _INTERRUPTS_H_
 #define _INTERRUPTS_H_
 
-#define BCM2835_INTC_TOTAL_IRQ		64 + 10
+#define BCM2835_INTC_TOTAL_IRQ		64 + 8
 
 #define BCM2835_IRQ_ID_AUX			29
 #define BCM2835_IRQ_ID_SPI_SLAVE 	43
