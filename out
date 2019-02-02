@@ -1,0 +1,4825 @@
+
+ucos_bcm2837.elf:     file format elf32-littlearm
+
+
+Disassembly of section .init:
+
+00008000 <_start>:
+    8000:	e59ff018 	ldr	pc, [pc, #24]	; 8020 <reset_handler>
+    8004:	e59ff018 	ldr	pc, [pc, #24]	; 8024 <undefined_handler>
+    8008:	e59ff018 	ldr	pc, [pc, #24]	; 8028 <swi_handler>
+    800c:	e59ff018 	ldr	pc, [pc, #24]	; 802c <prefetch_handler>
+    8010:	e59ff018 	ldr	pc, [pc, #24]	; 8030 <data_handler>
+    8014:	e59ff018 	ldr	pc, [pc, #24]	; 8034 <unused_handler>
+    8018:	e59ff018 	ldr	pc, [pc, #24]	; 8038 <irq_handler>
+    801c:	e59ff018 	ldr	pc, [pc, #24]	; 803c <fiq_handler>
+
+00008020 <reset_handler>:
+    8020:	00008040 	.word	0x00008040
+
+00008024 <undefined_handler>:
+    8024:	00010000 	.word	0x00010000
+
+00008028 <swi_handler>:
+    8028:	00010004 	.word	0x00010004
+
+0000802c <prefetch_handler>:
+    802c:	00010008 	.word	0x00010008
+
+00008030 <data_handler>:
+    8030:	0001000c 	.word	0x0001000c
+
+00008034 <unused_handler>:
+    8034:	00010010 	.word	0x00010010
+
+00008038 <irq_handler>:
+    8038:	0001061c 	.word	0x0001061c
+
+0000803c <fiq_handler>:
+    803c:	00010014 	.word	0x00010014
+
+00008040 <reset>:
+    8040:	e10f0000 	mrs	r0, CPSR
+    8044:	e3c0001f 	bic	r0, r0, #31
+    8048:	e3800013 	orr	r0, r0, #19
+    804c:	e16ff000 	msr	SPSR_fsxc, r0
+    8050:	e28f0004 	add	r0, pc, #4
+    8054:	e12ef300 	msr	ELR_hyp, r0
+    8058:	e160006e 	eret
+    805c:	e3a00902 	mov	r0, #32768	; 0x8000
+    8060:	e3a01000 	mov	r1, #0
+    8064:	e8b003fc 	ldm	r0!, {r2, r3, r4, r5, r6, r7, r8, r9}
+    8068:	e8a103fc 	stmia	r1!, {r2, r3, r4, r5, r6, r7, r8, r9}
+    806c:	e8b003fc 	ldm	r0!, {r2, r3, r4, r5, r6, r7, r8, r9}
+    8070:	e8a103fc 	stmia	r1!, {r2, r3, r4, r5, r6, r7, r8, r9}
+    8074:	e3a000d2 	mov	r0, #210	; 0xd2
+    8078:	e121f000 	msr	CPSR_c, r0
+    807c:	e3a0d902 	mov	sp, #32768	; 0x8000
+    8080:	e3a000d1 	mov	r0, #209	; 0xd1
+    8084:	e121f000 	msr	CPSR_c, r0
+    8088:	e3a0d901 	mov	sp, #16384	; 0x4000
+    808c:	e3a000d3 	mov	r0, #211	; 0xd3
+    8090:	e121f000 	msr	CPSR_c, r0
+    8094:	e3a0d302 	mov	sp, #134217728	; 0x8000000
+    8098:	e59f0018 	ldr	r0, [pc, #24]	; 80b8 <zero_loop+0x14>
+    809c:	e59f1018 	ldr	r1, [pc, #24]	; 80bc <zero_loop+0x18>
+    80a0:	e3a02000 	mov	r2, #0
+
+000080a4 <zero_loop>:
+    80a4:	e1500001 	cmp	r0, r1
+    80a8:	b4802004 	strlt	r2, [r0], #4
+    80ac:	bafffffc 	blt	80a4 <zero_loop>
+    80b0:	eb0020e2 	bl	10440 <EnableInterrupts>
+    80b4:	ea00318d 	b	146f0 <main>
+    80b8:	00014748 	.word	0x00014748
+    80bc:	00014748 	.word	0x00014748
+
+Disassembly of section .text:
+
+00010000 <undefined_instruction>:
+   10000:	eafffffe 	b	10000 <undefined_instruction>
+
+00010004 <swi>:
+   10004:	eafffffe 	b	10004 <swi>
+
+00010008 <prefetch_abort>:
+   10008:	eafffffe 	b	10008 <prefetch_abort>
+
+0001000c <data_abort>:
+   1000c:	eafffffe 	b	1000c <data_abort>
+
+00010010 <unused>:
+   10010:	eafffffe 	b	10010 <unused>
+
+00010014 <fiq>:
+   10014:	eafffffe 	b	10014 <fiq>
+
+00010018 <hang>:
+   10018:	eafffffe 	b	10018 <hang>
+
+0001001c <PUT32>:
+   1001c:	e5801000 	str	r1, [r0]
+   10020:	e12fff1e 	bx	lr
+
+00010024 <GET32>:
+   10024:	e5900000 	ldr	r0, [r0]
+   10028:	e12fff1e 	bx	lr
+
+0001002c <dummy>:
+   1002c:	e12fff1e 	bx	lr
+
+00010030 <uart_lcr>:
+   10030:	e3050054 	movw	r0, #20564	; 0x5054
+   10034:	e3430f21 	movt	r0, #16161	; 0x3f21
+   10038:	eafffff9 	b	10024 <GET32>
+
+0001003c <uart_recv>:
+   1003c:	e92d4010 	push	{r4, lr}
+   10040:	e3054054 	movw	r4, #20564	; 0x5054
+   10044:	e3434f21 	movt	r4, #16161	; 0x3f21
+   10048:	e1a00004 	mov	r0, r4
+   1004c:	ebfffff4 	bl	10024 <GET32>
+   10050:	e3100001 	tst	r0, #1
+   10054:	0afffffb 	beq	10048 <uart_recv+0xc>
+   10058:	e3050040 	movw	r0, #20544	; 0x5040
+   1005c:	e3430f21 	movt	r0, #16161	; 0x3f21
+   10060:	ebffffef 	bl	10024 <GET32>
+   10064:	e6ef0070 	uxtb	r0, r0
+   10068:	e8bd8010 	pop	{r4, pc}
+
+0001006c <uart_send>:
+   1006c:	e92d4070 	push	{r4, r5, r6, lr}
+   10070:	e3054054 	movw	r4, #20564	; 0x5054
+   10074:	e3434f21 	movt	r4, #16161	; 0x3f21
+   10078:	e1a05000 	mov	r5, r0
+   1007c:	e1a00004 	mov	r0, r4
+   10080:	ebffffe7 	bl	10024 <GET32>
+   10084:	e3100020 	tst	r0, #32
+   10088:	0afffffb 	beq	1007c <uart_send+0x10>
+   1008c:	e1a01005 	mov	r1, r5
+   10090:	e3050040 	movw	r0, #20544	; 0x5040
+   10094:	e3430f21 	movt	r0, #16161	; 0x3f21
+   10098:	e8bd4070 	pop	{r4, r5, r6, lr}
+   1009c:	eaffffde 	b	1001c <PUT32>
+
+000100a0 <uart_flush>:
+   100a0:	e92d4010 	push	{r4, lr}
+   100a4:	e3054054 	movw	r4, #20564	; 0x5054
+   100a8:	e3434f21 	movt	r4, #16161	; 0x3f21
+   100ac:	e1a00004 	mov	r0, r4
+   100b0:	ebffffdb 	bl	10024 <GET32>
+   100b4:	e3100c01 	tst	r0, #256	; 0x100
+   100b8:	1afffffb 	bne	100ac <uart_flush+0xc>
+   100bc:	e8bd8010 	pop	{r4, pc}
+
+000100c0 <hexstrings>:
+   100c0:	e92d4070 	push	{r4, r5, r6, lr}
+   100c4:	e1a05000 	mov	r5, r0
+   100c8:	e3a04020 	mov	r4, #32
+   100cc:	e2444004 	sub	r4, r4, #4
+   100d0:	e1a03435 	lsr	r3, r5, r4
+   100d4:	e203300f 	and	r3, r3, #15
+   100d8:	e3530009 	cmp	r3, #9
+   100dc:	e2830030 	add	r0, r3, #48	; 0x30
+   100e0:	82830037 	addhi	r0, r3, #55	; 0x37
+   100e4:	ebffffe0 	bl	1006c <uart_send>
+   100e8:	e3540000 	cmp	r4, #0
+   100ec:	1afffff6 	bne	100cc <hexstrings+0xc>
+   100f0:	e3a00020 	mov	r0, #32
+   100f4:	e8bd4070 	pop	{r4, r5, r6, lr}
+   100f8:	eaffffdb 	b	1006c <uart_send>
+
+000100fc <hexstring>:
+   100fc:	e92d4010 	push	{r4, lr}
+   10100:	ebffffee 	bl	100c0 <hexstrings>
+   10104:	e3a0000d 	mov	r0, #13
+   10108:	ebffffd7 	bl	1006c <uart_send>
+   1010c:	e3a0000a 	mov	r0, #10
+   10110:	e8bd4010 	pop	{r4, lr}
+   10114:	eaffffd4 	b	1006c <uart_send>
+
+00010118 <uart_init>:
+   10118:	e92d4010 	push	{r4, lr}
+   1011c:	e3a01001 	mov	r1, #1
+   10120:	e3a04000 	mov	r4, #0
+   10124:	e3050004 	movw	r0, #20484	; 0x5004
+   10128:	e3430f21 	movt	r0, #16161	; 0x3f21
+   1012c:	ebffffba 	bl	1001c <PUT32>
+   10130:	e1a01004 	mov	r1, r4
+   10134:	e3050044 	movw	r0, #20548	; 0x5044
+   10138:	e3430f21 	movt	r0, #16161	; 0x3f21
+   1013c:	ebffffb6 	bl	1001c <PUT32>
+   10140:	e1a01004 	mov	r1, r4
+   10144:	e3050060 	movw	r0, #20576	; 0x5060
+   10148:	e3430f21 	movt	r0, #16161	; 0x3f21
+   1014c:	ebffffb2 	bl	1001c <PUT32>
+   10150:	e3a01003 	mov	r1, #3
+   10154:	e305004c 	movw	r0, #20556	; 0x504c
+   10158:	e3430f21 	movt	r0, #16161	; 0x3f21
+   1015c:	ebffffae 	bl	1001c <PUT32>
+   10160:	e1a01004 	mov	r1, r4
+   10164:	e3050050 	movw	r0, #20560	; 0x5050
+   10168:	e3430f21 	movt	r0, #16161	; 0x3f21
+   1016c:	ebffffaa 	bl	1001c <PUT32>
+   10170:	e1a01004 	mov	r1, r4
+   10174:	e3050044 	movw	r0, #20548	; 0x5044
+   10178:	e3430f21 	movt	r0, #16161	; 0x3f21
+   1017c:	ebffffa6 	bl	1001c <PUT32>
+   10180:	e3a010c6 	mov	r1, #198	; 0xc6
+   10184:	e3050048 	movw	r0, #20552	; 0x5048
+   10188:	e3430f21 	movt	r0, #16161	; 0x3f21
+   1018c:	ebffffa2 	bl	1001c <PUT32>
+   10190:	e300110e 	movw	r1, #270	; 0x10e
+   10194:	e3050068 	movw	r0, #20584	; 0x5068
+   10198:	e3430f21 	movt	r0, #16161	; 0x3f21
+   1019c:	ebffff9e 	bl	1001c <PUT32>
+   101a0:	e3a00004 	mov	r0, #4
+   101a4:	e3430f20 	movt	r0, #16160	; 0x3f20
+   101a8:	ebffff9d 	bl	10024 <GET32>
+   101ac:	e3c01a3f 	bic	r1, r0, #258048	; 0x3f000
+   101b0:	e3811a12 	orr	r1, r1, #73728	; 0x12000
+   101b4:	e3a00004 	mov	r0, #4
+   101b8:	e3430f20 	movt	r0, #16160	; 0x3f20
+   101bc:	ebffff96 	bl	1001c <PUT32>
+   101c0:	e3a00094 	mov	r0, #148	; 0x94
+   101c4:	e3430f20 	movt	r0, #16160	; 0x3f20
+   101c8:	e1a01004 	mov	r1, r4
+   101cc:	ebffff92 	bl	1001c <PUT32>
+   101d0:	e1a00004 	mov	r0, r4
+   101d4:	e2844001 	add	r4, r4, #1
+   101d8:	ebffff93 	bl	1002c <dummy>
+   101dc:	e3540096 	cmp	r4, #150	; 0x96
+   101e0:	1afffffa 	bne	101d0 <uart_init+0xb8>
+   101e4:	e3a00098 	mov	r0, #152	; 0x98
+   101e8:	e3430f20 	movt	r0, #16160	; 0x3f20
+   101ec:	e3a01903 	mov	r1, #49152	; 0xc000
+   101f0:	e3a04000 	mov	r4, #0
+   101f4:	ebffff88 	bl	1001c <PUT32>
+   101f8:	e1a00004 	mov	r0, r4
+   101fc:	e2844001 	add	r4, r4, #1
+   10200:	ebffff89 	bl	1002c <dummy>
+   10204:	e3540096 	cmp	r4, #150	; 0x96
+   10208:	1afffffa 	bne	101f8 <uart_init+0xe0>
+   1020c:	e3a01000 	mov	r1, #0
+   10210:	e3a00098 	mov	r0, #152	; 0x98
+   10214:	e3430f20 	movt	r0, #16160	; 0x3f20
+   10218:	ebffff7f 	bl	1001c <PUT32>
+   1021c:	e3050060 	movw	r0, #20576	; 0x5060
+   10220:	e3430f21 	movt	r0, #16161	; 0x3f21
+   10224:	e3a01003 	mov	r1, #3
+   10228:	e8bd4010 	pop	{r4, lr}
+   1022c:	eaffff7a 	b	1001c <PUT32>
+
+00010230 <uart_string>:
+   10230:	e92d4010 	push	{r4, lr}
+   10234:	e1a04000 	mov	r4, r0
+   10238:	e5d00000 	ldrb	r0, [r0]
+   1023c:	e3500000 	cmp	r0, #0
+   10240:	0a000003 	beq	10254 <uart_string+0x24>
+   10244:	ebffff88 	bl	1006c <uart_send>
+   10248:	e5f40001 	ldrb	r0, [r4, #1]!
+   1024c:	e3500000 	cmp	r0, #0
+   10250:	1afffffb 	bne	10244 <uart_string+0x14>
+   10254:	e3a0000d 	mov	r0, #13
+   10258:	ebffff83 	bl	1006c <uart_send>
+   1025c:	e3a0000a 	mov	r0, #10
+   10260:	e8bd4010 	pop	{r4, lr}
+   10264:	eaffff80 	b	1006c <uart_send>
+
+00010268 <tickISR>:
+   10268:	e92d4010 	push	{r4, lr}
+   1026c:	eb000248 	bl	10b94 <OSTimeTick>
+   10270:	e3a03b2d 	mov	r3, #46080	; 0xb400
+   10274:	e3433f00 	movt	r3, #16128	; 0x3f00
+   10278:	e3a02000 	mov	r2, #0
+   1027c:	e583200c 	str	r2, [r3, #12]
+   10280:	e8bd8010 	pop	{r4, pc}
+
+00010284 <timer_init>:
+   10284:	e92d4070 	push	{r4, r5, r6, lr}
+   10288:	e3a00040 	mov	r0, #64	; 0x40
+   1028c:	eb000062 	bl	1041c <DisableInterrupt>
+   10290:	e3042748 	movw	r2, #18248	; 0x4748
+   10294:	e3402001 	movt	r2, #1
+   10298:	e3a03b2d 	mov	r3, #46080	; 0xb400
+   1029c:	e3433f00 	movt	r3, #16128	; 0x3f00
+   102a0:	e302e70f 	movw	lr, #9999	; 0x270f
+   102a4:	e3a0683e 	mov	r6, #4063232	; 0x3e0000
+   102a8:	e3a050f9 	mov	r5, #249	; 0xf9
+   102ac:	e3a04000 	mov	r4, #0
+   102b0:	e3001268 	movw	r1, #616	; 0x268
+   102b4:	e3401001 	movt	r1, #1
+   102b8:	e3a0c0a2 	mov	ip, #162	; 0xa2
+   102bc:	e340c03e 	movt	ip, #62	; 0x3e
+   102c0:	e5821200 	str	r1, [r2, #512]	; 0x200
+   102c4:	e3a00040 	mov	r0, #64	; 0x40
+   102c8:	e5836008 	str	r6, [r3, #8]
+   102cc:	e583e000 	str	lr, [r3]
+   102d0:	e583e018 	str	lr, [r3, #24]
+   102d4:	e583501c 	str	r5, [r3, #28]
+   102d8:	e583400c 	str	r4, [r3, #12]
+   102dc:	e583c008 	str	ip, [r3, #8]
+   102e0:	e8bd4070 	pop	{r4, r5, r6, lr}
+   102e4:	ea00003f 	b	103e8 <EnableInterrupt>
+
+000102e8 <stubHandler>:
+   102e8:	e12fff1e 	bx	lr
+
+000102ec <OS_CPU_IRQ_ISR_Handler>:
+   102ec:	e3a02cb2 	mov	r2, #45568	; 0xb200
+   102f0:	e3432f00 	movt	r2, #16128	; 0x3f00
+   102f4:	e3001cff 	movw	r1, #3327	; 0xcff
+   102f8:	e5923000 	ldr	r3, [r2]
+   102fc:	e1130001 	tst	r3, r1
+   10300:	1a000008 	bne	10328 <OS_CPU_IRQ_ISR_Handler+0x3c>
+   10304:	e3130c01 	tst	r3, #256	; 0x100
+   10308:	0a000013 	beq	1035c <OS_CPU_IRQ_ISR_Handler+0x70>
+   1030c:	e5921004 	ldr	r1, [r2, #4]
+   10310:	e3510000 	cmp	r1, #0
+   10314:	1a000015 	bne	10370 <OS_CPU_IRQ_ISR_Handler+0x84>
+   10318:	e3130c02 	tst	r3, #512	; 0x200
+   1031c:	0a000016 	beq	1037c <OS_CPU_IRQ_ISR_Handler+0x90>
+   10320:	e5923008 	ldr	r3, [r2, #8]
+   10324:	e12fff1e 	bx	lr
+   10328:	e3a0005f 	mov	r0, #95	; 0x5f
+   1032c:	e2431001 	sub	r1, r3, #1
+   10330:	e3042748 	movw	r2, #18248	; 0x4748
+   10334:	e3402001 	movt	r2, #1
+   10338:	e0233001 	eor	r3, r3, r1
+   1033c:	e16f3f13 	clz	r3, r3
+   10340:	e0403003 	sub	r3, r0, r3
+   10344:	e7923183 	ldr	r3, [r2, r3, lsl #3]
+   10348:	e3530000 	cmp	r3, #0
+   1034c:	012fff1e 	bxeq	lr
+   10350:	e0822180 	add	r2, r2, r0, lsl #3
+   10354:	e5921004 	ldr	r1, [r2, #4]
+   10358:	e12fff13 	bx	r3
+   1035c:	e3130c02 	tst	r3, #512	; 0x200
+   10360:	012fff1e 	bxeq	lr
+   10364:	e5922008 	ldr	r2, [r2, #8]
+   10368:	e3a0003f 	mov	r0, #63	; 0x3f
+   1036c:	eaffffee 	b	1032c <OS_CPU_IRQ_ISR_Handler+0x40>
+   10370:	e1a03001 	mov	r3, r1
+   10374:	e3a0001f 	mov	r0, #31
+   10378:	eaffffeb 	b	1032c <OS_CPU_IRQ_ISR_Handler+0x40>
+   1037c:	e12fff1e 	bx	lr
+
+00010380 <InitInterruptController>:
+   10380:	e3043748 	movw	r3, #18248	; 0x4748
+   10384:	e3403001 	movt	r3, #1
+   10388:	e30022e8 	movw	r2, #744	; 0x2e8
+   1038c:	e3402001 	movt	r2, #1
+   10390:	e2830d09 	add	r0, r3, #576	; 0x240
+   10394:	e3a01000 	mov	r1, #0
+   10398:	e5832000 	str	r2, [r3]
+   1039c:	e2833008 	add	r3, r3, #8
+   103a0:	e5031004 	str	r1, [r3, #-4]
+   103a4:	e1530000 	cmp	r3, r0
+   103a8:	1afffffa 	bne	10398 <InitInterruptController+0x18>
+   103ac:	e3a00000 	mov	r0, #0
+   103b0:	e12fff1e 	bx	lr
+
+000103b4 <RegisterInterrupt>:
+   103b4:	e10f0000 	mrs	r0, CPSR
+   103b8:	e3800080 	orr	r0, r0, #128	; 0x80
+   103bc:	e121f000 	msr	CPSR_c, r0
+   103c0:	e3043748 	movw	r3, #18248	; 0x4748
+   103c4:	e3403001 	movt	r3, #1
+   103c8:	e083c180 	add	ip, r3, r0, lsl #3
+   103cc:	e7831180 	str	r1, [r3, r0, lsl #3]
+   103d0:	e58c2004 	str	r2, [ip, #4]
+   103d4:	e10f0000 	mrs	r0, CPSR
+   103d8:	e3c00080 	bic	r0, r0, #128	; 0x80
+   103dc:	e121f000 	msr	CPSR_c, r0
+   103e0:	e3a00000 	mov	r0, #0
+   103e4:	e12fff1e 	bx	lr
+
+000103e8 <EnableInterrupt>:
+   103e8:	e2400040 	sub	r0, r0, #64	; 0x40
+   103ec:	e3a03cb2 	mov	r3, #45568	; 0xb200
+   103f0:	e3433f00 	movt	r3, #16128	; 0x3f00
+   103f4:	e3500008 	cmp	r0, #8
+   103f8:	e5932018 	ldr	r2, [r3, #24]
+   103fc:	93a02001 	movls	r2, #1
+   10400:	91a00012 	lslls	r0, r2, r0
+   10404:	95830018 	strls	r0, [r3, #24]
+   10408:	e3a03cb2 	mov	r3, #45568	; 0xb200
+   1040c:	e3433f00 	movt	r3, #16128	; 0x3f00
+   10410:	e3a00000 	mov	r0, #0
+   10414:	e5933018 	ldr	r3, [r3, #24]
+   10418:	e12fff1e 	bx	lr
+
+0001041c <DisableInterrupt>:
+   1041c:	e2400040 	sub	r0, r0, #64	; 0x40
+   10420:	e3500008 	cmp	r0, #8
+   10424:	93a02cb2 	movls	r2, #45568	; 0xb200
+   10428:	93a03001 	movls	r3, #1
+   1042c:	93432f00 	movtls	r2, #16128	; 0x3f00
+   10430:	91a00013 	lslls	r0, r3, r0
+   10434:	95820024 	strls	r0, [r2, #36]	; 0x24
+   10438:	e3a00000 	mov	r0, #0
+   1043c:	e12fff1e 	bx	lr
+
+00010440 <EnableInterrupts>:
+   10440:	e10f0000 	mrs	r0, CPSR
+   10444:	e3c00080 	bic	r0, r0, #128	; 0x80
+   10448:	e121f000 	msr	CPSR_c, r0
+   1044c:	e3a00000 	mov	r0, #0
+   10450:	e12fff1e 	bx	lr
+
+00010454 <DisableInterrupts>:
+   10454:	e10f0000 	mrs	r0, CPSR
+   10458:	e3800080 	orr	r0, r0, #128	; 0x80
+   1045c:	e121f000 	msr	CPSR_c, r0
+   10460:	e3a00000 	mov	r0, #0
+   10464:	e12fff1e 	bx	lr
+
+00010468 <OSCtxSw>:
+   10468:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+   1046c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+   10470:	e52dc004 	push	{ip}		; (str ip, [sp, #-4]!)
+   10474:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
+   10478:	e52da004 	push	{sl}		; (str sl, [sp, #-4]!)
+   1047c:	e52d9004 	push	{r9}		; (str r9, [sp, #-4]!)
+   10480:	e52d8004 	push	{r8}		; (str r8, [sp, #-4]!)
+   10484:	e52d7004 	push	{r7}		; (str r7, [sp, #-4]!)
+   10488:	e52d6004 	push	{r6}		; (str r6, [sp, #-4]!)
+   1048c:	e52d5004 	push	{r5}		; (str r5, [sp, #-4]!)
+   10490:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+   10494:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
+   10498:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
+   1049c:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
+   104a0:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+   104a4:	e10f4000 	mrs	r4, CPSR
+   104a8:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+   104ac:	e59f424c 	ldr	r4, [pc, #588]	; 10700 <OS_CPU_IRQ_ISR_1+0x54>
+   104b0:	e5945000 	ldr	r5, [r4]
+   104b4:	e585d000 	str	sp, [r5]
+   104b8:	eb0000c7 	bl	107dc <OSTaskSwHook>
+   104bc:	e59f4240 	ldr	r4, [pc, #576]	; 10704 <OS_CPU_IRQ_ISR_1+0x58>
+   104c0:	e59f5240 	ldr	r5, [pc, #576]	; 10708 <OS_CPU_IRQ_ISR_1+0x5c>
+   104c4:	e5d56000 	ldrb	r6, [r5]
+   104c8:	e5c46000 	strb	r6, [r4]
+   104cc:	e59f422c 	ldr	r4, [pc, #556]	; 10700 <OS_CPU_IRQ_ISR_1+0x54>
+   104d0:	e59f6234 	ldr	r6, [pc, #564]	; 1070c <OS_CPU_IRQ_ISR_1+0x60>
+   104d4:	e5966000 	ldr	r6, [r6]
+   104d8:	e5846000 	str	r6, [r4]
+   104dc:	e596d000 	ldr	sp, [r6]
+   104e0:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+   104e4:	e12ff004 	msr	CPSR_fsxc, r4
+   104e8:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+   104ec:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
+   104f0:	e49d2004 	pop	{r2}		; (ldr r2, [sp], #4)
+   104f4:	e49d3004 	pop	{r3}		; (ldr r3, [sp], #4)
+   104f8:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+   104fc:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
+   10500:	e49d6004 	pop	{r6}		; (ldr r6, [sp], #4)
+   10504:	e49d7004 	pop	{r7}		; (ldr r7, [sp], #4)
+   10508:	e49d8004 	pop	{r8}		; (ldr r8, [sp], #4)
+   1050c:	e49d9004 	pop	{r9}		; (ldr r9, [sp], #4)
+   10510:	e49da004 	pop	{sl}		; (ldr sl, [sp], #4)
+   10514:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
+   10518:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
+   1051c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+   10520:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+
+00010524 <OSIntCtxSw>:
+   10524:	eb0000ac 	bl	107dc <OSTaskSwHook>
+   10528:	e59f41d4 	ldr	r4, [pc, #468]	; 10704 <OS_CPU_IRQ_ISR_1+0x58>
+   1052c:	e59f51d4 	ldr	r5, [pc, #468]	; 10708 <OS_CPU_IRQ_ISR_1+0x5c>
+   10530:	e5d56000 	ldrb	r6, [r5]
+   10534:	e5c46000 	strb	r6, [r4]
+   10538:	e59f41c0 	ldr	r4, [pc, #448]	; 10700 <OS_CPU_IRQ_ISR_1+0x54>
+   1053c:	e59f61c8 	ldr	r6, [pc, #456]	; 1070c <OS_CPU_IRQ_ISR_1+0x60>
+   10540:	e5966000 	ldr	r6, [r6]
+   10544:	e5846000 	str	r6, [r4]
+   10548:	e596d000 	ldr	sp, [r6]
+   1054c:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+   10550:	e12ff004 	msr	CPSR_fsxc, r4
+   10554:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+   10558:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
+   1055c:	e49d2004 	pop	{r2}		; (ldr r2, [sp], #4)
+   10560:	e49d3004 	pop	{r3}		; (ldr r3, [sp], #4)
+   10564:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+   10568:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
+   1056c:	e49d6004 	pop	{r6}		; (ldr r6, [sp], #4)
+   10570:	e49d7004 	pop	{r7}		; (ldr r7, [sp], #4)
+   10574:	e49d8004 	pop	{r8}		; (ldr r8, [sp], #4)
+   10578:	e49d9004 	pop	{r9}		; (ldr r9, [sp], #4)
+   1057c:	e49da004 	pop	{sl}		; (ldr sl, [sp], #4)
+   10580:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
+   10584:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
+   10588:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+   1058c:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+
+00010590 <OSStartHighRdy>:
+   10590:	e32ff0df 	msr	CPSR_fsxc, #223	; 0xdf
+   10594:	eb000090 	bl	107dc <OSTaskSwHook>
+   10598:	e59f4170 	ldr	r4, [pc, #368]	; 10710 <OS_CPU_IRQ_ISR_1+0x64>
+   1059c:	e3a05001 	mov	r5, #1
+   105a0:	e5c45000 	strb	r5, [r4]
+   105a4:	e59f4160 	ldr	r4, [pc, #352]	; 1070c <OS_CPU_IRQ_ISR_1+0x60>
+   105a8:	e5944000 	ldr	r4, [r4]
+   105ac:	e594d000 	ldr	sp, [r4]
+   105b0:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+   105b4:	e12ff004 	msr	CPSR_fsxc, r4
+   105b8:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+   105bc:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
+   105c0:	e49d2004 	pop	{r2}		; (ldr r2, [sp], #4)
+   105c4:	e49d3004 	pop	{r3}		; (ldr r3, [sp], #4)
+   105c8:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+   105cc:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
+   105d0:	e49d6004 	pop	{r6}		; (ldr r6, [sp], #4)
+   105d4:	e49d7004 	pop	{r7}		; (ldr r7, [sp], #4)
+   105d8:	e49d8004 	pop	{r8}		; (ldr r8, [sp], #4)
+   105dc:	e49d9004 	pop	{r9}		; (ldr r9, [sp], #4)
+   105e0:	e49da004 	pop	{sl}		; (ldr sl, [sp], #4)
+   105e4:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
+   105e8:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
+   105ec:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+   105f0:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+
+000105f4 <OS_CPU_SR_Save>:
+   105f4:	e10f0000 	mrs	r0, CPSR
+   105f8:	e38010c0 	orr	r1, r0, #192	; 0xc0
+   105fc:	e121f001 	msr	CPSR_c, r1
+   10600:	e10f1000 	mrs	r1, CPSR
+   10604:	e20110c0 	and	r1, r1, #192	; 0xc0
+   10608:	e35100c0 	cmp	r1, #192	; 0xc0
+   1060c:	1afffff8 	bne	105f4 <OS_CPU_SR_Save>
+   10610:	e1a0f00e 	mov	pc, lr
+
+00010614 <OS_CPU_SR_Restore>:
+   10614:	e121f000 	msr	CPSR_c, r0
+   10618:	e1a0f00e 	mov	pc, lr
+
+0001061c <OS_CPU_IRQ_ISR>:
+   1061c:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
+   10620:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
+   10624:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
+   10628:	e1a0100d 	mov	r1, sp
+   1062c:	e28dd00c 	add	sp, sp, #12
+   10630:	e24e2004 	sub	r2, lr, #4
+   10634:	e14f3000 	mrs	r3, SPSR
+   10638:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+   1063c:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
+   10640:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+   10644:	e52dc004 	push	{ip}		; (str ip, [sp, #-4]!)
+   10648:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
+   1064c:	e52da004 	push	{sl}		; (str sl, [sp, #-4]!)
+   10650:	e52d9004 	push	{r9}		; (str r9, [sp, #-4]!)
+   10654:	e52d8004 	push	{r8}		; (str r8, [sp, #-4]!)
+   10658:	e52d7004 	push	{r7}		; (str r7, [sp, #-4]!)
+   1065c:	e52d6004 	push	{r6}		; (str r6, [sp, #-4]!)
+   10660:	e52d5004 	push	{r5}		; (str r5, [sp, #-4]!)
+   10664:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+   10668:	e4914004 	ldr	r4, [r1], #4
+   1066c:	e4915004 	ldr	r5, [r1], #4
+   10670:	e4916004 	ldr	r6, [r1], #4
+   10674:	e52d6004 	push	{r6}		; (str r6, [sp, #-4]!)
+   10678:	e52d5004 	push	{r5}		; (str r5, [sp, #-4]!)
+   1067c:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+   10680:	e52d0004 	push	{r0}		; (str r0, [sp, #-4]!)
+   10684:	e52d3004 	push	{r3}		; (str r3, [sp, #-4]!)
+   10688:	e59f0084 	ldr	r0, [pc, #132]	; 10714 <OS_CPU_IRQ_ISR_1+0x68>
+   1068c:	e5d01000 	ldrb	r1, [r0]
+   10690:	e2811001 	add	r1, r1, #1
+   10694:	e5c01000 	strb	r1, [r0]
+   10698:	e3510001 	cmp	r1, #1
+   1069c:	1a000002 	bne	106ac <OS_CPU_IRQ_ISR_1>
+   106a0:	e59f4058 	ldr	r4, [pc, #88]	; 10700 <OS_CPU_IRQ_ISR_1+0x54>
+   106a4:	e5945000 	ldr	r5, [r4]
+   106a8:	e585d000 	str	sp, [r5]
+
+000106ac <OS_CPU_IRQ_ISR_1>:
+   106ac:	e321f0d2 	msr	CPSR_c, #210	; 0xd2
+   106b0:	ebffff0d 	bl	102ec <OS_CPU_IRQ_ISR_Handler>
+   106b4:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+   106b8:	eb0000c3 	bl	109cc <OSIntExit>
+   106bc:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+   106c0:	e12ff004 	msr	CPSR_fsxc, r4
+   106c4:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+   106c8:	e49d1004 	pop	{r1}		; (ldr r1, [sp], #4)
+   106cc:	e49d2004 	pop	{r2}		; (ldr r2, [sp], #4)
+   106d0:	e49d3004 	pop	{r3}		; (ldr r3, [sp], #4)
+   106d4:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+   106d8:	e49d5004 	pop	{r5}		; (ldr r5, [sp], #4)
+   106dc:	e49d6004 	pop	{r6}		; (ldr r6, [sp], #4)
+   106e0:	e49d7004 	pop	{r7}		; (ldr r7, [sp], #4)
+   106e4:	e49d8004 	pop	{r8}		; (ldr r8, [sp], #4)
+   106e8:	e49d9004 	pop	{r9}		; (ldr r9, [sp], #4)
+   106ec:	e49da004 	pop	{sl}		; (ldr sl, [sp], #4)
+   106f0:	e49db004 	pop	{fp}		; (ldr fp, [sp], #4)
+   106f4:	e49dc004 	pop	{ip}		; (ldr ip, [sp], #4)
+   106f8:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+   106fc:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+   10700:	000152e4 	.word	0x000152e4
+   10704:	000149d0 	.word	0x000149d0
+   10708:	00014990 	.word	0x00014990
+   1070c:	000152c8 	.word	0x000152c8
+   10710:	00014989 	.word	0x00014989
+   10714:	000152e1 	.word	0x000152e1
+
+00010718 <OSTaskStkInit>:
+   10718:	e1a03002 	mov	r3, r2
+   1071c:	e301c414 	movw	ip, #5140	; 0x1414
+   10720:	e341c414 	movt	ip, #5140	; 0x1414
+   10724:	e92d40f0 	push	{r4, r5, r6, r7, lr}
+   10728:	e3a0501f 	mov	r5, #31
+   1072c:	e3014010 	movw	r4, #4112	; 0x1010
+   10730:	e3414010 	movt	r4, #4112	; 0x1010
+   10734:	e5820000 	str	r0, [r2]
+   10738:	e300e909 	movw	lr, #2313	; 0x909
+   1073c:	e340e909 	movt	lr, #2313	; 0x909
+   10740:	e5021038 	str	r1, [r2, #-56]	; 0xffffffc8
+   10744:	e3000707 	movw	r0, #1799	; 0x707
+   10748:	e3400707 	movt	r0, #1799	; 0x707
+   1074c:	e502c004 	str	ip, [r2, #-4]
+   10750:	e3001606 	movw	r1, #1542	; 0x606
+   10754:	e3401606 	movt	r1, #1542	; 0x606
+   10758:	e300c808 	movw	ip, #2056	; 0x808
+   1075c:	e340c808 	movt	ip, #2056	; 0x808
+   10760:	e5024010 	str	r4, [r2, #-16]
+   10764:	e3017212 	movw	r7, #4626	; 0x1212
+   10768:	e3417212 	movt	r7, #4626	; 0x1212
+   1076c:	e502e014 	str	lr, [r2, #-20]	; 0xffffffec
+   10770:	e3016111 	movw	r6, #4369	; 0x1111
+   10774:	e3416111 	movt	r6, #4369	; 0x1111
+   10778:	e502c018 	str	ip, [r2, #-24]	; 0xffffffe8
+   1077c:	e3004505 	movw	r4, #1285	; 0x505
+   10780:	e3404505 	movt	r4, #1285	; 0x505
+   10784:	e502001c 	str	r0, [r2, #-28]	; 0xffffffe4
+   10788:	e300e404 	movw	lr, #1028	; 0x404
+   1078c:	e340e404 	movt	lr, #1028	; 0x404
+   10790:	e5021020 	str	r1, [r2, #-32]	; 0xffffffe0
+   10794:	e300c303 	movw	ip, #771	; 0x303
+   10798:	e340c303 	movt	ip, #771	; 0x303
+   1079c:	e3000202 	movw	r0, #514	; 0x202
+   107a0:	e3400202 	movt	r0, #514	; 0x202
+   107a4:	e3001101 	movw	r1, #257	; 0x101
+   107a8:	e3401101 	movt	r1, #257	; 0x101
+   107ac:	e5020030 	str	r0, [r2, #-48]	; 0xffffffd0
+   107b0:	e5027008 	str	r7, [r2, #-8]
+   107b4:	e502600c 	str	r6, [r2, #-12]
+   107b8:	e5024024 	str	r4, [r2, #-36]	; 0xffffffdc
+   107bc:	e502e028 	str	lr, [r2, #-40]	; 0xffffffd8
+   107c0:	e502c02c 	str	ip, [r2, #-44]	; 0xffffffd4
+   107c4:	e5021034 	str	r1, [r2, #-52]	; 0xffffffcc
+   107c8:	e523503c 	str	r5, [r3, #-60]!	; 0xffffffc4
+   107cc:	e1a00003 	mov	r0, r3
+   107d0:	e8bd80f0 	pop	{r4, r5, r6, r7, pc}
+
+000107d4 <OSTaskCreateHook>:
+   107d4:	e12fff1e 	bx	lr
+
+000107d8 <OSTaskDelHook>:
+   107d8:	e12fff1e 	bx	lr
+
+000107dc <OSTaskSwHook>:
+   107dc:	e12fff1e 	bx	lr
+
+000107e0 <OSTaskStatHook>:
+   107e0:	e12fff1e 	bx	lr
+
+000107e4 <OSTimeTickHook>:
+   107e4:	e12fff1e 	bx	lr
+
+000107e8 <OSInitHookBegin>:
+   107e8:	e12fff1e 	bx	lr
+
+000107ec <OSInitHookEnd>:
+   107ec:	e12fff1e 	bx	lr
+
+000107f0 <OSTaskIdleHook>:
+   107f0:	e12fff1e 	bx	lr
+
+000107f4 <OSTCBInitHook>:
+   107f4:	e12fff1e 	bx	lr
+
+000107f8 <OS_FlagBlock>:
+   107f8:	e305c2e4 	movw	ip, #21220	; 0x52e4
+   107fc:	e340c001 	movt	ip, #1
+   10800:	e92d4030 	push	{r4, r5, lr}
+   10804:	e3a04000 	mov	r4, #0
+   10808:	e59cc000 	ldr	ip, [ip]
+   1080c:	e1dd50bc 	ldrh	r5, [sp, #12]
+   10810:	e5dce02c 	ldrb	lr, [ip, #44]	; 0x2c
+   10814:	e58c1024 	str	r1, [ip, #36]	; 0x24
+   10818:	e38ee020 	orr	lr, lr, #32
+   1081c:	e1cc52ba 	strh	r5, [ip, #42]	; 0x2a
+   10820:	e5cce02c 	strb	lr, [ip, #44]	; 0x2c
+   10824:	e5c13012 	strb	r3, [r1, #18]
+   10828:	e581c008 	str	ip, [r1, #8]
+   1082c:	e5903004 	ldr	r3, [r0, #4]
+   10830:	e5814004 	str	r4, [r1, #4]
+   10834:	e1530004 	cmp	r3, r4
+   10838:	e5813000 	str	r3, [r1]
+   1083c:	e1c121b0 	strh	r2, [r1, #16]
+   10840:	e581000c 	str	r0, [r1, #12]
+   10844:	15831004 	strne	r1, [r3, #4]
+   10848:	e30532d4 	movw	r3, #21204	; 0x52d4
+   1084c:	e3403001 	movt	r3, #1
+   10850:	e5801004 	str	r1, [r0, #4]
+   10854:	e5dc102f 	ldrb	r1, [ip, #47]	; 0x2f
+   10858:	e5dc0030 	ldrb	r0, [ip, #48]	; 0x30
+   1085c:	e7d32001 	ldrb	r2, [r3, r1]
+   10860:	e1c22000 	bic	r2, r2, r0
+   10864:	e3520000 	cmp	r2, #0
+   10868:	e7c32001 	strb	r2, [r3, r1]
+   1086c:	18bd8030 	popne	{r4, r5, pc}
+   10870:	e30532d0 	movw	r3, #21200	; 0x52d0
+   10874:	e3403001 	movt	r3, #1
+   10878:	e5dc1031 	ldrb	r1, [ip, #49]	; 0x31
+   1087c:	e5d32000 	ldrb	r2, [r3]
+   10880:	e1c22001 	bic	r2, r2, r1
+   10884:	e5c32000 	strb	r2, [r3]
+   10888:	e8bd8030 	pop	{r4, r5, pc}
+
+0001088c <OS_FlagTaskRdy>:
+   1088c:	e5903008 	ldr	r3, [r0, #8]
+   10890:	e3a0c000 	mov	ip, #0
+   10894:	e5d3202c 	ldrb	r2, [r3, #44]	; 0x2c
+   10898:	e1c312b8 	strh	r1, [r3, #40]	; 0x28
+   1089c:	e20220df 	and	r2, r2, #223	; 0xdf
+   108a0:	e1c3c2ba 	strh	ip, [r3, #42]	; 0x2a
+   108a4:	e152000c 	cmp	r2, ip
+   108a8:	e5c3202c 	strb	r2, [r3, #44]	; 0x2c
+   108ac:	1a00001a 	bne	1091c <OS_FlagTaskRdy+0x90>
+   108b0:	e92d4070 	push	{r4, r5, r6, lr}
+   108b4:	e30512d0 	movw	r1, #21200	; 0x52d0
+   108b8:	e3401001 	movt	r1, #1
+   108bc:	e5d3502f 	ldrb	r5, [r3, #47]	; 0x2f
+   108c0:	e30522d4 	movw	r2, #21204	; 0x52d4
+   108c4:	e3402001 	movt	r2, #1
+   108c8:	e5d16000 	ldrb	r6, [r1]
+   108cc:	e3a0c001 	mov	ip, #1
+   108d0:	e5d34031 	ldrb	r4, [r3, #49]	; 0x31
+   108d4:	e7d2e005 	ldrb	lr, [r2, r5]
+   108d8:	e1844006 	orr	r4, r4, r6
+   108dc:	e5d36030 	ldrb	r6, [r3, #48]	; 0x30
+   108e0:	e5c14000 	strb	r4, [r1]
+   108e4:	e18e1006 	orr	r1, lr, r6
+   108e8:	e7c21005 	strb	r1, [r2, r5]
+   108ec:	e5901004 	ldr	r1, [r0, #4]
+   108f0:	e5902000 	ldr	r2, [r0]
+   108f4:	e3510000 	cmp	r1, #0
+   108f8:	0a000018 	beq	10960 <OS_FlagTaskRdy+0xd4>
+   108fc:	e3520000 	cmp	r2, #0
+   10900:	e5812000 	str	r2, [r1]
+   10904:	0a000000 	beq	1090c <OS_FlagTaskRdy+0x80>
+   10908:	e5821004 	str	r1, [r2, #4]
+   1090c:	e3a02000 	mov	r2, #0
+   10910:	e1a0000c 	mov	r0, ip
+   10914:	e5832024 	str	r2, [r3, #36]	; 0x24
+   10918:	e8bd8070 	pop	{r4, r5, r6, pc}
+   1091c:	e5901004 	ldr	r1, [r0, #4]
+   10920:	e5902000 	ldr	r2, [r0]
+   10924:	e3510000 	cmp	r1, #0
+   10928:	0a000007 	beq	1094c <OS_FlagTaskRdy+0xc0>
+   1092c:	e3520000 	cmp	r2, #0
+   10930:	e5812000 	str	r2, [r1]
+   10934:	0a000000 	beq	1093c <OS_FlagTaskRdy+0xb0>
+   10938:	e5821004 	str	r1, [r2, #4]
+   1093c:	e3a02000 	mov	r2, #0
+   10940:	e1a0000c 	mov	r0, ip
+   10944:	e5832024 	str	r2, [r3, #36]	; 0x24
+   10948:	e12fff1e 	bx	lr
+   1094c:	e590000c 	ldr	r0, [r0, #12]
+   10950:	e3520000 	cmp	r2, #0
+   10954:	e5802004 	str	r2, [r0, #4]
+   10958:	1afffff6 	bne	10938 <OS_FlagTaskRdy+0xac>
+   1095c:	eafffff6 	b	1093c <OS_FlagTaskRdy+0xb0>
+   10960:	e590000c 	ldr	r0, [r0, #12]
+   10964:	e3520000 	cmp	r2, #0
+   10968:	e5802004 	str	r2, [r0, #4]
+   1096c:	1affffe5 	bne	10908 <OS_FlagTaskRdy+0x7c>
+   10970:	eaffffe5 	b	1090c <OS_FlagTaskRdy+0x80>
+
+00010974 <OS_TaskIdle>:
+   10974:	e92d4010 	push	{r4, lr}
+   10978:	e304498c 	movw	r4, #18828	; 0x498c
+   1097c:	e3404001 	movt	r4, #1
+   10980:	ebffff1b 	bl	105f4 <OS_CPU_SR_Save>
+   10984:	e5943000 	ldr	r3, [r4]
+   10988:	e2833001 	add	r3, r3, #1
+   1098c:	e5843000 	str	r3, [r4]
+   10990:	ebffff1f 	bl	10614 <OS_CPU_SR_Restore>
+   10994:	ebffff95 	bl	107f0 <OSTaskIdleHook>
+   10998:	eafffff8 	b	10980 <OS_TaskIdle+0xc>
+
+0001099c <OSIntEnter>:
+   1099c:	e3043989 	movw	r3, #18825	; 0x4989
+   109a0:	e3403001 	movt	r3, #1
+   109a4:	e5d33000 	ldrb	r3, [r3]
+   109a8:	e3530001 	cmp	r3, #1
+   109ac:	112fff1e 	bxne	lr
+   109b0:	e30532e1 	movw	r3, #21217	; 0x52e1
+   109b4:	e3403001 	movt	r3, #1
+   109b8:	e5d32000 	ldrb	r2, [r3]
+   109bc:	e35200ff 	cmp	r2, #255	; 0xff
+   109c0:	12822001 	addne	r2, r2, #1
+   109c4:	15c32000 	strbne	r2, [r3]
+   109c8:	e12fff1e 	bx	lr
+
+000109cc <OSIntExit>:
+   109cc:	e3043989 	movw	r3, #18825	; 0x4989
+   109d0:	e3403001 	movt	r3, #1
+   109d4:	e5d33000 	ldrb	r3, [r3]
+   109d8:	e3530001 	cmp	r3, #1
+   109dc:	112fff1e 	bxne	lr
+   109e0:	e92d4010 	push	{r4, lr}
+   109e4:	e24dd008 	sub	sp, sp, #8
+   109e8:	ebffff01 	bl	105f4 <OS_CPU_SR_Save>
+   109ec:	e30522e1 	movw	r2, #21217	; 0x52e1
+   109f0:	e3402001 	movt	r2, #1
+   109f4:	e5d23000 	ldrb	r3, [r2]
+   109f8:	e3530000 	cmp	r3, #0
+   109fc:	1a00002c 	bne	10ab4 <OSIntExit+0xe8>
+   10a00:	e3043988 	movw	r3, #18824	; 0x4988
+   10a04:	e3403001 	movt	r3, #1
+   10a08:	e5d33000 	ldrb	r3, [r3]
+   10a0c:	e3530000 	cmp	r3, #0
+   10a10:	1a000024 	bne	10aa8 <OSIntExit+0xdc>
+   10a14:	e30512d0 	movw	r1, #21200	; 0x52d0
+   10a18:	e3401001 	movt	r1, #1
+   10a1c:	e30425d0 	movw	r2, #17872	; 0x45d0
+   10a20:	e3402001 	movt	r2, #1
+   10a24:	e30532d4 	movw	r3, #21204	; 0x52d4
+   10a28:	e3403001 	movt	r3, #1
+   10a2c:	e5d1c000 	ldrb	ip, [r1]
+   10a30:	e30449d0 	movw	r4, #18896	; 0x49d0
+   10a34:	e3404001 	movt	r4, #1
+   10a38:	e3041990 	movw	r1, #18832	; 0x4990
+   10a3c:	e3401001 	movt	r1, #1
+   10a40:	e305e2e0 	movw	lr, #21216	; 0x52e0
+   10a44:	e340e001 	movt	lr, #1
+   10a48:	e7d2c00c 	ldrb	ip, [r2, ip]
+   10a4c:	e5d44000 	ldrb	r4, [r4]
+   10a50:	e5cec000 	strb	ip, [lr]
+   10a54:	e7d3300c 	ldrb	r3, [r3, ip]
+   10a58:	e7d23003 	ldrb	r3, [r2, r3]
+   10a5c:	e083318c 	add	r3, r3, ip, lsl #3
+   10a60:	e6ef3073 	uxtb	r3, r3
+   10a64:	e1540003 	cmp	r4, r3
+   10a68:	e5c13000 	strb	r3, [r1]
+   10a6c:	0a00000d 	beq	10aa8 <OSIntExit+0xdc>
+   10a70:	e305223c 	movw	r2, #21052	; 0x523c
+   10a74:	e3402001 	movt	r2, #1
+   10a78:	e305ef58 	movw	lr, #24408	; 0x5f58
+   10a7c:	e340e001 	movt	lr, #1
+   10a80:	e30512c8 	movw	r1, #21192	; 0x52c8
+   10a84:	e3401001 	movt	r1, #1
+   10a88:	e592c000 	ldr	ip, [r2]
+   10a8c:	e79ee103 	ldr	lr, [lr, r3, lsl #2]
+   10a90:	e28c3001 	add	r3, ip, #1
+   10a94:	e58d0004 	str	r0, [sp, #4]
+   10a98:	e5823000 	str	r3, [r2]
+   10a9c:	e581e000 	str	lr, [r1]
+   10aa0:	ebfffe9f 	bl	10524 <OSIntCtxSw>
+   10aa4:	e59d0004 	ldr	r0, [sp, #4]
+   10aa8:	e28dd008 	add	sp, sp, #8
+   10aac:	e8bd4010 	pop	{r4, lr}
+   10ab0:	eafffed7 	b	10614 <OS_CPU_SR_Restore>
+   10ab4:	e2433001 	sub	r3, r3, #1
+   10ab8:	e6ef3073 	uxtb	r3, r3
+   10abc:	e3530000 	cmp	r3, #0
+   10ac0:	e5c23000 	strb	r3, [r2]
+   10ac4:	1afffff7 	bne	10aa8 <OSIntExit+0xdc>
+   10ac8:	eaffffcc 	b	10a00 <OSIntExit+0x34>
+
+00010acc <OSSchedLock>:
+   10acc:	e3043989 	movw	r3, #18825	; 0x4989
+   10ad0:	e3403001 	movt	r3, #1
+   10ad4:	e5d33000 	ldrb	r3, [r3]
+   10ad8:	e3530001 	cmp	r3, #1
+   10adc:	112fff1e 	bxne	lr
+   10ae0:	e92d4010 	push	{r4, lr}
+   10ae4:	ebfffec2 	bl	105f4 <OS_CPU_SR_Save>
+   10ae8:	e3043988 	movw	r3, #18824	; 0x4988
+   10aec:	e3403001 	movt	r3, #1
+   10af0:	e5d32000 	ldrb	r2, [r3]
+   10af4:	e35200ff 	cmp	r2, #255	; 0xff
+   10af8:	12822001 	addne	r2, r2, #1
+   10afc:	15c32000 	strbne	r2, [r3]
+   10b00:	e8bd4010 	pop	{r4, lr}
+   10b04:	eafffec2 	b	10614 <OS_CPU_SR_Restore>
+
+00010b08 <OSStart>:
+   10b08:	e3043989 	movw	r3, #18825	; 0x4989
+   10b0c:	e3403001 	movt	r3, #1
+   10b10:	e5d33000 	ldrb	r3, [r3]
+   10b14:	e3530000 	cmp	r3, #0
+   10b18:	112fff1e 	bxne	lr
+   10b1c:	e30532d0 	movw	r3, #21200	; 0x52d0
+   10b20:	e3403001 	movt	r3, #1
+   10b24:	e92d4070 	push	{r4, r5, r6, lr}
+   10b28:	e30425d0 	movw	r2, #17872	; 0x45d0
+   10b2c:	e3402001 	movt	r2, #1
+   10b30:	e5d33000 	ldrb	r3, [r3]
+   10b34:	e30552d4 	movw	r5, #21204	; 0x52d4
+   10b38:	e3405001 	movt	r5, #1
+   10b3c:	e305cf58 	movw	ip, #24408	; 0x5f58
+   10b40:	e340c001 	movt	ip, #1
+   10b44:	e3044990 	movw	r4, #18832	; 0x4990
+   10b48:	e3404001 	movt	r4, #1
+   10b4c:	e7d26003 	ldrb	r6, [r2, r3]
+   10b50:	e304e9d0 	movw	lr, #18896	; 0x49d0
+   10b54:	e340e001 	movt	lr, #1
+   10b58:	e30502c8 	movw	r0, #21192	; 0x52c8
+   10b5c:	e3400001 	movt	r0, #1
+   10b60:	e30512e4 	movw	r1, #21220	; 0x52e4
+   10b64:	e3401001 	movt	r1, #1
+   10b68:	e7d53006 	ldrb	r3, [r5, r6]
+   10b6c:	e7d23003 	ldrb	r3, [r2, r3]
+   10b70:	e0833186 	add	r3, r3, r6, lsl #3
+   10b74:	e6ef3073 	uxtb	r3, r3
+   10b78:	e5c43000 	strb	r3, [r4]
+   10b7c:	e5ce3000 	strb	r3, [lr]
+   10b80:	e79c3103 	ldr	r3, [ip, r3, lsl #2]
+   10b84:	e8bd4070 	pop	{r4, r5, r6, lr}
+   10b88:	e5803000 	str	r3, [r0]
+   10b8c:	e5813000 	str	r3, [r1]
+   10b90:	eafffe7e 	b	10590 <OSStartHighRdy>
+
+00010b94 <OSTimeTick>:
+   10b94:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   10b98:	ebffff11 	bl	107e4 <OSTimeTickHook>
+   10b9c:	ebfffe94 	bl	105f4 <OS_CPU_SR_Save>
+   10ba0:	e30532e8 	movw	r3, #21224	; 0x52e8
+   10ba4:	e3403001 	movt	r3, #1
+   10ba8:	e5932000 	ldr	r2, [r3]
+   10bac:	e2822001 	add	r2, r2, #1
+   10bb0:	e5832000 	str	r2, [r3]
+   10bb4:	ebfffe96 	bl	10614 <OS_CPU_SR_Restore>
+   10bb8:	e3043989 	movw	r3, #18825	; 0x4989
+   10bbc:	e3403001 	movt	r3, #1
+   10bc0:	e5d35000 	ldrb	r5, [r3]
+   10bc4:	e3550001 	cmp	r5, #1
+   10bc8:	18bd81f0 	popne	{r4, r5, r6, r7, r8, pc}
+   10bcc:	e30439d4 	movw	r3, #18900	; 0x49d4
+   10bd0:	e3403001 	movt	r3, #1
+   10bd4:	e5934000 	ldr	r4, [r3]
+   10bd8:	e5d4302d 	ldrb	r3, [r4, #45]	; 0x2d
+   10bdc:	e353003f 	cmp	r3, #63	; 0x3f
+   10be0:	08bd81f0 	popeq	{r4, r5, r6, r7, r8, pc}
+   10be4:	e30572d0 	movw	r7, #21200	; 0x52d0
+   10be8:	e3407001 	movt	r7, #1
+   10bec:	e30562d4 	movw	r6, #21204	; 0x52d4
+   10bf0:	e3406001 	movt	r6, #1
+   10bf4:	ebfffe7e 	bl	105f4 <OS_CPU_SR_Save>
+   10bf8:	e1d422ba 	ldrh	r2, [r4, #42]	; 0x2a
+   10bfc:	e3520000 	cmp	r2, #0
+   10c00:	e2423001 	sub	r3, r2, #1
+   10c04:	e6ff3073 	uxth	r3, r3
+   10c08:	0a00000e 	beq	10c48 <OSTimeTick+0xb4>
+   10c0c:	e3530000 	cmp	r3, #0
+   10c10:	e1c432ba 	strh	r3, [r4, #42]	; 0x2a
+   10c14:	1a00000b 	bne	10c48 <OSTimeTick+0xb4>
+   10c18:	e5d4302c 	ldrb	r3, [r4, #44]	; 0x2c
+   10c1c:	e3130008 	tst	r3, #8
+   10c20:	11c452ba 	strhne	r5, [r4, #42]	; 0x2a
+   10c24:	05d4102f 	ldrbeq	r1, [r4, #47]	; 0x2f
+   10c28:	05d42031 	ldrbeq	r2, [r4, #49]	; 0x31
+   10c2c:	05d7e000 	ldrbeq	lr, [r7]
+   10c30:	05d4c030 	ldrbeq	ip, [r4, #48]	; 0x30
+   10c34:	07d63001 	ldrbeq	r3, [r6, r1]
+   10c38:	0182200e 	orreq	r2, r2, lr
+   10c3c:	05c72000 	strbeq	r2, [r7]
+   10c40:	0183300c 	orreq	r3, r3, ip
+   10c44:	07c63001 	strbeq	r3, [r6, r1]
+   10c48:	e5944014 	ldr	r4, [r4, #20]
+   10c4c:	ebfffe70 	bl	10614 <OS_CPU_SR_Restore>
+   10c50:	e5d4302d 	ldrb	r3, [r4, #45]	; 0x2d
+   10c54:	e353003f 	cmp	r3, #63	; 0x3f
+   10c58:	1affffe5 	bne	10bf4 <OSTimeTick+0x60>
+   10c5c:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+
+00010c60 <OSVersion>:
+   10c60:	e3a000fc 	mov	r0, #252	; 0xfc
+   10c64:	e12fff1e 	bx	lr
+
+00010c68 <OS_Dummy>:
+   10c68:	e12fff1e 	bx	lr
+
+00010c6c <OS_EventTaskRdy>:
+   10c6c:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   10c70:	e30435d0 	movw	r3, #17872	; 0x45d0
+   10c74:	e3403001 	movt	r3, #1
+   10c78:	e5d07001 	ldrb	r7, [r0, #1]
+   10c7c:	e7d34007 	ldrb	r4, [r3, r7]
+   10c80:	e0808004 	add	r8, r0, r4
+   10c84:	e083e004 	add	lr, r3, r4
+   10c88:	e5d8c008 	ldrb	ip, [r8, #8]
+   10c8c:	e5de6100 	ldrb	r6, [lr, #256]	; 0x100
+   10c90:	e7d3e00c 	ldrb	lr, [r3, ip]
+   10c94:	e083300e 	add	r3, r3, lr
+   10c98:	e08ee184 	add	lr, lr, r4, lsl #3
+   10c9c:	e5d35100 	ldrb	r5, [r3, #256]	; 0x100
+   10ca0:	e6ef307e 	uxtb	r3, lr
+   10ca4:	e3a0e000 	mov	lr, #0
+   10ca8:	e1ccc005 	bic	ip, ip, r5
+   10cac:	e35c0000 	cmp	ip, #0
+   10cb0:	e5c8c008 	strb	ip, [r8, #8]
+   10cb4:	01c77006 	biceq	r7, r7, r6
+   10cb8:	05c07001 	strbeq	r7, [r0, #1]
+   10cbc:	e3050f58 	movw	r0, #24408	; 0x5f58
+   10cc0:	e3400001 	movt	r0, #1
+   10cc4:	e7900103 	ldr	r0, [r0, r3, lsl #2]
+   10cc8:	e5d0c02c 	ldrb	ip, [r0, #44]	; 0x2c
+   10ccc:	e5801020 	str	r1, [r0, #32]
+   10cd0:	e1cc2002 	bic	r2, ip, r2
+   10cd4:	e1c0e2ba 	strh	lr, [r0, #42]	; 0x2a
+   10cd8:	e152000e 	cmp	r2, lr
+   10cdc:	e5c0202c 	strb	r2, [r0, #44]	; 0x2c
+   10ce0:	e580e01c 	str	lr, [r0, #28]
+   10ce4:	1a000009 	bne	10d10 <OS_EventTaskRdy+0xa4>
+   10ce8:	e30512d0 	movw	r1, #21200	; 0x52d0
+   10cec:	e3401001 	movt	r1, #1
+   10cf0:	e30522d4 	movw	r2, #21204	; 0x52d4
+   10cf4:	e3402001 	movt	r2, #1
+   10cf8:	e5d1c000 	ldrb	ip, [r1]
+   10cfc:	e7d20004 	ldrb	r0, [r2, r4]
+   10d00:	e186600c 	orr	r6, r6, ip
+   10d04:	e1855000 	orr	r5, r5, r0
+   10d08:	e5c16000 	strb	r6, [r1]
+   10d0c:	e7c25004 	strb	r5, [r2, r4]
+   10d10:	e1a00003 	mov	r0, r3
+   10d14:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+
+00010d18 <OS_EventTaskWait>:
+   10d18:	e30532e4 	movw	r3, #21220	; 0x52e4
+   10d1c:	e3403001 	movt	r3, #1
+   10d20:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+   10d24:	e305c2d4 	movw	ip, #21204	; 0x52d4
+   10d28:	e340c001 	movt	ip, #1
+   10d2c:	e5931000 	ldr	r1, [r3]
+   10d30:	e5d1302f 	ldrb	r3, [r1, #47]	; 0x2f
+   10d34:	e5d12030 	ldrb	r2, [r1, #48]	; 0x30
+   10d38:	e581001c 	str	r0, [r1, #28]
+   10d3c:	e7dce003 	ldrb	lr, [ip, r3]
+   10d40:	e1cee002 	bic	lr, lr, r2
+   10d44:	e35e0000 	cmp	lr, #0
+   10d48:	e7cce003 	strb	lr, [ip, r3]
+   10d4c:	e0803003 	add	r3, r0, r3
+   10d50:	0305c2d0 	movweq	ip, #21200	; 0x52d0
+   10d54:	05d11031 	ldrbeq	r1, [r1, #49]	; 0x31
+   10d58:	0340c001 	movteq	ip, #1
+   10d5c:	15d11031 	ldrbne	r1, [r1, #49]	; 0x31
+   10d60:	05dce000 	ldrbeq	lr, [ip]
+   10d64:	01cee001 	biceq	lr, lr, r1
+   10d68:	05cce000 	strbeq	lr, [ip]
+   10d6c:	e5d3c008 	ldrb	ip, [r3, #8]
+   10d70:	e182200c 	orr	r2, r2, ip
+   10d74:	e5c32008 	strb	r2, [r3, #8]
+   10d78:	e5d03001 	ldrb	r3, [r0, #1]
+   10d7c:	e1811003 	orr	r1, r1, r3
+   10d80:	e5c01001 	strb	r1, [r0, #1]
+   10d84:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+
+00010d88 <OS_EventTO>:
+   10d88:	e30532e4 	movw	r3, #21220	; 0x52e4
+   10d8c:	e3403001 	movt	r3, #1
+   10d90:	e5933000 	ldr	r3, [r3]
+   10d94:	e5d3202f 	ldrb	r2, [r3, #47]	; 0x2f
+   10d98:	e5d3c030 	ldrb	ip, [r3, #48]	; 0x30
+   10d9c:	e0802002 	add	r2, r0, r2
+   10da0:	e5d21008 	ldrb	r1, [r2, #8]
+   10da4:	e1c1100c 	bic	r1, r1, ip
+   10da8:	e3510000 	cmp	r1, #0
+   10dac:	e5c21008 	strb	r1, [r2, #8]
+   10db0:	05d02001 	ldrbeq	r2, [r0, #1]
+   10db4:	05d31031 	ldrbeq	r1, [r3, #49]	; 0x31
+   10db8:	01c22001 	biceq	r2, r2, r1
+   10dbc:	05c02001 	strbeq	r2, [r0, #1]
+   10dc0:	e3a02000 	mov	r2, #0
+   10dc4:	e5c3202c 	strb	r2, [r3, #44]	; 0x2c
+   10dc8:	e583201c 	str	r2, [r3, #28]
+   10dcc:	e12fff1e 	bx	lr
+
+00010dd0 <OS_EventWaitListInit>:
+   10dd0:	e3a03000 	mov	r3, #0
+   10dd4:	e5c03001 	strb	r3, [r0, #1]
+   10dd8:	e5c03008 	strb	r3, [r0, #8]
+   10ddc:	e5c03009 	strb	r3, [r0, #9]
+   10de0:	e5c0300a 	strb	r3, [r0, #10]
+   10de4:	e5c0300b 	strb	r3, [r0, #11]
+   10de8:	e5c0300c 	strb	r3, [r0, #12]
+   10dec:	e5c0300d 	strb	r3, [r0, #13]
+   10df0:	e5c0300e 	strb	r3, [r0, #14]
+   10df4:	e5c0300f 	strb	r3, [r0, #15]
+   10df8:	e12fff1e 	bx	lr
+
+00010dfc <OS_Sched>:
+   10dfc:	e92d4010 	push	{r4, lr}
+   10e00:	e24dd008 	sub	sp, sp, #8
+   10e04:	ebfffdfa 	bl	105f4 <OS_CPU_SR_Save>
+   10e08:	e30532e1 	movw	r3, #21217	; 0x52e1
+   10e0c:	e3403001 	movt	r3, #1
+   10e10:	e5d33000 	ldrb	r3, [r3]
+   10e14:	e3530000 	cmp	r3, #0
+   10e18:	1a000026 	bne	10eb8 <OS_Sched+0xbc>
+   10e1c:	e3043988 	movw	r3, #18824	; 0x4988
+   10e20:	e3403001 	movt	r3, #1
+   10e24:	e5d33000 	ldrb	r3, [r3]
+   10e28:	e3530000 	cmp	r3, #0
+   10e2c:	1a000021 	bne	10eb8 <OS_Sched+0xbc>
+   10e30:	e30532d0 	movw	r3, #21200	; 0x52d0
+   10e34:	e3403001 	movt	r3, #1
+   10e38:	e30425d0 	movw	r2, #17872	; 0x45d0
+   10e3c:	e3402001 	movt	r2, #1
+   10e40:	e305c2d4 	movw	ip, #21204	; 0x52d4
+   10e44:	e340c001 	movt	ip, #1
+   10e48:	e5d33000 	ldrb	r3, [r3]
+   10e4c:	e304e9d0 	movw	lr, #18896	; 0x49d0
+   10e50:	e340e001 	movt	lr, #1
+   10e54:	e3041990 	movw	r1, #18832	; 0x4990
+   10e58:	e3401001 	movt	r1, #1
+   10e5c:	e7d24003 	ldrb	r4, [r2, r3]
+   10e60:	e5dee000 	ldrb	lr, [lr]
+   10e64:	e7dc3004 	ldrb	r3, [ip, r4]
+   10e68:	e7d23003 	ldrb	r3, [r2, r3]
+   10e6c:	e0833184 	add	r3, r3, r4, lsl #3
+   10e70:	e6ef3073 	uxtb	r3, r3
+   10e74:	e15e0003 	cmp	lr, r3
+   10e78:	e5c13000 	strb	r3, [r1]
+   10e7c:	0a00000d 	beq	10eb8 <OS_Sched+0xbc>
+   10e80:	e305223c 	movw	r2, #21052	; 0x523c
+   10e84:	e3402001 	movt	r2, #1
+   10e88:	e305ef58 	movw	lr, #24408	; 0x5f58
+   10e8c:	e340e001 	movt	lr, #1
+   10e90:	e30512c8 	movw	r1, #21192	; 0x52c8
+   10e94:	e3401001 	movt	r1, #1
+   10e98:	e592c000 	ldr	ip, [r2]
+   10e9c:	e79ee103 	ldr	lr, [lr, r3, lsl #2]
+   10ea0:	e28c3001 	add	r3, ip, #1
+   10ea4:	e58d0004 	str	r0, [sp, #4]
+   10ea8:	e5823000 	str	r3, [r2]
+   10eac:	e581e000 	str	lr, [r1]
+   10eb0:	ebfffd6c 	bl	10468 <OSCtxSw>
+   10eb4:	e59d0004 	ldr	r0, [sp, #4]
+   10eb8:	e28dd008 	add	sp, sp, #8
+   10ebc:	e8bd4010 	pop	{r4, lr}
+   10ec0:	eafffdd3 	b	10614 <OS_CPU_SR_Restore>
+
+00010ec4 <OSSchedUnlock>:
+   10ec4:	e3043989 	movw	r3, #18825	; 0x4989
+   10ec8:	e3403001 	movt	r3, #1
+   10ecc:	e5d33000 	ldrb	r3, [r3]
+   10ed0:	e3530001 	cmp	r3, #1
+   10ed4:	112fff1e 	bxne	lr
+   10ed8:	e92d4010 	push	{r4, lr}
+   10edc:	ebfffdc4 	bl	105f4 <OS_CPU_SR_Save>
+   10ee0:	e3042988 	movw	r2, #18824	; 0x4988
+   10ee4:	e3402001 	movt	r2, #1
+   10ee8:	e1a01000 	mov	r1, r0
+   10eec:	e5d23000 	ldrb	r3, [r2]
+   10ef0:	e3530000 	cmp	r3, #0
+   10ef4:	0a00000c 	beq	10f2c <OSSchedUnlock+0x68>
+   10ef8:	e2433001 	sub	r3, r3, #1
+   10efc:	e6ef3073 	uxtb	r3, r3
+   10f00:	e3530000 	cmp	r3, #0
+   10f04:	e5c23000 	strb	r3, [r2]
+   10f08:	1a000004 	bne	10f20 <OSSchedUnlock+0x5c>
+   10f0c:	e30532e1 	movw	r3, #21217	; 0x52e1
+   10f10:	e3403001 	movt	r3, #1
+   10f14:	e5d33000 	ldrb	r3, [r3]
+   10f18:	e3530000 	cmp	r3, #0
+   10f1c:	0a000004 	beq	10f34 <OSSchedUnlock+0x70>
+   10f20:	e1a00001 	mov	r0, r1
+   10f24:	e8bd4010 	pop	{r4, lr}
+   10f28:	eafffdb9 	b	10614 <OS_CPU_SR_Restore>
+   10f2c:	e8bd4010 	pop	{r4, lr}
+   10f30:	eafffdb7 	b	10614 <OS_CPU_SR_Restore>
+   10f34:	ebfffdb6 	bl	10614 <OS_CPU_SR_Restore>
+   10f38:	e8bd4010 	pop	{r4, lr}
+   10f3c:	eaffffae 	b	10dfc <OS_Sched>
+
+00010f40 <OSTimeDly.part.1>:
+   10f40:	e92d4010 	push	{r4, lr}
+   10f44:	e1a04000 	mov	r4, r0
+   10f48:	ebfffda9 	bl	105f4 <OS_CPU_SR_Save>
+   10f4c:	e30522e4 	movw	r2, #21220	; 0x52e4
+   10f50:	e3402001 	movt	r2, #1
+   10f54:	e30532d4 	movw	r3, #21204	; 0x52d4
+   10f58:	e3403001 	movt	r3, #1
+   10f5c:	e5921000 	ldr	r1, [r2]
+   10f60:	e5d1c02f 	ldrb	ip, [r1, #47]	; 0x2f
+   10f64:	e5d1e030 	ldrb	lr, [r1, #48]	; 0x30
+   10f68:	e7d3200c 	ldrb	r2, [r3, ip]
+   10f6c:	e1c2200e 	bic	r2, r2, lr
+   10f70:	e3520000 	cmp	r2, #0
+   10f74:	e7c3200c 	strb	r2, [r3, ip]
+   10f78:	1a000005 	bne	10f94 <OSTimeDly.part.1+0x54>
+   10f7c:	e30532d0 	movw	r3, #21200	; 0x52d0
+   10f80:	e3403001 	movt	r3, #1
+   10f84:	e5d1c031 	ldrb	ip, [r1, #49]	; 0x31
+   10f88:	e5d32000 	ldrb	r2, [r3]
+   10f8c:	e1c2200c 	bic	r2, r2, ip
+   10f90:	e5c32000 	strb	r2, [r3]
+   10f94:	e1c142ba 	strh	r4, [r1, #42]	; 0x2a
+   10f98:	ebfffd9d 	bl	10614 <OS_CPU_SR_Restore>
+   10f9c:	e8bd4010 	pop	{r4, lr}
+   10fa0:	eaffff95 	b	10dfc <OS_Sched>
+
+00010fa4 <OSStatInit>:
+   10fa4:	e92d4010 	push	{r4, lr}
+   10fa8:	e3a00002 	mov	r0, #2
+   10fac:	e304498c 	movw	r4, #18828	; 0x498c
+   10fb0:	e3404001 	movt	r4, #1
+   10fb4:	ebffffe1 	bl	10f40 <OSTimeDly.part.1>
+   10fb8:	ebfffd8d 	bl	105f4 <OS_CPU_SR_Save>
+   10fbc:	e3a03000 	mov	r3, #0
+   10fc0:	e5843000 	str	r3, [r4]
+   10fc4:	ebfffd92 	bl	10614 <OS_CPU_SR_Restore>
+   10fc8:	e3a00064 	mov	r0, #100	; 0x64
+   10fcc:	ebffffdb 	bl	10f40 <OSTimeDly.part.1>
+   10fd0:	ebfffd87 	bl	105f4 <OS_CPU_SR_Save>
+   10fd4:	e3053f54 	movw	r3, #24404	; 0x5f54
+   10fd8:	e3403001 	movt	r3, #1
+   10fdc:	e3a01001 	mov	r1, #1
+   10fe0:	e3052240 	movw	r2, #21056	; 0x5240
+   10fe4:	e3402001 	movt	r2, #1
+   10fe8:	e5c31000 	strb	r1, [r3]
+   10fec:	e594c000 	ldr	ip, [r4]
+   10ff0:	e8bd4010 	pop	{r4, lr}
+   10ff4:	e582c000 	str	ip, [r2]
+   10ff8:	eafffd85 	b	10614 <OS_CPU_SR_Restore>
+
+00010ffc <OS_TaskStat>:
+   10ffc:	e92d4ff8 	push	{r3, r4, r5, r6, r7, r8, r9, sl, fp, lr}
+   11000:	e3054f54 	movw	r4, #24404	; 0x5f54
+   11004:	e3404001 	movt	r4, #1
+   11008:	e5d43000 	ldrb	r3, [r4]
+   1100c:	e3530000 	cmp	r3, #0
+   11010:	1a000004 	bne	11028 <OS_TaskStat+0x2c>
+   11014:	e3a000c8 	mov	r0, #200	; 0xc8
+   11018:	ebffffc8 	bl	10f40 <OSTimeDly.part.1>
+   1101c:	e5d43000 	ldrb	r3, [r4]
+   11020:	e3530000 	cmp	r3, #0
+   11024:	0afffffa 	beq	11014 <OS_TaskStat+0x18>
+   11028:	e305a240 	movw	sl, #21056	; 0x5240
+   1102c:	e340a001 	movt	sl, #1
+   11030:	e308351f 	movw	r3, #34079	; 0x851f
+   11034:	e34531eb 	movt	r3, #20971	; 0x51eb
+   11038:	e1a0b003 	mov	fp, r3
+   1103c:	e304598c 	movw	r5, #18828	; 0x498c
+   11040:	e3405001 	movt	r5, #1
+   11044:	e59a6000 	ldr	r6, [sl]
+   11048:	e3069058 	movw	r9, #24664	; 0x6058
+   1104c:	e3409001 	movt	r9, #1
+   11050:	e3058248 	movw	r8, #21064	; 0x5248
+   11054:	e3408001 	movt	r8, #1
+   11058:	e3a07000 	mov	r7, #0
+   1105c:	e0863693 	umull	r3, r6, r3, r6
+   11060:	e1a062a6 	lsr	r6, r6, #5
+   11064:	ea000008 	b	1108c <OS_TaskStat+0x90>
+   11068:	e734f614 	udiv	r4, r4, r6
+   1106c:	e2644064 	rsb	r4, r4, #100	; 0x64
+   11070:	e6af4074 	sxtb	r4, r4
+   11074:	e3540000 	cmp	r4, #0
+   11078:	a5c84000 	strbge	r4, [r8]
+   1107c:	b5c87000 	strblt	r7, [r8]
+   11080:	ebfffdd6 	bl	107e0 <OSTaskStatHook>
+   11084:	e3a00064 	mov	r0, #100	; 0x64
+   11088:	ebffffac 	bl	10f40 <OSTimeDly.part.1>
+   1108c:	ebfffd58 	bl	105f4 <OS_CPU_SR_Save>
+   11090:	e5953000 	ldr	r3, [r5]
+   11094:	e5954000 	ldr	r4, [r5]
+   11098:	e5893000 	str	r3, [r9]
+   1109c:	e5857000 	str	r7, [r5]
+   110a0:	ebfffd5b 	bl	10614 <OS_CPU_SR_Restore>
+   110a4:	e3560000 	cmp	r6, #0
+   110a8:	1affffee 	bne	11068 <OS_TaskStat+0x6c>
+   110ac:	e59a3000 	ldr	r3, [sl]
+   110b0:	e5c86000 	strb	r6, [r8]
+   110b4:	e086339b 	umull	r3, r6, fp, r3
+   110b8:	e1a062a6 	lsr	r6, r6, #5
+   110bc:	eaffffef 	b	11080 <OS_TaskStat+0x84>
+
+000110c0 <OS_TCBInit>:
+   110c0:	e92d47f0 	push	{r4, r5, r6, r7, r8, r9, sl, lr}
+   110c4:	e1a07003 	mov	r7, r3
+   110c8:	e1a06000 	mov	r6, r0
+   110cc:	e1a0a001 	mov	sl, r1
+   110d0:	e1a09002 	mov	r9, r2
+   110d4:	e1dd82b8 	ldrh	r8, [sp, #40]	; 0x28
+   110d8:	ebfffd45 	bl	105f4 <OS_CPU_SR_Save>
+   110dc:	e3053244 	movw	r3, #21060	; 0x5244
+   110e0:	e3403001 	movt	r3, #1
+   110e4:	e5934000 	ldr	r4, [r3]
+   110e8:	e3540000 	cmp	r4, #0
+   110ec:	0a00003e 	beq	111ec <OS_TCBInit+0x12c>
+   110f0:	e5942014 	ldr	r2, [r4, #20]
+   110f4:	e3a05000 	mov	r5, #0
+   110f8:	e5832000 	str	r2, [r3]
+   110fc:	ebfffd44 	bl	10614 <OS_CPU_SR_Restore>
+   11100:	e1a011a6 	lsr	r1, r6, #3
+   11104:	e30435d0 	movw	r3, #17872	; 0x45d0
+   11108:	e3403001 	movt	r3, #1
+   1110c:	e0830001 	add	r0, r3, r1
+   11110:	e2062007 	and	r2, r6, #7
+   11114:	e0833002 	add	r3, r3, r2
+   11118:	e5c4102f 	strb	r1, [r4, #47]	; 0x2f
+   1111c:	e5c4202e 	strb	r2, [r4, #46]	; 0x2e
+   11120:	e5d0c100 	ldrb	ip, [r0, #256]	; 0x100
+   11124:	e59d0024 	ldr	r0, [sp, #36]	; 0x24
+   11128:	e5d33100 	ldrb	r3, [r3, #256]	; 0x100
+   1112c:	e5840004 	str	r0, [r4, #4]
+   11130:	e59d0020 	ldr	r0, [sp, #32]
+   11134:	e5c4c031 	strb	ip, [r4, #49]	; 0x31
+   11138:	e5c43030 	strb	r3, [r4, #48]	; 0x30
+   1113c:	e5c4602d 	strb	r6, [r4, #45]	; 0x2d
+   11140:	e584000c 	str	r0, [r4, #12]
+   11144:	e1a00004 	mov	r0, r4
+   11148:	e5c4502c 	strb	r5, [r4, #44]	; 0x2c
+   1114c:	e1c452ba 	strh	r5, [r4, #42]	; 0x2a
+   11150:	e5c45032 	strb	r5, [r4, #50]	; 0x32
+   11154:	e584501c 	str	r5, [r4, #28]
+   11158:	e5845024 	str	r5, [r4, #36]	; 0x24
+   1115c:	e5845020 	str	r5, [r4, #32]
+   11160:	e584a000 	str	sl, [r4]
+   11164:	e5849008 	str	r9, [r4, #8]
+   11168:	e1c481b0 	strh	r8, [r4, #16]
+   1116c:	e1c471b2 	strh	r7, [r4, #18]
+   11170:	ebfffd9f 	bl	107f4 <OSTCBInitHook>
+   11174:	e1a00004 	mov	r0, r4
+   11178:	ebfffd95 	bl	107d4 <OSTaskCreateHook>
+   1117c:	ebfffd1c 	bl	105f4 <OS_CPU_SR_Save>
+   11180:	e30419d4 	movw	r1, #18900	; 0x49d4
+   11184:	e3401001 	movt	r1, #1
+   11188:	e3053f58 	movw	r3, #24408	; 0x5f58
+   1118c:	e3403001 	movt	r3, #1
+   11190:	e5912000 	ldr	r2, [r1]
+   11194:	e7834106 	str	r4, [r3, r6, lsl #2]
+   11198:	e30532d4 	movw	r3, #21204	; 0x52d4
+   1119c:	e3403001 	movt	r3, #1
+   111a0:	e1520005 	cmp	r2, r5
+   111a4:	e5845018 	str	r5, [r4, #24]
+   111a8:	e5842014 	str	r2, [r4, #20]
+   111ac:	15824018 	strne	r4, [r2, #24]
+   111b0:	e30522d0 	movw	r2, #21200	; 0x52d0
+   111b4:	e3402001 	movt	r2, #1
+   111b8:	e5d4502f 	ldrb	r5, [r4, #47]	; 0x2f
+   111bc:	e5d4e031 	ldrb	lr, [r4, #49]	; 0x31
+   111c0:	e5d2c000 	ldrb	ip, [r2]
+   111c4:	e5d46030 	ldrb	r6, [r4, #48]	; 0x30
+   111c8:	e18ee00c 	orr	lr, lr, ip
+   111cc:	e7d3c005 	ldrb	ip, [r3, r5]
+   111d0:	e5814000 	str	r4, [r1]
+   111d4:	e18c1006 	orr	r1, ip, r6
+   111d8:	e5c2e000 	strb	lr, [r2]
+   111dc:	e7c31005 	strb	r1, [r3, r5]
+   111e0:	ebfffd0b 	bl	10614 <OS_CPU_SR_Restore>
+   111e4:	e3a00000 	mov	r0, #0
+   111e8:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+   111ec:	ebfffd08 	bl	10614 <OS_CPU_SR_Restore>
+   111f0:	e3a00046 	mov	r0, #70	; 0x46
+   111f4:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+
+000111f8 <OSTaskCreateExt.part.0>:
+   111f8:	e92d4ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, lr}
+   111fc:	e1a05003 	mov	r5, r3
+   11200:	e3054f58 	movw	r4, #24408	; 0x5f58
+   11204:	e3404001 	movt	r4, #1
+   11208:	e24dd014 	sub	sp, sp, #20
+   1120c:	e1a09000 	mov	r9, r0
+   11210:	e1a0a001 	mov	sl, r1
+   11214:	e1a0b002 	mov	fp, r2
+   11218:	e1dd83b8 	ldrh	r8, [sp, #56]	; 0x38
+   1121c:	e1dd74b8 	ldrh	r7, [sp, #72]	; 0x48
+   11220:	ebfffcf3 	bl	105f4 <OS_CPU_SR_Save>
+   11224:	e7946105 	ldr	r6, [r4, r5, lsl #2]
+   11228:	e3560000 	cmp	r6, #0
+   1122c:	0a000004 	beq	11244 <OSTaskCreateExt.part.0+0x4c>
+   11230:	e3a06028 	mov	r6, #40	; 0x28
+   11234:	ebfffcf6 	bl	10614 <OS_CPU_SR_Restore>
+   11238:	e1a00006 	mov	r0, r6
+   1123c:	e28dd014 	add	sp, sp, #20
+   11240:	e8bd8ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, pc}
+   11244:	e3a03001 	mov	r3, #1
+   11248:	e7843105 	str	r3, [r4, r5, lsl #2]
+   1124c:	ebfffcf0 	bl	10614 <OS_CPU_SR_Restore>
+   11250:	e3170003 	tst	r7, #3
+   11254:	1a000023 	bne	112e8 <OSTaskCreateExt.part.0+0xf0>
+   11258:	e1a0200b 	mov	r2, fp
+   1125c:	e1a0100a 	mov	r1, sl
+   11260:	e1a03007 	mov	r3, r7
+   11264:	e1a00009 	mov	r0, r9
+   11268:	ebfffd2a 	bl	10718 <OSTaskStkInit>
+   1126c:	e59d3044 	ldr	r3, [sp, #68]	; 0x44
+   11270:	e1a01000 	mov	r1, r0
+   11274:	e58d7008 	str	r7, [sp, #8]
+   11278:	e58d3004 	str	r3, [sp, #4]
+   1127c:	e1a00005 	mov	r0, r5
+   11280:	e59d3040 	ldr	r3, [sp, #64]	; 0x40
+   11284:	e59d203c 	ldr	r2, [sp, #60]	; 0x3c
+   11288:	e58d3000 	str	r3, [sp]
+   1128c:	e1a03008 	mov	r3, r8
+   11290:	ebffff8a 	bl	110c0 <OS_TCBInit>
+   11294:	e2506000 	subs	r6, r0, #0
+   11298:	1a00000d 	bne	112d4 <OSTaskCreateExt.part.0+0xdc>
+   1129c:	ebfffcd4 	bl	105f4 <OS_CPU_SR_Save>
+   112a0:	e3053249 	movw	r3, #21065	; 0x5249
+   112a4:	e3403001 	movt	r3, #1
+   112a8:	e5d32000 	ldrb	r2, [r3]
+   112ac:	e2822001 	add	r2, r2, #1
+   112b0:	e5c32000 	strb	r2, [r3]
+   112b4:	ebfffcd6 	bl	10614 <OS_CPU_SR_Restore>
+   112b8:	e3043989 	movw	r3, #18825	; 0x4989
+   112bc:	e3403001 	movt	r3, #1
+   112c0:	e5d33000 	ldrb	r3, [r3]
+   112c4:	e3530001 	cmp	r3, #1
+   112c8:	1affffda 	bne	11238 <OSTaskCreateExt.part.0+0x40>
+   112cc:	ebfffeca 	bl	10dfc <OS_Sched>
+   112d0:	eaffffd8 	b	11238 <OSTaskCreateExt.part.0+0x40>
+   112d4:	ebfffcc6 	bl	105f4 <OS_CPU_SR_Save>
+   112d8:	e3a03000 	mov	r3, #0
+   112dc:	e7843105 	str	r3, [r4, r5, lsl #2]
+   112e0:	ebfffccb 	bl	10614 <OS_CPU_SR_Restore>
+   112e4:	eaffffd3 	b	11238 <OSTaskCreateExt.part.0+0x40>
+   112e8:	e59d3040 	ldr	r3, [sp, #64]	; 0x40
+   112ec:	e1a01006 	mov	r1, r6
+   112f0:	e59d003c 	ldr	r0, [sp, #60]	; 0x3c
+   112f4:	e1a02103 	lsl	r2, r3, #2
+   112f8:	eb000c76 	bl	144d8 <memset>
+   112fc:	eaffffd5 	b	11258 <OSTaskCreateExt.part.0+0x60>
+
+00011300 <OSFlagAccept>:
+   11300:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   11304:	e2505000 	subs	r5, r0, #0
+   11308:	e1a06003 	mov	r6, r3
+   1130c:	01a04005 	moveq	r4, r5
+   11310:	03e03069 	mvneq	r3, #105	; 0x69
+   11314:	05c63000 	strbeq	r3, [r6]
+   11318:	0a000005 	beq	11334 <OSFlagAccept+0x34>
+   1131c:	e5d53000 	ldrb	r3, [r5]
+   11320:	e3530005 	cmp	r3, #5
+   11324:	0a000004 	beq	1133c <OSFlagAccept+0x3c>
+   11328:	e3a03001 	mov	r3, #1
+   1132c:	e3a04000 	mov	r4, #0
+   11330:	e5c63000 	strb	r3, [r6]
+   11334:	e1a00004 	mov	r0, r4
+   11338:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   1133c:	e3120080 	tst	r2, #128	; 0x80
+   11340:	e3a03000 	mov	r3, #0
+   11344:	e1a04002 	mov	r4, r2
+   11348:	1202407f 	andne	r4, r2, #127	; 0x7f
+   1134c:	e5c63000 	strb	r3, [r6]
+   11350:	e1a07001 	mov	r7, r1
+   11354:	13a08001 	movne	r8, #1
+   11358:	03a08000 	moveq	r8, #0
+   1135c:	ebfffca4 	bl	105f4 <OS_CPU_SR_Save>
+   11360:	e3540003 	cmp	r4, #3
+   11364:	979ff104 	ldrls	pc, [pc, r4, lsl #2]
+   11368:	ea00001e 	b	113e8 <OSFlagAccept+0xe8>
+   1136c:	000113d8 	.word	0x000113d8
+   11370:	000113bc 	.word	0x000113bc
+   11374:	000113a0 	.word	0x000113a0
+   11378:	0001137c 	.word	0x0001137c
+   1137c:	e1d540b8 	ldrh	r4, [r5, #8]
+   11380:	e0177004 	ands	r7, r7, r4
+   11384:	1a000008 	bne	113ac <OSFlagAccept+0xac>
+   11388:	e3e03067 	mvn	r3, #103	; 0x67
+   1138c:	e5c63000 	strb	r3, [r6]
+   11390:	e1d540b8 	ldrh	r4, [r5, #8]
+   11394:	ebfffc9e 	bl	10614 <OS_CPU_SR_Restore>
+   11398:	e1a00004 	mov	r0, r4
+   1139c:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   113a0:	e1d540b8 	ldrh	r4, [r5, #8]
+   113a4:	e1d73004 	bics	r3, r7, r4
+   113a8:	1afffff6 	bne	11388 <OSFlagAccept+0x88>
+   113ac:	e3580001 	cmp	r8, #1
+   113b0:	01c44007 	biceq	r4, r4, r7
+   113b4:	01c540b8 	strheq	r4, [r5, #8]
+   113b8:	eafffff5 	b	11394 <OSFlagAccept+0x94>
+   113bc:	e1d540b8 	ldrh	r4, [r5, #8]
+   113c0:	e1d77004 	bics	r7, r7, r4
+   113c4:	0affffef 	beq	11388 <OSFlagAccept+0x88>
+   113c8:	e3580001 	cmp	r8, #1
+   113cc:	01844007 	orreq	r4, r4, r7
+   113d0:	01c540b8 	strheq	r4, [r5, #8]
+   113d4:	eaffffee 	b	11394 <OSFlagAccept+0x94>
+   113d8:	e1d540b8 	ldrh	r4, [r5, #8]
+   113dc:	e1140007 	tst	r4, r7
+   113e0:	1affffe8 	bne	11388 <OSFlagAccept+0x88>
+   113e4:	eafffff7 	b	113c8 <OSFlagAccept+0xc8>
+   113e8:	ebfffc89 	bl	10614 <OS_CPU_SR_Restore>
+   113ec:	e3e03068 	mvn	r3, #104	; 0x68
+   113f0:	e3a04000 	mov	r4, #0
+   113f4:	e5c63000 	strb	r3, [r6]
+   113f8:	eaffffcd 	b	11334 <OSFlagAccept+0x34>
+
+000113fc <OSFlagCreate>:
+   113fc:	e30532e1 	movw	r3, #21217	; 0x52e1
+   11400:	e3403001 	movt	r3, #1
+   11404:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   11408:	e5d35000 	ldrb	r5, [r3]
+   1140c:	e3550000 	cmp	r5, #0
+   11410:	13e03072 	mvnne	r3, #114	; 0x72
+   11414:	13a04000 	movne	r4, #0
+   11418:	15c13000 	strbne	r3, [r1]
+   1141c:	1a00000f 	bne	11460 <OSFlagCreate+0x64>
+   11420:	e1a07001 	mov	r7, r1
+   11424:	e1a06000 	mov	r6, r0
+   11428:	ebfffc71 	bl	105f4 <OS_CPU_SR_Save>
+   1142c:	e3053f50 	movw	r3, #24400	; 0x5f50
+   11430:	e3403001 	movt	r3, #1
+   11434:	e5934000 	ldr	r4, [r3]
+   11438:	e3540000 	cmp	r4, #0
+   1143c:	0a000009 	beq	11468 <OSFlagCreate+0x6c>
+   11440:	e5941004 	ldr	r1, [r4, #4]
+   11444:	e3a02005 	mov	r2, #5
+   11448:	e1c460b8 	strh	r6, [r4, #8]
+   1144c:	e5831000 	str	r1, [r3]
+   11450:	e5845004 	str	r5, [r4, #4]
+   11454:	e5c42000 	strb	r2, [r4]
+   11458:	ebfffc6d 	bl	10614 <OS_CPU_SR_Restore>
+   1145c:	e5c75000 	strb	r5, [r7]
+   11460:	e1a00004 	mov	r0, r4
+   11464:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   11468:	ebfffc69 	bl	10614 <OS_CPU_SR_Restore>
+   1146c:	e3e03065 	mvn	r3, #101	; 0x65
+   11470:	e1a00004 	mov	r0, r4
+   11474:	e5c73000 	strb	r3, [r7]
+   11478:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+
+0001147c <OSFlagDel>:
+   1147c:	e30532e1 	movw	r3, #21217	; 0x52e1
+   11480:	e3403001 	movt	r3, #1
+   11484:	e5d33000 	ldrb	r3, [r3]
+   11488:	e3530000 	cmp	r3, #0
+   1148c:	1a000007 	bne	114b0 <OSFlagDel+0x34>
+   11490:	e3500000 	cmp	r0, #0
+   11494:	0a00002b 	beq	11548 <OSFlagDel+0xcc>
+   11498:	e5d03000 	ldrb	r3, [r0]
+   1149c:	e3530005 	cmp	r3, #5
+   114a0:	0a000005 	beq	114bc <OSFlagDel+0x40>
+   114a4:	e3a03001 	mov	r3, #1
+   114a8:	e5c23000 	strb	r3, [r2]
+   114ac:	e12fff1e 	bx	lr
+   114b0:	e3e03073 	mvn	r3, #115	; 0x73
+   114b4:	e5c23000 	strb	r3, [r2]
+   114b8:	e12fff1e 	bx	lr
+   114bc:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   114c0:	e1a04000 	mov	r4, r0
+   114c4:	e1a05002 	mov	r5, r2
+   114c8:	e1a07001 	mov	r7, r1
+   114cc:	ebfffc48 	bl	105f4 <OS_CPU_SR_Save>
+   114d0:	e5946004 	ldr	r6, [r4, #4]
+   114d4:	e1a08000 	mov	r8, r0
+   114d8:	e3560000 	cmp	r6, #0
+   114dc:	0a00001c 	beq	11554 <OSFlagDel+0xd8>
+   114e0:	e3570000 	cmp	r7, #0
+   114e4:	0a000024 	beq	1157c <OSFlagDel+0x100>
+   114e8:	e3570001 	cmp	r7, #1
+   114ec:	1a00001c 	bne	11564 <OSFlagDel+0xe8>
+   114f0:	e1a00006 	mov	r0, r6
+   114f4:	e3a01000 	mov	r1, #0
+   114f8:	ebfffce3 	bl	1088c <OS_FlagTaskRdy>
+   114fc:	e5966000 	ldr	r6, [r6]
+   11500:	e3560000 	cmp	r6, #0
+   11504:	1afffff9 	bne	114f0 <OSFlagDel+0x74>
+   11508:	e3a06001 	mov	r6, #1
+   1150c:	e3a02000 	mov	r2, #0
+   11510:	e3053f50 	movw	r3, #24400	; 0x5f50
+   11514:	e3403001 	movt	r3, #1
+   11518:	e5c42000 	strb	r2, [r4]
+   1151c:	e1a00008 	mov	r0, r8
+   11520:	e5932000 	ldr	r2, [r3]
+   11524:	e5834000 	str	r4, [r3]
+   11528:	e5842004 	str	r2, [r4, #4]
+   1152c:	ebfffc38 	bl	10614 <OS_CPU_SR_Restore>
+   11530:	e3560001 	cmp	r6, #1
+   11534:	0a000015 	beq	11590 <OSFlagDel+0x114>
+   11538:	e3a03000 	mov	r3, #0
+   1153c:	e1a00003 	mov	r0, r3
+   11540:	e5c53000 	strb	r3, [r5]
+   11544:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   11548:	e3e03069 	mvn	r3, #105	; 0x69
+   1154c:	e5c23000 	strb	r3, [r2]
+   11550:	e12fff1e 	bx	lr
+   11554:	e3570000 	cmp	r7, #0
+   11558:	0a00000e 	beq	11598 <OSFlagDel+0x11c>
+   1155c:	e3570001 	cmp	r7, #1
+   11560:	0affffe9 	beq	1150c <OSFlagDel+0x90>
+   11564:	e1a00008 	mov	r0, r8
+   11568:	ebfffc29 	bl	10614 <OS_CPU_SR_Restore>
+   1156c:	e3a03007 	mov	r3, #7
+   11570:	e1a00004 	mov	r0, r4
+   11574:	e5c53000 	strb	r3, [r5]
+   11578:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   1157c:	ebfffc24 	bl	10614 <OS_CPU_SR_Restore>
+   11580:	e3a03008 	mov	r3, #8
+   11584:	e1a00004 	mov	r0, r4
+   11588:	e5c53000 	strb	r3, [r5]
+   1158c:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   11590:	ebfffe19 	bl	10dfc <OS_Sched>
+   11594:	eaffffe7 	b	11538 <OSFlagDel+0xbc>
+   11598:	e3053f50 	movw	r3, #24400	; 0x5f50
+   1159c:	e3403001 	movt	r3, #1
+   115a0:	e5c47000 	strb	r7, [r4]
+   115a4:	e5932000 	ldr	r2, [r3]
+   115a8:	e5834000 	str	r4, [r3]
+   115ac:	e5842004 	str	r2, [r4, #4]
+   115b0:	ebfffc17 	bl	10614 <OS_CPU_SR_Restore>
+   115b4:	e5c57000 	strb	r7, [r5]
+   115b8:	e1a00007 	mov	r0, r7
+   115bc:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+
+000115c0 <OSFlagPend>:
+   115c0:	e305c2e1 	movw	ip, #21217	; 0x52e1
+   115c4:	e340c001 	movt	ip, #1
+   115c8:	e92d47f0 	push	{r4, r5, r6, r7, r8, r9, sl, lr}
+   115cc:	e1a05000 	mov	r5, r0
+   115d0:	e5dc0000 	ldrb	r0, [ip]
+   115d4:	e24dd020 	sub	sp, sp, #32
+   115d8:	e3500000 	cmp	r0, #0
+   115dc:	1a00001b 	bne	11650 <OSFlagPend+0x90>
+   115e0:	e3550000 	cmp	r5, #0
+   115e4:	0a000020 	beq	1166c <OSFlagPend+0xac>
+   115e8:	e1a06002 	mov	r6, r2
+   115ec:	e5d52000 	ldrb	r2, [r5]
+   115f0:	e3520005 	cmp	r2, #5
+   115f4:	0a000006 	beq	11614 <OSFlagPend+0x54>
+   115f8:	e59d2040 	ldr	r2, [sp, #64]	; 0x40
+   115fc:	e3a03001 	mov	r3, #1
+   11600:	e1a04000 	mov	r4, r0
+   11604:	e5c23000 	strb	r3, [r2]
+   11608:	e1a00004 	mov	r0, r4
+   1160c:	e28dd020 	add	sp, sp, #32
+   11610:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+   11614:	e3160080 	tst	r6, #128	; 0x80
+   11618:	e1a07001 	mov	r7, r1
+   1161c:	1206607f 	andne	r6, r6, #127	; 0x7f
+   11620:	e1a08003 	mov	r8, r3
+   11624:	01a0a000 	moveq	sl, r0
+   11628:	13a0a001 	movne	sl, #1
+   1162c:	ebfffbf0 	bl	105f4 <OS_CPU_SR_Save>
+   11630:	e1a09000 	mov	r9, r0
+   11634:	e3560003 	cmp	r6, #3
+   11638:	979ff106 	ldrls	pc, [pc, r6, lsl #2]
+   1163c:	ea000030 	b	11704 <OSFlagPend+0x144>
+   11640:	000116b0 	.word	0x000116b0
+   11644:	000116cc 	.word	0x000116cc
+   11648:	000116e8 	.word	0x000116e8
+   1164c:	00011680 	.word	0x00011680
+   11650:	e59d2040 	ldr	r2, [sp, #64]	; 0x40
+   11654:	e3a03002 	mov	r3, #2
+   11658:	e3a04000 	mov	r4, #0
+   1165c:	e1a00004 	mov	r0, r4
+   11660:	e5c23000 	strb	r3, [r2]
+   11664:	e28dd020 	add	sp, sp, #32
+   11668:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+   1166c:	e59d2040 	ldr	r2, [sp, #64]	; 0x40
+   11670:	e3e03069 	mvn	r3, #105	; 0x69
+   11674:	e1a04005 	mov	r4, r5
+   11678:	e5c23000 	strb	r3, [r2]
+   1167c:	eaffffe1 	b	11608 <OSFlagPend+0x48>
+   11680:	e1d540b8 	ldrh	r4, [r5, #8]
+   11684:	e0173004 	ands	r3, r7, r4
+   11688:	0a000055 	beq	117e4 <OSFlagPend+0x224>
+   1168c:	e35a0001 	cmp	sl, #1
+   11690:	01c44003 	biceq	r4, r4, r3
+   11694:	01c540b8 	strheq	r4, [r5, #8]
+   11698:	e1a00009 	mov	r0, r9
+   1169c:	ebfffbdc 	bl	10614 <OS_CPU_SR_Restore>
+   116a0:	e59d2040 	ldr	r2, [sp, #64]	; 0x40
+   116a4:	e3a03000 	mov	r3, #0
+   116a8:	e5c23000 	strb	r3, [r2]
+   116ac:	eaffffd5 	b	11608 <OSFlagPend+0x48>
+   116b0:	e1d540b8 	ldrh	r4, [r5, #8]
+   116b4:	e1140007 	tst	r4, r7
+   116b8:	1a000017 	bne	1171c <OSFlagPend+0x15c>
+   116bc:	e35a0001 	cmp	sl, #1
+   116c0:	01874004 	orreq	r4, r7, r4
+   116c4:	01c540b8 	strheq	r4, [r5, #8]
+   116c8:	eafffff2 	b	11698 <OSFlagPend+0xd8>
+   116cc:	e1d540b8 	ldrh	r4, [r5, #8]
+   116d0:	e1d73004 	bics	r3, r7, r4
+   116d4:	0a00003e 	beq	117d4 <OSFlagPend+0x214>
+   116d8:	e35a0001 	cmp	sl, #1
+   116dc:	01844003 	orreq	r4, r4, r3
+   116e0:	01c540b8 	strheq	r4, [r5, #8]
+   116e4:	eaffffeb 	b	11698 <OSFlagPend+0xd8>
+   116e8:	e1d540b8 	ldrh	r4, [r5, #8]
+   116ec:	e1d73004 	bics	r3, r7, r4
+   116f0:	1a000033 	bne	117c4 <OSFlagPend+0x204>
+   116f4:	e35a0001 	cmp	sl, #1
+   116f8:	01c44007 	biceq	r4, r4, r7
+   116fc:	01c540b8 	strheq	r4, [r5, #8]
+   11700:	eaffffe4 	b	11698 <OSFlagPend+0xd8>
+   11704:	ebfffbc2 	bl	10614 <OS_CPU_SR_Restore>
+   11708:	e59d2040 	ldr	r2, [sp, #64]	; 0x40
+   1170c:	e3e03068 	mvn	r3, #104	; 0x68
+   11710:	e3a04000 	mov	r4, #0
+   11714:	e5c23000 	strb	r3, [r2]
+   11718:	eaffffba 	b	11608 <OSFlagPend+0x48>
+   1171c:	e1a02007 	mov	r2, r7
+   11720:	e58d8000 	str	r8, [sp]
+   11724:	e3a03000 	mov	r3, #0
+   11728:	e28d100c 	add	r1, sp, #12
+   1172c:	e1a00005 	mov	r0, r5
+   11730:	ebfffc30 	bl	107f8 <OS_FlagBlock>
+   11734:	e1a00009 	mov	r0, r9
+   11738:	ebfffbb5 	bl	10614 <OS_CPU_SR_Restore>
+   1173c:	ebfffdae 	bl	10dfc <OS_Sched>
+   11740:	ebfffbab 	bl	105f4 <OS_CPU_SR_Save>
+   11744:	e30532e4 	movw	r3, #21220	; 0x52e4
+   11748:	e3403001 	movt	r3, #1
+   1174c:	e5933000 	ldr	r3, [r3]
+   11750:	e5d3202c 	ldrb	r2, [r3, #44]	; 0x2c
+   11754:	e3120020 	tst	r2, #32
+   11758:	0a000011 	beq	117a4 <OSFlagPend+0x1e4>
+   1175c:	e59d1010 	ldr	r1, [sp, #16]
+   11760:	e59d200c 	ldr	r2, [sp, #12]
+   11764:	e3510000 	cmp	r1, #0
+   11768:	0a000032 	beq	11838 <OSFlagPend+0x278>
+   1176c:	e3520000 	cmp	r2, #0
+   11770:	e5812000 	str	r2, [r1]
+   11774:	0a000000 	beq	1177c <OSFlagPend+0x1bc>
+   11778:	e5821004 	str	r1, [r2, #4]
+   1177c:	e59d1014 	ldr	r1, [sp, #20]
+   11780:	e3a02000 	mov	r2, #0
+   11784:	e1a04002 	mov	r4, r2
+   11788:	e5812024 	str	r2, [r1, #36]	; 0x24
+   1178c:	e5c3202c 	strb	r2, [r3, #44]	; 0x2c
+   11790:	ebfffb9f 	bl	10614 <OS_CPU_SR_Restore>
+   11794:	e59d2040 	ldr	r2, [sp, #64]	; 0x40
+   11798:	e3a0300a 	mov	r3, #10
+   1179c:	e5c23000 	strb	r3, [r2]
+   117a0:	eaffff98 	b	11608 <OSFlagPend+0x48>
+   117a4:	e35a0001 	cmp	sl, #1
+   117a8:	0a000011 	beq	117f4 <OSFlagPend+0x234>
+   117ac:	e1d540b8 	ldrh	r4, [r5, #8]
+   117b0:	ebfffb97 	bl	10614 <OS_CPU_SR_Restore>
+   117b4:	e59d2040 	ldr	r2, [sp, #64]	; 0x40
+   117b8:	e3a03000 	mov	r3, #0
+   117bc:	e5c23000 	strb	r3, [r2]
+   117c0:	eaffff90 	b	11608 <OSFlagPend+0x48>
+   117c4:	e58d8000 	str	r8, [sp]
+   117c8:	e1a02007 	mov	r2, r7
+   117cc:	e3a03002 	mov	r3, #2
+   117d0:	eaffffd4 	b	11728 <OSFlagPend+0x168>
+   117d4:	e58d8000 	str	r8, [sp]
+   117d8:	e1a02007 	mov	r2, r7
+   117dc:	e3a03001 	mov	r3, #1
+   117e0:	eaffffd0 	b	11728 <OSFlagPend+0x168>
+   117e4:	e58d8000 	str	r8, [sp]
+   117e8:	e1a02007 	mov	r2, r7
+   117ec:	e3a03003 	mov	r3, #3
+   117f0:	eaffffcc 	b	11728 <OSFlagPend+0x168>
+   117f4:	e3560003 	cmp	r6, #3
+   117f8:	979ff106 	ldrls	pc, [pc, r6, lsl #2]
+   117fc:	eaffffea 	b	117ac <OSFlagPend+0x1ec>
+   11800:	00011824 	.word	0x00011824
+   11804:	00011824 	.word	0x00011824
+   11808:	00011810 	.word	0x00011810
+   1180c:	00011810 	.word	0x00011810
+   11810:	e1d332b8 	ldrh	r3, [r3, #40]	; 0x28
+   11814:	e1d540b8 	ldrh	r4, [r5, #8]
+   11818:	e1c44003 	bic	r4, r4, r3
+   1181c:	e1c540b8 	strh	r4, [r5, #8]
+   11820:	eaffffe2 	b	117b0 <OSFlagPend+0x1f0>
+   11824:	e1d332b8 	ldrh	r3, [r3, #40]	; 0x28
+   11828:	e1d540b8 	ldrh	r4, [r5, #8]
+   1182c:	e1844003 	orr	r4, r4, r3
+   11830:	e1c540b8 	strh	r4, [r5, #8]
+   11834:	eaffffdd 	b	117b0 <OSFlagPend+0x1f0>
+   11838:	e59dc018 	ldr	ip, [sp, #24]
+   1183c:	e3520000 	cmp	r2, #0
+   11840:	e58c2004 	str	r2, [ip, #4]
+   11844:	1affffcb 	bne	11778 <OSFlagPend+0x1b8>
+   11848:	eaffffcb 	b	1177c <OSFlagPend+0x1bc>
+
+0001184c <OSFlagPost>:
+   1184c:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   11850:	e2505000 	subs	r5, r0, #0
+   11854:	01a04005 	moveq	r4, r5
+   11858:	03e02069 	mvneq	r2, #105	; 0x69
+   1185c:	05c32000 	strbeq	r2, [r3]
+   11860:	0a000005 	beq	1187c <OSFlagPost+0x30>
+   11864:	e5d5c000 	ldrb	ip, [r5]
+   11868:	e35c0005 	cmp	ip, #5
+   1186c:	0a000004 	beq	11884 <OSFlagPost+0x38>
+   11870:	e3a02001 	mov	r2, #1
+   11874:	e3a04000 	mov	r4, #0
+   11878:	e5c32000 	strb	r2, [r3]
+   1187c:	e1a00004 	mov	r0, r4
+   11880:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   11884:	e1a04002 	mov	r4, r2
+   11888:	e1a06003 	mov	r6, r3
+   1188c:	e1a07001 	mov	r7, r1
+   11890:	ebfffb57 	bl	105f4 <OS_CPU_SR_Save>
+   11894:	e3540000 	cmp	r4, #0
+   11898:	e1a08000 	mov	r8, r0
+   1189c:	0a00003a 	beq	1198c <OSFlagPost+0x140>
+   118a0:	e3540001 	cmp	r4, #1
+   118a4:	1a000033 	bne	11978 <OSFlagPost+0x12c>
+   118a8:	e1d510b8 	ldrh	r1, [r5, #8]
+   118ac:	e1871001 	orr	r1, r7, r1
+   118b0:	e1c510b8 	strh	r1, [r5, #8]
+   118b4:	e5954004 	ldr	r4, [r5, #4]
+   118b8:	e3540000 	cmp	r4, #0
+   118bc:	0a000038 	beq	119a4 <OSFlagPost+0x158>
+   118c0:	e3a07000 	mov	r7, #0
+   118c4:	e5d42012 	ldrb	r2, [r4, #18]
+   118c8:	e3520003 	cmp	r2, #3
+   118cc:	979ff102 	ldrls	pc, [pc, r2, lsl #2]
+   118d0:	ea000007 	b	118f4 <OSFlagPost+0xa8>
+   118d4:	0001192c 	.word	0x0001192c
+   118d8:	00011954 	.word	0x00011954
+   118dc:	00011940 	.word	0x00011940
+   118e0:	000118e4 	.word	0x000118e4
+   118e4:	e1d510b8 	ldrh	r1, [r5, #8]
+   118e8:	e1d431b0 	ldrh	r3, [r4, #16]
+   118ec:	e0111003 	ands	r1, r1, r3
+   118f0:	1a00001b 	bne	11964 <OSFlagPost+0x118>
+   118f4:	e5944000 	ldr	r4, [r4]
+   118f8:	e3540000 	cmp	r4, #0
+   118fc:	1afffff0 	bne	118c4 <OSFlagPost+0x78>
+   11900:	e1a00008 	mov	r0, r8
+   11904:	ebfffb42 	bl	10614 <OS_CPU_SR_Restore>
+   11908:	e3570001 	cmp	r7, #1
+   1190c:	0a000022 	beq	1199c <OSFlagPost+0x150>
+   11910:	ebfffb37 	bl	105f4 <OS_CPU_SR_Save>
+   11914:	e1d540b8 	ldrh	r4, [r5, #8]
+   11918:	ebfffb3d 	bl	10614 <OS_CPU_SR_Restore>
+   1191c:	e3a03000 	mov	r3, #0
+   11920:	e1a00004 	mov	r0, r4
+   11924:	e5c63000 	strb	r3, [r6]
+   11928:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   1192c:	e1d411b0 	ldrh	r1, [r4, #16]
+   11930:	e1d530b8 	ldrh	r3, [r5, #8]
+   11934:	e1130001 	tst	r3, r1
+   11938:	1affffed 	bne	118f4 <OSFlagPost+0xa8>
+   1193c:	ea000008 	b	11964 <OSFlagPost+0x118>
+   11940:	e1d411b0 	ldrh	r1, [r4, #16]
+   11944:	e1d530b8 	ldrh	r3, [r5, #8]
+   11948:	e1d13003 	bics	r3, r1, r3
+   1194c:	1affffe8 	bne	118f4 <OSFlagPost+0xa8>
+   11950:	ea000003 	b	11964 <OSFlagPost+0x118>
+   11954:	e1d530b8 	ldrh	r3, [r5, #8]
+   11958:	e1d411b0 	ldrh	r1, [r4, #16]
+   1195c:	e1d11003 	bics	r1, r1, r3
+   11960:	0affffe3 	beq	118f4 <OSFlagPost+0xa8>
+   11964:	e1a00004 	mov	r0, r4
+   11968:	ebfffbc7 	bl	1088c <OS_FlagTaskRdy>
+   1196c:	e3500001 	cmp	r0, #1
+   11970:	03a07001 	moveq	r7, #1
+   11974:	eaffffde 	b	118f4 <OSFlagPost+0xa8>
+   11978:	ebfffb25 	bl	10614 <OS_CPU_SR_Restore>
+   1197c:	e3e03066 	mvn	r3, #102	; 0x66
+   11980:	e3a04000 	mov	r4, #0
+   11984:	e5c63000 	strb	r3, [r6]
+   11988:	eaffffbb 	b	1187c <OSFlagPost+0x30>
+   1198c:	e1d510b8 	ldrh	r1, [r5, #8]
+   11990:	e1c11007 	bic	r1, r1, r7
+   11994:	e1c510b8 	strh	r1, [r5, #8]
+   11998:	eaffffc5 	b	118b4 <OSFlagPost+0x68>
+   1199c:	ebfffd16 	bl	10dfc <OS_Sched>
+   119a0:	eaffffda 	b	11910 <OSFlagPost+0xc4>
+   119a4:	e1a00008 	mov	r0, r8
+   119a8:	ebfffb19 	bl	10614 <OS_CPU_SR_Restore>
+   119ac:	eaffffd7 	b	11910 <OSFlagPost+0xc4>
+
+000119b0 <OSFlagQuery>:
+   119b0:	e92d4070 	push	{r4, r5, r6, lr}
+   119b4:	e2504000 	subs	r4, r0, #0
+   119b8:	03e03069 	mvneq	r3, #105	; 0x69
+   119bc:	05c13000 	strbeq	r3, [r1]
+   119c0:	0a000005 	beq	119dc <OSFlagQuery+0x2c>
+   119c4:	e5d43000 	ldrb	r3, [r4]
+   119c8:	e3530005 	cmp	r3, #5
+   119cc:	0a000004 	beq	119e4 <OSFlagQuery+0x34>
+   119d0:	e3a03001 	mov	r3, #1
+   119d4:	e3a04000 	mov	r4, #0
+   119d8:	e5c13000 	strb	r3, [r1]
+   119dc:	e1a00004 	mov	r0, r4
+   119e0:	e8bd8070 	pop	{r4, r5, r6, pc}
+   119e4:	e1a05001 	mov	r5, r1
+   119e8:	ebfffb01 	bl	105f4 <OS_CPU_SR_Save>
+   119ec:	e1d440b8 	ldrh	r4, [r4, #8]
+   119f0:	ebfffb07 	bl	10614 <OS_CPU_SR_Restore>
+   119f4:	e3a03000 	mov	r3, #0
+   119f8:	e1a00004 	mov	r0, r4
+   119fc:	e5c53000 	strb	r3, [r5]
+   11a00:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+00011a04 <OS_FlagInit>:
+   11a04:	e3043994 	movw	r3, #18836	; 0x4994
+   11a08:	e3403001 	movt	r3, #1
+   11a0c:	e1a01003 	mov	r1, r3
+   11a10:	e3a02000 	mov	r2, #0
+   11a14:	e3050f50 	movw	r0, #24400	; 0x5f50
+   11a18:	e3400001 	movt	r0, #1
+   11a1c:	e92d4010 	push	{r4, lr}
+   11a20:	e283c030 	add	ip, r3, #48	; 0x30
+   11a24:	e2834018 	add	r4, r3, #24
+   11a28:	e4c1200c 	strb	r2, [r1], #12
+   11a2c:	e283e024 	add	lr, r3, #36	; 0x24
+   11a30:	e5834010 	str	r4, [r3, #16]
+   11a34:	e583e01c 	str	lr, [r3, #28]
+   11a38:	e583c028 	str	ip, [r3, #40]	; 0x28
+   11a3c:	e5803000 	str	r3, [r0]
+   11a40:	e5831004 	str	r1, [r3, #4]
+   11a44:	e5c3200c 	strb	r2, [r3, #12]
+   11a48:	e5c32018 	strb	r2, [r3, #24]
+   11a4c:	e5c32024 	strb	r2, [r3, #36]	; 0x24
+   11a50:	e5832034 	str	r2, [r3, #52]	; 0x34
+   11a54:	e8bd8010 	pop	{r4, pc}
+
+00011a58 <OS_FlagUnlink>:
+   11a58:	e5902004 	ldr	r2, [r0, #4]
+   11a5c:	e5903000 	ldr	r3, [r0]
+   11a60:	e3520000 	cmp	r2, #0
+   11a64:	0a000007 	beq	11a88 <OS_FlagUnlink+0x30>
+   11a68:	e3530000 	cmp	r3, #0
+   11a6c:	e5823000 	str	r3, [r2]
+   11a70:	0a000000 	beq	11a78 <OS_FlagUnlink+0x20>
+   11a74:	e5832004 	str	r2, [r3, #4]
+   11a78:	e5903008 	ldr	r3, [r0, #8]
+   11a7c:	e3a02000 	mov	r2, #0
+   11a80:	e5832024 	str	r2, [r3, #36]	; 0x24
+   11a84:	e12fff1e 	bx	lr
+   11a88:	e590100c 	ldr	r1, [r0, #12]
+   11a8c:	e3530000 	cmp	r3, #0
+   11a90:	e5813004 	str	r3, [r1, #4]
+   11a94:	1afffff6 	bne	11a74 <OS_FlagUnlink+0x1c>
+   11a98:	eafffff6 	b	11a78 <OS_FlagUnlink+0x20>
+
+00011a9c <OSMboxAccept>:
+   11a9c:	e92d4070 	push	{r4, r5, r6, lr}
+   11aa0:	e2504000 	subs	r4, r0, #0
+   11aa4:	0a000009 	beq	11ad0 <OSMboxAccept+0x34>
+   11aa8:	e5d43000 	ldrb	r3, [r4]
+   11aac:	e3530001 	cmp	r3, #1
+   11ab0:	1a000006 	bne	11ad0 <OSMboxAccept+0x34>
+   11ab4:	ebffface 	bl	105f4 <OS_CPU_SR_Save>
+   11ab8:	e3a03000 	mov	r3, #0
+   11abc:	e5945004 	ldr	r5, [r4, #4]
+   11ac0:	e5843004 	str	r3, [r4, #4]
+   11ac4:	ebfffad2 	bl	10614 <OS_CPU_SR_Restore>
+   11ac8:	e1a00005 	mov	r0, r5
+   11acc:	e8bd8070 	pop	{r4, r5, r6, pc}
+   11ad0:	e3a05000 	mov	r5, #0
+   11ad4:	e1a00005 	mov	r0, r5
+   11ad8:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+00011adc <OSMboxCreate>:
+   11adc:	e30532e1 	movw	r3, #21217	; 0x52e1
+   11ae0:	e3403001 	movt	r3, #1
+   11ae4:	e92d4070 	push	{r4, r5, r6, lr}
+   11ae8:	e5d35000 	ldrb	r5, [r3]
+   11aec:	e3550000 	cmp	r5, #0
+   11af0:	13a04000 	movne	r4, #0
+   11af4:	1a000016 	bne	11b54 <OSMboxCreate+0x78>
+   11af8:	e1a06000 	mov	r6, r0
+   11afc:	ebfffabc 	bl	105f4 <OS_CPU_SR_Save>
+   11b00:	e30532dc 	movw	r3, #21212	; 0x52dc
+   11b04:	e3403001 	movt	r3, #1
+   11b08:	e5934000 	ldr	r4, [r3]
+   11b0c:	e3540000 	cmp	r4, #0
+   11b10:	0a000011 	beq	11b5c <OSMboxCreate+0x80>
+   11b14:	e5942004 	ldr	r2, [r4, #4]
+   11b18:	e5832000 	str	r2, [r3]
+   11b1c:	ebfffabc 	bl	10614 <OS_CPU_SR_Restore>
+   11b20:	e3a03001 	mov	r3, #1
+   11b24:	e1c450b2 	strh	r5, [r4, #2]
+   11b28:	e5846004 	str	r6, [r4, #4]
+   11b2c:	e5c45001 	strb	r5, [r4, #1]
+   11b30:	e5c45008 	strb	r5, [r4, #8]
+   11b34:	e5c45009 	strb	r5, [r4, #9]
+   11b38:	e5c4500a 	strb	r5, [r4, #10]
+   11b3c:	e5c4500b 	strb	r5, [r4, #11]
+   11b40:	e5c4500c 	strb	r5, [r4, #12]
+   11b44:	e5c4500d 	strb	r5, [r4, #13]
+   11b48:	e5c4500e 	strb	r5, [r4, #14]
+   11b4c:	e5c4500f 	strb	r5, [r4, #15]
+   11b50:	e5c43000 	strb	r3, [r4]
+   11b54:	e1a00004 	mov	r0, r4
+   11b58:	e8bd8070 	pop	{r4, r5, r6, pc}
+   11b5c:	ebfffaac 	bl	10614 <OS_CPU_SR_Restore>
+   11b60:	e1a00004 	mov	r0, r4
+   11b64:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+00011b68 <OSMboxDel>:
+   11b68:	e30532e1 	movw	r3, #21217	; 0x52e1
+   11b6c:	e3403001 	movt	r3, #1
+   11b70:	e5d33000 	ldrb	r3, [r3]
+   11b74:	e3530000 	cmp	r3, #0
+   11b78:	1a000007 	bne	11b9c <OSMboxDel+0x34>
+   11b7c:	e3500000 	cmp	r0, #0
+   11b80:	0a000018 	beq	11be8 <OSMboxDel+0x80>
+   11b84:	e5d03000 	ldrb	r3, [r0]
+   11b88:	e3530001 	cmp	r3, #1
+   11b8c:	0a000005 	beq	11ba8 <OSMboxDel+0x40>
+   11b90:	e3a03001 	mov	r3, #1
+   11b94:	e5c23000 	strb	r3, [r2]
+   11b98:	e12fff1e 	bx	lr
+   11b9c:	e3e03073 	mvn	r3, #115	; 0x73
+   11ba0:	e5c23000 	strb	r3, [r2]
+   11ba4:	e12fff1e 	bx	lr
+   11ba8:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   11bac:	e1a04000 	mov	r4, r0
+   11bb0:	e1a05002 	mov	r5, r2
+   11bb4:	e1a06001 	mov	r6, r1
+   11bb8:	ebfffa8d 	bl	105f4 <OS_CPU_SR_Save>
+   11bbc:	e5d43001 	ldrb	r3, [r4, #1]
+   11bc0:	e1a07000 	mov	r7, r0
+   11bc4:	e3530000 	cmp	r3, #0
+   11bc8:	0a000009 	beq	11bf4 <OSMboxDel+0x8c>
+   11bcc:	e3560000 	cmp	r6, #0
+   11bd0:	1a000021 	bne	11c5c <OSMboxDel+0xf4>
+   11bd4:	ebfffa8e 	bl	10614 <OS_CPU_SR_Restore>
+   11bd8:	e3a03008 	mov	r3, #8
+   11bdc:	e1a00004 	mov	r0, r4
+   11be0:	e5c53000 	strb	r3, [r5]
+   11be4:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   11be8:	e3a03004 	mov	r3, #4
+   11bec:	e5c23000 	strb	r3, [r2]
+   11bf0:	e12fff1e 	bx	lr
+   11bf4:	e3560000 	cmp	r6, #0
+   11bf8:	0a000024 	beq	11c90 <OSMboxDel+0x128>
+   11bfc:	e3560001 	cmp	r6, #1
+   11c00:	1a00000f 	bne	11c44 <OSMboxDel+0xdc>
+   11c04:	e1a06003 	mov	r6, r3
+   11c08:	e3a02000 	mov	r2, #0
+   11c0c:	e30532dc 	movw	r3, #21212	; 0x52dc
+   11c10:	e3403001 	movt	r3, #1
+   11c14:	e5c42000 	strb	r2, [r4]
+   11c18:	e1a00007 	mov	r0, r7
+   11c1c:	e5932000 	ldr	r2, [r3]
+   11c20:	e5834000 	str	r4, [r3]
+   11c24:	e5842004 	str	r2, [r4, #4]
+   11c28:	ebfffa79 	bl	10614 <OS_CPU_SR_Restore>
+   11c2c:	e3560001 	cmp	r6, #1
+   11c30:	0a000014 	beq	11c88 <OSMboxDel+0x120>
+   11c34:	e3a03000 	mov	r3, #0
+   11c38:	e1a00003 	mov	r0, r3
+   11c3c:	e5c53000 	strb	r3, [r5]
+   11c40:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   11c44:	e1a00007 	mov	r0, r7
+   11c48:	ebfffa71 	bl	10614 <OS_CPU_SR_Restore>
+   11c4c:	e3a03007 	mov	r3, #7
+   11c50:	e1a00004 	mov	r0, r4
+   11c54:	e5c53000 	strb	r3, [r5]
+   11c58:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   11c5c:	e3560001 	cmp	r6, #1
+   11c60:	1afffff7 	bne	11c44 <OSMboxDel+0xdc>
+   11c64:	e3a02002 	mov	r2, #2
+   11c68:	e3a01000 	mov	r1, #0
+   11c6c:	e1a00004 	mov	r0, r4
+   11c70:	ebfffbfd 	bl	10c6c <OS_EventTaskRdy>
+   11c74:	e5d43001 	ldrb	r3, [r4, #1]
+   11c78:	e3530000 	cmp	r3, #0
+   11c7c:	1afffff8 	bne	11c64 <OSMboxDel+0xfc>
+   11c80:	e3a06001 	mov	r6, #1
+   11c84:	eaffffdf 	b	11c08 <OSMboxDel+0xa0>
+   11c88:	ebfffc5b 	bl	10dfc <OS_Sched>
+   11c8c:	eaffffe8 	b	11c34 <OSMboxDel+0xcc>
+   11c90:	e30532dc 	movw	r3, #21212	; 0x52dc
+   11c94:	e3403001 	movt	r3, #1
+   11c98:	e5c46000 	strb	r6, [r4]
+   11c9c:	e5932000 	ldr	r2, [r3]
+   11ca0:	e5834000 	str	r4, [r3]
+   11ca4:	e5842004 	str	r2, [r4, #4]
+   11ca8:	ebfffa59 	bl	10614 <OS_CPU_SR_Restore>
+   11cac:	e5c56000 	strb	r6, [r5]
+   11cb0:	e1a00006 	mov	r0, r6
+   11cb4:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+
+00011cb8 <OSMboxPend>:
+   11cb8:	e30532e1 	movw	r3, #21217	; 0x52e1
+   11cbc:	e3403001 	movt	r3, #1
+   11cc0:	e92d47f0 	push	{r4, r5, r6, r7, r8, r9, sl, lr}
+   11cc4:	e5d35000 	ldrb	r5, [r3]
+   11cc8:	e3550000 	cmp	r5, #0
+   11ccc:	13a03002 	movne	r3, #2
+   11cd0:	13a04000 	movne	r4, #0
+   11cd4:	15c23000 	strbne	r3, [r2]
+   11cd8:	1a000012 	bne	11d28 <OSMboxPend+0x70>
+   11cdc:	e3500000 	cmp	r0, #0
+   11ce0:	01a04000 	moveq	r4, r0
+   11ce4:	03a03004 	moveq	r3, #4
+   11ce8:	05c23000 	strbeq	r3, [r2]
+   11cec:	0a00000d 	beq	11d28 <OSMboxPend+0x70>
+   11cf0:	e5d03000 	ldrb	r3, [r0]
+   11cf4:	e3530001 	cmp	r3, #1
+   11cf8:	1a00000c 	bne	11d30 <OSMboxPend+0x78>
+   11cfc:	e1a07000 	mov	r7, r0
+   11d00:	e1a06002 	mov	r6, r2
+   11d04:	e1a08001 	mov	r8, r1
+   11d08:	ebfffa39 	bl	105f4 <OS_CPU_SR_Save>
+   11d0c:	e1a09000 	mov	r9, r0
+   11d10:	e5974004 	ldr	r4, [r7, #4]
+   11d14:	e3540000 	cmp	r4, #0
+   11d18:	0a000009 	beq	11d44 <OSMboxPend+0x8c>
+   11d1c:	e5875004 	str	r5, [r7, #4]
+   11d20:	ebfffa3b 	bl	10614 <OS_CPU_SR_Restore>
+   11d24:	e5c65000 	strb	r5, [r6]
+   11d28:	e1a00004 	mov	r0, r4
+   11d2c:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+   11d30:	e3a03001 	mov	r3, #1
+   11d34:	e1a04005 	mov	r4, r5
+   11d38:	e1a00004 	mov	r0, r4
+   11d3c:	e5c23000 	strb	r3, [r2]
+   11d40:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+   11d44:	e30542e4 	movw	r4, #21220	; 0x52e4
+   11d48:	e3404001 	movt	r4, #1
+   11d4c:	e1a00007 	mov	r0, r7
+   11d50:	e5943000 	ldr	r3, [r4]
+   11d54:	e5d3202c 	ldrb	r2, [r3, #44]	; 0x2c
+   11d58:	e1c382ba 	strh	r8, [r3, #42]	; 0x2a
+   11d5c:	e3822002 	orr	r2, r2, #2
+   11d60:	e5c3202c 	strb	r2, [r3, #44]	; 0x2c
+   11d64:	ebfffbeb 	bl	10d18 <OS_EventTaskWait>
+   11d68:	e1a00009 	mov	r0, r9
+   11d6c:	ebfffa28 	bl	10614 <OS_CPU_SR_Restore>
+   11d70:	ebfffc21 	bl	10dfc <OS_Sched>
+   11d74:	ebfffa1e 	bl	105f4 <OS_CPU_SR_Save>
+   11d78:	e5943000 	ldr	r3, [r4]
+   11d7c:	e1a02000 	mov	r2, r0
+   11d80:	e5934020 	ldr	r4, [r3, #32]
+   11d84:	e3540000 	cmp	r4, #0
+   11d88:	0a000006 	beq	11da8 <OSMboxPend+0xf0>
+   11d8c:	e5835020 	str	r5, [r3, #32]
+   11d90:	e5c3502c 	strb	r5, [r3, #44]	; 0x2c
+   11d94:	e583501c 	str	r5, [r3, #28]
+   11d98:	ebfffa1d 	bl	10614 <OS_CPU_SR_Restore>
+   11d9c:	e5c65000 	strb	r5, [r6]
+   11da0:	e1a00004 	mov	r0, r4
+   11da4:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+   11da8:	e5d3102f 	ldrb	r1, [r3, #47]	; 0x2f
+   11dac:	e5d3c030 	ldrb	ip, [r3, #48]	; 0x30
+   11db0:	e0871001 	add	r1, r7, r1
+   11db4:	e5d10008 	ldrb	r0, [r1, #8]
+   11db8:	e1c0000c 	bic	r0, r0, ip
+   11dbc:	e3500000 	cmp	r0, #0
+   11dc0:	e5c10008 	strb	r0, [r1, #8]
+   11dc4:	05d71001 	ldrbeq	r1, [r7, #1]
+   11dc8:	05d30031 	ldrbeq	r0, [r3, #49]	; 0x31
+   11dcc:	01c11000 	biceq	r1, r1, r0
+   11dd0:	e1a00002 	mov	r0, r2
+   11dd4:	05c71001 	strbeq	r1, [r7, #1]
+   11dd8:	e3a01000 	mov	r1, #0
+   11ddc:	e5c3102c 	strb	r1, [r3, #44]	; 0x2c
+   11de0:	e583101c 	str	r1, [r3, #28]
+   11de4:	ebfffa0a 	bl	10614 <OS_CPU_SR_Restore>
+   11de8:	e3a0300a 	mov	r3, #10
+   11dec:	e5c63000 	strb	r3, [r6]
+   11df0:	eaffffcc 	b	11d28 <OSMboxPend+0x70>
+
+00011df4 <OSMboxPost>:
+   11df4:	e3500000 	cmp	r0, #0
+   11df8:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   11dfc:	03a04004 	moveq	r4, #4
+   11e00:	0a000006 	beq	11e20 <OSMboxPost+0x2c>
+   11e04:	e3510000 	cmp	r1, #0
+   11e08:	03a04003 	moveq	r4, #3
+   11e0c:	0a000003 	beq	11e20 <OSMboxPost+0x2c>
+   11e10:	e5d03000 	ldrb	r3, [r0]
+   11e14:	e3530001 	cmp	r3, #1
+   11e18:	13a04001 	movne	r4, #1
+   11e1c:	0a000001 	beq	11e28 <OSMboxPost+0x34>
+   11e20:	e1a00004 	mov	r0, r4
+   11e24:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   11e28:	e1a06000 	mov	r6, r0
+   11e2c:	e1a05001 	mov	r5, r1
+   11e30:	ebfff9ef 	bl	105f4 <OS_CPU_SR_Save>
+   11e34:	e1a07000 	mov	r7, r0
+   11e38:	e5d64001 	ldrb	r4, [r6, #1]
+   11e3c:	e3540000 	cmp	r4, #0
+   11e40:	1a000005 	bne	11e5c <OSMboxPost+0x68>
+   11e44:	e5963004 	ldr	r3, [r6, #4]
+   11e48:	e3530000 	cmp	r3, #0
+   11e4c:	0a00000b 	beq	11e80 <OSMboxPost+0x8c>
+   11e50:	ebfff9ef 	bl	10614 <OS_CPU_SR_Restore>
+   11e54:	e3a04014 	mov	r4, #20
+   11e58:	eafffff0 	b	11e20 <OSMboxPost+0x2c>
+   11e5c:	e1a01005 	mov	r1, r5
+   11e60:	e3a02002 	mov	r2, #2
+   11e64:	e1a00006 	mov	r0, r6
+   11e68:	e3a04000 	mov	r4, #0
+   11e6c:	ebfffb7e 	bl	10c6c <OS_EventTaskRdy>
+   11e70:	e1a00007 	mov	r0, r7
+   11e74:	ebfff9e6 	bl	10614 <OS_CPU_SR_Restore>
+   11e78:	ebfffbdf 	bl	10dfc <OS_Sched>
+   11e7c:	eaffffe7 	b	11e20 <OSMboxPost+0x2c>
+   11e80:	e5865004 	str	r5, [r6, #4]
+   11e84:	ebfff9e2 	bl	10614 <OS_CPU_SR_Restore>
+   11e88:	eaffffe4 	b	11e20 <OSMboxPost+0x2c>
+
+00011e8c <OSMboxPostOpt>:
+   11e8c:	e3500000 	cmp	r0, #0
+   11e90:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   11e94:	03a06004 	moveq	r6, #4
+   11e98:	0a000006 	beq	11eb8 <OSMboxPostOpt+0x2c>
+   11e9c:	e3510000 	cmp	r1, #0
+   11ea0:	03a06003 	moveq	r6, #3
+   11ea4:	0a000003 	beq	11eb8 <OSMboxPostOpt+0x2c>
+   11ea8:	e5d03000 	ldrb	r3, [r0]
+   11eac:	e3530001 	cmp	r3, #1
+   11eb0:	13a06001 	movne	r6, #1
+   11eb4:	0a000001 	beq	11ec0 <OSMboxPostOpt+0x34>
+   11eb8:	e1a00006 	mov	r0, r6
+   11ebc:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   11ec0:	e1a04000 	mov	r4, r0
+   11ec4:	e1a07002 	mov	r7, r2
+   11ec8:	e1a05001 	mov	r5, r1
+   11ecc:	ebfff9c8 	bl	105f4 <OS_CPU_SR_Save>
+   11ed0:	e1a08000 	mov	r8, r0
+   11ed4:	e5d46001 	ldrb	r6, [r4, #1]
+   11ed8:	e3560000 	cmp	r6, #0
+   11edc:	0a00000d 	beq	11f18 <OSMboxPostOpt+0x8c>
+   11ee0:	e3170001 	tst	r7, #1
+   11ee4:	0a000011 	beq	11f30 <OSMboxPostOpt+0xa4>
+   11ee8:	e3a02002 	mov	r2, #2
+   11eec:	e1a01005 	mov	r1, r5
+   11ef0:	e1a00004 	mov	r0, r4
+   11ef4:	ebfffb5c 	bl	10c6c <OS_EventTaskRdy>
+   11ef8:	e5d43001 	ldrb	r3, [r4, #1]
+   11efc:	e3530000 	cmp	r3, #0
+   11f00:	1afffff8 	bne	11ee8 <OSMboxPostOpt+0x5c>
+   11f04:	e1a00008 	mov	r0, r8
+   11f08:	e3a06000 	mov	r6, #0
+   11f0c:	ebfff9c0 	bl	10614 <OS_CPU_SR_Restore>
+   11f10:	ebfffbb9 	bl	10dfc <OS_Sched>
+   11f14:	eaffffe7 	b	11eb8 <OSMboxPostOpt+0x2c>
+   11f18:	e5943004 	ldr	r3, [r4, #4]
+   11f1c:	e3530000 	cmp	r3, #0
+   11f20:	0a000007 	beq	11f44 <OSMboxPostOpt+0xb8>
+   11f24:	ebfff9ba 	bl	10614 <OS_CPU_SR_Restore>
+   11f28:	e3a06014 	mov	r6, #20
+   11f2c:	eaffffe1 	b	11eb8 <OSMboxPostOpt+0x2c>
+   11f30:	e1a01005 	mov	r1, r5
+   11f34:	e1a00004 	mov	r0, r4
+   11f38:	e3a02002 	mov	r2, #2
+   11f3c:	ebfffb4a 	bl	10c6c <OS_EventTaskRdy>
+   11f40:	eaffffef 	b	11f04 <OSMboxPostOpt+0x78>
+   11f44:	e5845004 	str	r5, [r4, #4]
+   11f48:	ebfff9b1 	bl	10614 <OS_CPU_SR_Restore>
+   11f4c:	eaffffd9 	b	11eb8 <OSMboxPostOpt+0x2c>
+
+00011f50 <OSMboxQuery>:
+   11f50:	e92d4070 	push	{r4, r5, r6, lr}
+   11f54:	e2504000 	subs	r4, r0, #0
+   11f58:	0a000004 	beq	11f70 <OSMboxQuery+0x20>
+   11f5c:	e5d43000 	ldrb	r3, [r4]
+   11f60:	e3530001 	cmp	r3, #1
+   11f64:	0a000003 	beq	11f78 <OSMboxQuery+0x28>
+   11f68:	e3a00001 	mov	r0, #1
+   11f6c:	e8bd8070 	pop	{r4, r5, r6, pc}
+   11f70:	e3a00004 	mov	r0, #4
+   11f74:	e8bd8070 	pop	{r4, r5, r6, pc}
+   11f78:	e1a05001 	mov	r5, r1
+   11f7c:	ebfff99c 	bl	105f4 <OS_CPU_SR_Save>
+   11f80:	e5d43001 	ldrb	r3, [r4, #1]
+   11f84:	e5c5300c 	strb	r3, [r5, #12]
+   11f88:	e5d43008 	ldrb	r3, [r4, #8]
+   11f8c:	e5c53004 	strb	r3, [r5, #4]
+   11f90:	e5d43009 	ldrb	r3, [r4, #9]
+   11f94:	e5c53005 	strb	r3, [r5, #5]
+   11f98:	e5d4300a 	ldrb	r3, [r4, #10]
+   11f9c:	e5c53006 	strb	r3, [r5, #6]
+   11fa0:	e5d4300b 	ldrb	r3, [r4, #11]
+   11fa4:	e5c53007 	strb	r3, [r5, #7]
+   11fa8:	e5d4300c 	ldrb	r3, [r4, #12]
+   11fac:	e5c53008 	strb	r3, [r5, #8]
+   11fb0:	e5d4300d 	ldrb	r3, [r4, #13]
+   11fb4:	e5c53009 	strb	r3, [r5, #9]
+   11fb8:	e5d4300e 	ldrb	r3, [r4, #14]
+   11fbc:	e5c5300a 	strb	r3, [r5, #10]
+   11fc0:	e5d4300f 	ldrb	r3, [r4, #15]
+   11fc4:	e5c5300b 	strb	r3, [r5, #11]
+   11fc8:	e5943004 	ldr	r3, [r4, #4]
+   11fcc:	e5853000 	str	r3, [r5]
+   11fd0:	ebfff98f 	bl	10614 <OS_CPU_SR_Restore>
+   11fd4:	e3a00000 	mov	r0, #0
+   11fd8:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+00011fdc <OSMemCreate>:
+   11fdc:	e92d47f0 	push	{r4, r5, r6, r7, r8, r9, sl, lr}
+   11fe0:	e2509000 	subs	r9, r0, #0
+   11fe4:	01a06009 	moveq	r6, r9
+   11fe8:	03a02076 	moveq	r2, #118	; 0x76
+   11fec:	05c32000 	strbeq	r2, [r3]
+   11ff0:	0a000029 	beq	1209c <OSMemCreate+0xc0>
+   11ff4:	e3510001 	cmp	r1, #1
+   11ff8:	93a0206f 	movls	r2, #111	; 0x6f
+   11ffc:	93a06000 	movls	r6, #0
+   12000:	95c32000 	strbls	r2, [r3]
+   12004:	9a000024 	bls	1209c <OSMemCreate+0xc0>
+   12008:	e3520003 	cmp	r2, #3
+   1200c:	93a02070 	movls	r2, #112	; 0x70
+   12010:	93a06000 	movls	r6, #0
+   12014:	95c32000 	strbls	r2, [r3]
+   12018:	9a00001f 	bls	1209c <OSMemCreate+0xc0>
+   1201c:	e1a08003 	mov	r8, r3
+   12020:	e1a05002 	mov	r5, r2
+   12024:	e1a07001 	mov	r7, r1
+   12028:	ebfff971 	bl	105f4 <OS_CPU_SR_Save>
+   1202c:	e305324c 	movw	r3, #21068	; 0x524c
+   12030:	e3403001 	movt	r3, #1
+   12034:	e5936000 	ldr	r6, [r3]
+   12038:	e3560000 	cmp	r6, #0
+   1203c:	0a000018 	beq	120a4 <OSMemCreate+0xc8>
+   12040:	e5962004 	ldr	r2, [r6, #4]
+   12044:	e1a04009 	mov	r4, r9
+   12048:	e5832000 	str	r2, [r3]
+   1204c:	ebfff970 	bl	10614 <OS_CPU_SR_Restore>
+   12050:	e0891005 	add	r1, r9, r5
+   12054:	e2472001 	sub	r2, r7, #1
+   12058:	e1a0e001 	mov	lr, r1
+   1205c:	e3a0c000 	mov	ip, #0
+   12060:	e28cc001 	add	ip, ip, #1
+   12064:	e684e005 	str	lr, [r4], r5
+   12068:	e152000c 	cmp	r2, ip
+   1206c:	e08ee005 	add	lr, lr, r5
+   12070:	1afffffa 	bne	12060 <OSMemCreate+0x84>
+   12074:	e2473002 	sub	r3, r7, #2
+   12078:	e3a02000 	mov	r2, #0
+   1207c:	e0030395 	mul	r3, r5, r3
+   12080:	e7812003 	str	r2, [r1, r3]
+   12084:	e5869000 	str	r9, [r6]
+   12088:	e5869004 	str	r9, [r6, #4]
+   1208c:	e5867010 	str	r7, [r6, #16]
+   12090:	e586700c 	str	r7, [r6, #12]
+   12094:	e5865008 	str	r5, [r6, #8]
+   12098:	e5c82000 	strb	r2, [r8]
+   1209c:	e1a00006 	mov	r0, r6
+   120a0:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+   120a4:	ebfff95a 	bl	10614 <OS_CPU_SR_Restore>
+   120a8:	e3a0306e 	mov	r3, #110	; 0x6e
+   120ac:	e1a00006 	mov	r0, r6
+   120b0:	e5c83000 	strb	r3, [r8]
+   120b4:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+
+000120b8 <OSMemGet>:
+   120b8:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   120bc:	e2504000 	subs	r4, r0, #0
+   120c0:	01a06004 	moveq	r6, r4
+   120c4:	03a03074 	moveq	r3, #116	; 0x74
+   120c8:	05c13000 	strbeq	r3, [r1]
+   120cc:	0a00000c 	beq	12104 <OSMemGet+0x4c>
+   120d0:	e1a07001 	mov	r7, r1
+   120d4:	ebfff946 	bl	105f4 <OS_CPU_SR_Save>
+   120d8:	e5945010 	ldr	r5, [r4, #16]
+   120dc:	e3550000 	cmp	r5, #0
+   120e0:	0a000009 	beq	1210c <OSMemGet+0x54>
+   120e4:	e5946004 	ldr	r6, [r4, #4]
+   120e8:	e2455001 	sub	r5, r5, #1
+   120ec:	e5963000 	ldr	r3, [r6]
+   120f0:	e5845010 	str	r5, [r4, #16]
+   120f4:	e5843004 	str	r3, [r4, #4]
+   120f8:	ebfff945 	bl	10614 <OS_CPU_SR_Restore>
+   120fc:	e3a03000 	mov	r3, #0
+   12100:	e5c73000 	strb	r3, [r7]
+   12104:	e1a00006 	mov	r0, r6
+   12108:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   1210c:	ebfff940 	bl	10614 <OS_CPU_SR_Restore>
+   12110:	e3a03071 	mov	r3, #113	; 0x71
+   12114:	e1a06005 	mov	r6, r5
+   12118:	e5c73000 	strb	r3, [r7]
+   1211c:	eafffff8 	b	12104 <OSMemGet+0x4c>
+
+00012120 <OSMemPut>:
+   12120:	e92d4070 	push	{r4, r5, r6, lr}
+   12124:	e2504000 	subs	r4, r0, #0
+   12128:	0a00000c 	beq	12160 <OSMemPut+0x40>
+   1212c:	e3510000 	cmp	r1, #0
+   12130:	0a000008 	beq	12158 <OSMemPut+0x38>
+   12134:	e1a05001 	mov	r5, r1
+   12138:	ebfff92d 	bl	105f4 <OS_CPU_SR_Save>
+   1213c:	e5943010 	ldr	r3, [r4, #16]
+   12140:	e594200c 	ldr	r2, [r4, #12]
+   12144:	e1530002 	cmp	r3, r2
+   12148:	3a000006 	bcc	12168 <OSMemPut+0x48>
+   1214c:	ebfff930 	bl	10614 <OS_CPU_SR_Restore>
+   12150:	e3a00072 	mov	r0, #114	; 0x72
+   12154:	e8bd8070 	pop	{r4, r5, r6, pc}
+   12158:	e3a00073 	mov	r0, #115	; 0x73
+   1215c:	e8bd8070 	pop	{r4, r5, r6, pc}
+   12160:	e3a00074 	mov	r0, #116	; 0x74
+   12164:	e8bd8070 	pop	{r4, r5, r6, pc}
+   12168:	e5942004 	ldr	r2, [r4, #4]
+   1216c:	e2833001 	add	r3, r3, #1
+   12170:	e5852000 	str	r2, [r5]
+   12174:	e5843010 	str	r3, [r4, #16]
+   12178:	e5845004 	str	r5, [r4, #4]
+   1217c:	ebfff924 	bl	10614 <OS_CPU_SR_Restore>
+   12180:	e3a00000 	mov	r0, #0
+   12184:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+00012188 <OSMemQuery>:
+   12188:	e92d4070 	push	{r4, r5, r6, lr}
+   1218c:	e2505000 	subs	r5, r0, #0
+   12190:	0a000015 	beq	121ec <OSMemQuery+0x64>
+   12194:	e3510000 	cmp	r1, #0
+   12198:	0a000011 	beq	121e4 <OSMemQuery+0x5c>
+   1219c:	e1a04001 	mov	r4, r1
+   121a0:	ebfff913 	bl	105f4 <OS_CPU_SR_Save>
+   121a4:	e2851008 	add	r1, r5, #8
+   121a8:	e595e000 	ldr	lr, [r5]
+   121ac:	e595c004 	ldr	ip, [r5, #4]
+   121b0:	e891000e 	ldm	r1, {r1, r2, r3}
+   121b4:	e584e000 	str	lr, [r4]
+   121b8:	e584200c 	str	r2, [r4, #12]
+   121bc:	e5843010 	str	r3, [r4, #16]
+   121c0:	e584c004 	str	ip, [r4, #4]
+   121c4:	e5841008 	str	r1, [r4, #8]
+   121c8:	ebfff911 	bl	10614 <OS_CPU_SR_Restore>
+   121cc:	e594300c 	ldr	r3, [r4, #12]
+   121d0:	e5942010 	ldr	r2, [r4, #16]
+   121d4:	e3a00000 	mov	r0, #0
+   121d8:	e0433002 	sub	r3, r3, r2
+   121dc:	e5843014 	str	r3, [r4, #20]
+   121e0:	e8bd8070 	pop	{r4, r5, r6, pc}
+   121e4:	e3a00075 	mov	r0, #117	; 0x75
+   121e8:	e8bd8070 	pop	{r4, r5, r6, pc}
+   121ec:	e3a00074 	mov	r0, #116	; 0x74
+   121f0:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+000121f4 <OS_MemInit>:
+   121f4:	e30439d8 	movw	r3, #18904	; 0x49d8
+   121f8:	e3403001 	movt	r3, #1
+   121fc:	e305124c 	movw	r1, #21068	; 0x524c
+   12200:	e3401001 	movt	r1, #1
+   12204:	e3a02000 	mov	r2, #0
+   12208:	e92d4010 	push	{r4, lr}
+   1220c:	e283c03c 	add	ip, r3, #60	; 0x3c
+   12210:	e2834014 	add	r4, r3, #20
+   12214:	e283e028 	add	lr, r3, #40	; 0x28
+   12218:	e2830050 	add	r0, r3, #80	; 0x50
+   1221c:	e5834004 	str	r4, [r3, #4]
+   12220:	e583e018 	str	lr, [r3, #24]
+   12224:	e583c02c 	str	ip, [r3, #44]	; 0x2c
+   12228:	e5830040 	str	r0, [r3, #64]	; 0x40
+   1222c:	e5813000 	str	r3, [r1]
+   12230:	e5832000 	str	r2, [r3]
+   12234:	e5832010 	str	r2, [r3, #16]
+   12238:	e583200c 	str	r2, [r3, #12]
+   1223c:	e5832008 	str	r2, [r3, #8]
+   12240:	e5832014 	str	r2, [r3, #20]
+   12244:	e5832024 	str	r2, [r3, #36]	; 0x24
+   12248:	e5832020 	str	r2, [r3, #32]
+   1224c:	e583201c 	str	r2, [r3, #28]
+   12250:	e5832028 	str	r2, [r3, #40]	; 0x28
+   12254:	e5832038 	str	r2, [r3, #56]	; 0x38
+   12258:	e5832034 	str	r2, [r3, #52]	; 0x34
+   1225c:	e5832030 	str	r2, [r3, #48]	; 0x30
+   12260:	e583203c 	str	r2, [r3, #60]	; 0x3c
+   12264:	e583204c 	str	r2, [r3, #76]	; 0x4c
+   12268:	e5832048 	str	r2, [r3, #72]	; 0x48
+   1226c:	e5832044 	str	r2, [r3, #68]	; 0x44
+   12270:	e5832054 	str	r2, [r3, #84]	; 0x54
+   12274:	e5832050 	str	r2, [r3, #80]	; 0x50
+   12278:	e5832060 	str	r2, [r3, #96]	; 0x60
+   1227c:	e583205c 	str	r2, [r3, #92]	; 0x5c
+   12280:	e5832058 	str	r2, [r3, #88]	; 0x58
+   12284:	e8bd8010 	pop	{r4, pc}
+
+00012288 <OSInit>:
+   12288:	e92d40f0 	push	{r4, r5, r6, r7, lr}
+   1228c:	e3056249 	movw	r6, #21065	; 0x5249
+   12290:	e3406001 	movt	r6, #1
+   12294:	e24dd01c 	sub	sp, sp, #28
+   12298:	e305523c 	movw	r5, #21052	; 0x523c
+   1229c:	e3405001 	movt	r5, #1
+   122a0:	ebfff950 	bl	107e8 <OSInitHookBegin>
+   122a4:	e305c2e8 	movw	ip, #21224	; 0x52e8
+   122a8:	e340c001 	movt	ip, #1
+   122ac:	e3043988 	movw	r3, #18824	; 0x4988
+   122b0:	e3403001 	movt	r3, #1
+   122b4:	e3a00000 	mov	r0, #0
+   122b8:	e30512e1 	movw	r1, #21217	; 0x52e1
+   122bc:	e3401001 	movt	r1, #1
+   122c0:	e3042989 	movw	r2, #18825	; 0x4989
+   122c4:	e3402001 	movt	r2, #1
+   122c8:	e58c0000 	str	r0, [ip]
+   122cc:	e304498c 	movw	r4, #18828	; 0x498c
+   122d0:	e3404001 	movt	r4, #1
+   122d4:	e5c30000 	strb	r0, [r3]
+   122d8:	e306e058 	movw	lr, #24664	; 0x6058
+   122dc:	e340e001 	movt	lr, #1
+   122e0:	e305c240 	movw	ip, #21056	; 0x5240
+   122e4:	e340c001 	movt	ip, #1
+   122e8:	e30532d0 	movw	r3, #21200	; 0x52d0
+   122ec:	e3403001 	movt	r3, #1
+   122f0:	e5c10000 	strb	r0, [r1]
+   122f4:	e3051f54 	movw	r1, #24404	; 0x5f54
+   122f8:	e3401001 	movt	r1, #1
+   122fc:	e5c20000 	strb	r0, [r2]
+   12300:	e3042990 	movw	r2, #18832	; 0x4990
+   12304:	e3402001 	movt	r2, #1
+   12308:	e58c0000 	str	r0, [ip]
+   1230c:	e305c2d4 	movw	ip, #21204	; 0x52d4
+   12310:	e340c001 	movt	ip, #1
+   12314:	e5c60000 	strb	r0, [r6]
+   12318:	e30469d0 	movw	r6, #18896	; 0x49d0
+   1231c:	e3406001 	movt	r6, #1
+   12320:	e5850000 	str	r0, [r5]
+   12324:	e30552c8 	movw	r5, #21192	; 0x52c8
+   12328:	e3405001 	movt	r5, #1
+   1232c:	e5840000 	str	r0, [r4]
+   12330:	e30542e4 	movw	r4, #21220	; 0x52e4
+   12334:	e3404001 	movt	r4, #1
+   12338:	e58e0000 	str	r0, [lr]
+   1233c:	e304e9d4 	movw	lr, #18900	; 0x49d4
+   12340:	e340e001 	movt	lr, #1
+   12344:	e5c30000 	strb	r0, [r3]
+   12348:	e59f31b8 	ldr	r3, [pc, #440]	; 12508 <OSInit+0x280>
+   1234c:	e5c10000 	strb	r0, [r1]
+   12350:	e1a01000 	mov	r1, r0
+   12354:	e5c20000 	strb	r0, [r2]
+   12358:	e2832c01 	add	r2, r3, #256	; 0x100
+   1235c:	e5c60000 	strb	r0, [r6]
+   12360:	e5850000 	str	r0, [r5]
+   12364:	e5840000 	str	r0, [r4]
+   12368:	e58e0000 	str	r0, [lr]
+   1236c:	e5cc0000 	strb	r0, [ip]
+   12370:	e5cc0001 	strb	r0, [ip, #1]
+   12374:	e5cc0002 	strb	r0, [ip, #2]
+   12378:	e5cc0003 	strb	r0, [ip, #3]
+   1237c:	e5cc0004 	strb	r0, [ip, #4]
+   12380:	e5cc0005 	strb	r0, [ip, #5]
+   12384:	e5cc0006 	strb	r0, [ip, #6]
+   12388:	e5cc0007 	strb	r0, [ip, #7]
+   1238c:	e5a31004 	str	r1, [r3, #4]!
+   12390:	e1530002 	cmp	r3, r2
+   12394:	1afffffc 	bne	1238c <OSInit+0x104>
+   12398:	e59f316c 	ldr	r3, [pc, #364]	; 1250c <OSInit+0x284>
+   1239c:	e2832d0d 	add	r2, r3, #832	; 0x340
+   123a0:	e5033020 	str	r3, [r3, #-32]	; 0xffffffe0
+   123a4:	e2833034 	add	r3, r3, #52	; 0x34
+   123a8:	e1530002 	cmp	r3, r2
+   123ac:	1afffffb 	bne	123a0 <OSInit+0x118>
+   123b0:	e2432fdd 	sub	r2, r3, #884	; 0x374
+   123b4:	e3050244 	movw	r0, #21060	; 0x5244
+   123b8:	e3400001 	movt	r0, #1
+   123bc:	e59f314c 	ldr	r3, [pc, #332]	; 12510 <OSInit+0x288>
+   123c0:	e3a0c000 	mov	ip, #0
+   123c4:	e1a0400c 	mov	r4, ip
+   123c8:	e28310e0 	add	r1, r3, #224	; 0xe0
+   123cc:	e5802000 	str	r2, [r0]
+   123d0:	e582c354 	str	ip, [r2, #852]	; 0x354
+   123d4:	e5434010 	strb	r4, [r3, #-16]
+   123d8:	e503300c 	str	r3, [r3, #-12]
+   123dc:	e2833010 	add	r3, r3, #16
+   123e0:	e1530001 	cmp	r3, r1
+   123e4:	1afffffa 	bne	123d4 <OSInit+0x14c>
+   123e8:	e3042994 	movw	r2, #18836	; 0x4994
+   123ec:	e3402001 	movt	r2, #1
+   123f0:	e1a01002 	mov	r1, r2
+   123f4:	e305c2dc 	movw	ip, #21212	; 0x52dc
+   123f8:	e340c001 	movt	ip, #1
+   123fc:	e3050f50 	movw	r0, #24400	; 0x5f50
+   12400:	e3400001 	movt	r0, #1
+   12404:	e4c1400c 	strb	r4, [r1], #12
+   12408:	e2825018 	add	r5, r2, #24
+   1240c:	e2827024 	add	r7, r2, #36	; 0x24
+   12410:	e282e030 	add	lr, r2, #48	; 0x30
+   12414:	e5434010 	strb	r4, [r3, #-16]
+   12418:	e24330f0 	sub	r3, r3, #240	; 0xf0
+   1241c:	e58340e4 	str	r4, [r3, #228]	; 0xe4
+   12420:	e3a06003 	mov	r6, #3
+   12424:	e5c2400c 	strb	r4, [r2, #12]
+   12428:	e5c24018 	strb	r4, [r2, #24]
+   1242c:	e5c24024 	strb	r4, [r2, #36]	; 0x24
+   12430:	e5824034 	str	r4, [r2, #52]	; 0x34
+   12434:	e5825010 	str	r5, [r2, #16]
+   12438:	e3a05c02 	mov	r5, #512	; 0x200
+   1243c:	e582701c 	str	r7, [r2, #28]
+   12440:	e582e028 	str	lr, [r2, #40]	; 0x28
+   12444:	e5821004 	str	r1, [r2, #4]
+   12448:	e58c3000 	str	r3, [ip]
+   1244c:	e5802000 	str	r2, [r0]
+   12450:	ebffff67 	bl	121f4 <OS_MemInit>
+   12454:	e3052250 	movw	r2, #21072	; 0x5250
+   12458:	e3402001 	movt	r2, #1
+   1245c:	e1a0c002 	mov	ip, r2
+   12460:	e2823018 	add	r3, r2, #24
+   12464:	e30f1fff 	movw	r1, #65535	; 0xffff
+   12468:	e305e2cc 	movw	lr, #21196	; 0x52cc
+   1246c:	e340e001 	movt	lr, #1
+   12470:	e48c3030 	str	r3, [ip], #48	; 0x30
+   12474:	e2827048 	add	r7, r2, #72	; 0x48
+   12478:	e58d1000 	str	r1, [sp]
+   1247c:	e30532ec 	movw	r3, #21228	; 0x52ec
+   12480:	e3403001 	movt	r3, #1
+   12484:	e2821060 	add	r1, r2, #96	; 0x60
+   12488:	e58d3004 	str	r3, [sp, #4]
+   1248c:	e58d400c 	str	r4, [sp, #12]
+   12490:	e3a0303f 	mov	r3, #63	; 0x3f
+   12494:	e58d6010 	str	r6, [sp, #16]
+   12498:	e3000974 	movw	r0, #2420	; 0x974
+   1249c:	e3400001 	movt	r0, #1
+   124a0:	e58d5008 	str	r5, [sp, #8]
+   124a4:	e58e2000 	str	r2, [lr]
+   124a8:	e5824060 	str	r4, [r2, #96]	; 0x60
+   124ac:	e5827030 	str	r7, [r2, #48]	; 0x30
+   124b0:	e5821048 	str	r1, [r2, #72]	; 0x48
+   124b4:	e3a01000 	mov	r1, #0
+   124b8:	e582c018 	str	ip, [r2, #24]
+   124bc:	e59f2050 	ldr	r2, [pc, #80]	; 12514 <OSInit+0x28c>
+   124c0:	ebfffb4c 	bl	111f8 <OSTaskCreateExt.part.0>
+   124c4:	e30fcffe 	movw	ip, #65534	; 0xfffe
+   124c8:	e3042a3c 	movw	r2, #19004	; 0x4a3c
+   124cc:	e3402001 	movt	r2, #1
+   124d0:	e58d2004 	str	r2, [sp, #4]
+   124d4:	e3a0303e 	mov	r3, #62	; 0x3e
+   124d8:	e58d6010 	str	r6, [sp, #16]
+   124dc:	e3a01000 	mov	r1, #0
+   124e0:	e58d5008 	str	r5, [sp, #8]
+   124e4:	e3000ffc 	movw	r0, #4092	; 0xffc
+   124e8:	e3400001 	movt	r0, #1
+   124ec:	e58d400c 	str	r4, [sp, #12]
+   124f0:	e58dc000 	str	ip, [sp]
+   124f4:	e59f201c 	ldr	r2, [pc, #28]	; 12518 <OSInit+0x290>
+   124f8:	ebfffb3e 	bl	111f8 <OSTaskCreateExt.part.0>
+   124fc:	e28dd01c 	add	sp, sp, #28
+   12500:	e8bd40f0 	pop	{r4, r5, r6, r7, lr}
+   12504:	eafff8b8 	b	107ec <OSInitHookEnd>
+   12508:	00015f54 	.word	0x00015f54
+   1250c:	00015c10 	.word	0x00015c10
+   12510:	00015afc 	.word	0x00015afc
+   12514:	00015ae8 	.word	0x00015ae8
+   12518:	00015238 	.word	0x00015238
+
+0001251c <OSMutexAccept>:
+   1251c:	e30532e1 	movw	r3, #21217	; 0x52e1
+   12520:	e3403001 	movt	r3, #1
+   12524:	e92d4070 	push	{r4, r5, r6, lr}
+   12528:	e5d34000 	ldrb	r4, [r3]
+   1252c:	e3540000 	cmp	r4, #0
+   12530:	1a00000a 	bne	12560 <OSMutexAccept+0x44>
+   12534:	e3500000 	cmp	r0, #0
+   12538:	03a03004 	moveq	r3, #4
+   1253c:	05c13000 	strbeq	r3, [r1]
+   12540:	0a000004 	beq	12558 <OSMutexAccept+0x3c>
+   12544:	e5d03000 	ldrb	r3, [r0]
+   12548:	e3530004 	cmp	r3, #4
+   1254c:	0a000008 	beq	12574 <OSMutexAccept+0x58>
+   12550:	e3a03001 	mov	r3, #1
+   12554:	e5c13000 	strb	r3, [r1]
+   12558:	e1a00004 	mov	r0, r4
+   1255c:	e8bd8070 	pop	{r4, r5, r6, pc}
+   12560:	e3a03002 	mov	r3, #2
+   12564:	e3a04000 	mov	r4, #0
+   12568:	e1a00004 	mov	r0, r4
+   1256c:	e5c13000 	strb	r3, [r1]
+   12570:	e8bd8070 	pop	{r4, r5, r6, pc}
+   12574:	e1a05000 	mov	r5, r0
+   12578:	e1a06001 	mov	r6, r1
+   1257c:	ebfff81c 	bl	105f4 <OS_CPU_SR_Save>
+   12580:	e1d530b2 	ldrh	r3, [r5, #2]
+   12584:	e6ef2073 	uxtb	r2, r3
+   12588:	e35200ff 	cmp	r2, #255	; 0xff
+   1258c:	0a000002 	beq	1259c <OSMutexAccept+0x80>
+   12590:	ebfff81f 	bl	10614 <OS_CPU_SR_Restore>
+   12594:	e5c64000 	strb	r4, [r6]
+   12598:	eaffffee 	b	12558 <OSMutexAccept+0x3c>
+   1259c:	e30522e4 	movw	r2, #21220	; 0x52e4
+   125a0:	e3402001 	movt	r2, #1
+   125a4:	e3c330ff 	bic	r3, r3, #255	; 0xff
+   125a8:	e5921000 	ldr	r1, [r2]
+   125ac:	e5d1202d 	ldrb	r2, [r1, #45]	; 0x2d
+   125b0:	e5851004 	str	r1, [r5, #4]
+   125b4:	e1823003 	orr	r3, r2, r3
+   125b8:	e1c530b2 	strh	r3, [r5, #2]
+   125bc:	ebfff814 	bl	10614 <OS_CPU_SR_Restore>
+   125c0:	e5c64000 	strb	r4, [r6]
+   125c4:	e3a04001 	mov	r4, #1
+   125c8:	eaffffe2 	b	12558 <OSMutexAccept+0x3c>
+
+000125cc <OSMutexCreate>:
+   125cc:	e30532e1 	movw	r3, #21217	; 0x52e1
+   125d0:	e3403001 	movt	r3, #1
+   125d4:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   125d8:	e5d34000 	ldrb	r4, [r3]
+   125dc:	e3540000 	cmp	r4, #0
+   125e0:	13e03072 	mvnne	r3, #114	; 0x72
+   125e4:	13a04000 	movne	r4, #0
+   125e8:	15c13000 	strbne	r3, [r1]
+   125ec:	1a000025 	bne	12688 <OSMutexCreate+0xbc>
+   125f0:	e350003e 	cmp	r0, #62	; 0x3e
+   125f4:	83a0302a 	movhi	r3, #42	; 0x2a
+   125f8:	85c13000 	strbhi	r3, [r1]
+   125fc:	8a000021 	bhi	12688 <OSMutexCreate+0xbc>
+   12600:	e1a05000 	mov	r5, r0
+   12604:	e1a07001 	mov	r7, r1
+   12608:	ebfff7f9 	bl	105f4 <OS_CPU_SR_Save>
+   1260c:	e3053f58 	movw	r3, #24408	; 0x5f58
+   12610:	e3403001 	movt	r3, #1
+   12614:	e7936105 	ldr	r6, [r3, r5, lsl #2]
+   12618:	e3560000 	cmp	r6, #0
+   1261c:	1a00001b 	bne	12690 <OSMutexCreate+0xc4>
+   12620:	e30522dc 	movw	r2, #21212	; 0x52dc
+   12624:	e3402001 	movt	r2, #1
+   12628:	e3a01001 	mov	r1, #1
+   1262c:	e5924000 	ldr	r4, [r2]
+   12630:	e7831105 	str	r1, [r3, r5, lsl #2]
+   12634:	e3540000 	cmp	r4, #0
+   12638:	0a000019 	beq	126a4 <OSMutexCreate+0xd8>
+   1263c:	e5943004 	ldr	r3, [r4, #4]
+   12640:	e5823000 	str	r3, [r2]
+   12644:	ebfff7f2 	bl	10614 <OS_CPU_SR_Restore>
+   12648:	e1a00405 	lsl	r0, r5, #8
+   1264c:	e3a03004 	mov	r3, #4
+   12650:	e38000ff 	orr	r0, r0, #255	; 0xff
+   12654:	e5846004 	str	r6, [r4, #4]
+   12658:	e1c400b2 	strh	r0, [r4, #2]
+   1265c:	e5c46001 	strb	r6, [r4, #1]
+   12660:	e5c46008 	strb	r6, [r4, #8]
+   12664:	e5c46009 	strb	r6, [r4, #9]
+   12668:	e5c4600a 	strb	r6, [r4, #10]
+   1266c:	e5c4600b 	strb	r6, [r4, #11]
+   12670:	e5c4600c 	strb	r6, [r4, #12]
+   12674:	e5c4600d 	strb	r6, [r4, #13]
+   12678:	e5c4600e 	strb	r6, [r4, #14]
+   1267c:	e5c4600f 	strb	r6, [r4, #15]
+   12680:	e5c43000 	strb	r3, [r4]
+   12684:	e5c76000 	strb	r6, [r7]
+   12688:	e1a00004 	mov	r0, r4
+   1268c:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   12690:	ebfff7df 	bl	10614 <OS_CPU_SR_Restore>
+   12694:	e3a03028 	mov	r3, #40	; 0x28
+   12698:	e1a00004 	mov	r0, r4
+   1269c:	e5c73000 	strb	r3, [r7]
+   126a0:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   126a4:	e7834105 	str	r4, [r3, r5, lsl #2]
+   126a8:	ebfff7d9 	bl	10614 <OS_CPU_SR_Restore>
+   126ac:	e3a03004 	mov	r3, #4
+   126b0:	e5c73000 	strb	r3, [r7]
+   126b4:	eafffff3 	b	12688 <OSMutexCreate+0xbc>
+
+000126b8 <OSMutexDel>:
+   126b8:	e30532e1 	movw	r3, #21217	; 0x52e1
+   126bc:	e3403001 	movt	r3, #1
+   126c0:	e5d33000 	ldrb	r3, [r3]
+   126c4:	e3530000 	cmp	r3, #0
+   126c8:	1a000007 	bne	126ec <OSMutexDel+0x34>
+   126cc:	e3500000 	cmp	r0, #0
+   126d0:	0a000042 	beq	127e0 <OSMutexDel+0x128>
+   126d4:	e5d03000 	ldrb	r3, [r0]
+   126d8:	e3530004 	cmp	r3, #4
+   126dc:	0a000005 	beq	126f8 <OSMutexDel+0x40>
+   126e0:	e3a03001 	mov	r3, #1
+   126e4:	e5c23000 	strb	r3, [r2]
+   126e8:	e12fff1e 	bx	lr
+   126ec:	e3e03073 	mvn	r3, #115	; 0x73
+   126f0:	e5c23000 	strb	r3, [r2]
+   126f4:	e12fff1e 	bx	lr
+   126f8:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   126fc:	e1a04000 	mov	r4, r0
+   12700:	e1a05002 	mov	r5, r2
+   12704:	e1a06001 	mov	r6, r1
+   12708:	ebfff7b9 	bl	105f4 <OS_CPU_SR_Save>
+   1270c:	e5d43001 	ldrb	r3, [r4, #1]
+   12710:	e1a07000 	mov	r7, r0
+   12714:	e3530000 	cmp	r3, #0
+   12718:	0a000006 	beq	12738 <OSMutexDel+0x80>
+   1271c:	e3560000 	cmp	r6, #0
+   12720:	1a000023 	bne	127b4 <OSMutexDel+0xfc>
+   12724:	ebfff7ba 	bl	10614 <OS_CPU_SR_Restore>
+   12728:	e3a03008 	mov	r3, #8
+   1272c:	e1a00004 	mov	r0, r4
+   12730:	e5c53000 	strb	r3, [r5]
+   12734:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   12738:	e3560000 	cmp	r6, #0
+   1273c:	0a00002c 	beq	127f4 <OSMutexDel+0x13c>
+   12740:	e3560001 	cmp	r6, #1
+   12744:	1a000014 	bne	1279c <OSMutexDel+0xe4>
+   12748:	e1a06003 	mov	r6, r3
+   1274c:	e1d410b2 	ldrh	r1, [r4, #2]
+   12750:	e3052f58 	movw	r2, #24408	; 0x5f58
+   12754:	e3402001 	movt	r2, #1
+   12758:	e3a0c000 	mov	ip, #0
+   1275c:	e30532dc 	movw	r3, #21212	; 0x52dc
+   12760:	e3403001 	movt	r3, #1
+   12764:	e1a01421 	lsr	r1, r1, #8
+   12768:	e1a00007 	mov	r0, r7
+   1276c:	e782c101 	str	ip, [r2, r1, lsl #2]
+   12770:	e5c4c000 	strb	ip, [r4]
+   12774:	e5932000 	ldr	r2, [r3]
+   12778:	e5834000 	str	r4, [r3]
+   1277c:	e5842004 	str	r2, [r4, #4]
+   12780:	ebfff7a3 	bl	10614 <OS_CPU_SR_Restore>
+   12784:	e3560001 	cmp	r6, #1
+   12788:	0a000017 	beq	127ec <OSMutexDel+0x134>
+   1278c:	e3a03000 	mov	r3, #0
+   12790:	e1a00003 	mov	r0, r3
+   12794:	e5c53000 	strb	r3, [r5]
+   12798:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   1279c:	e1a00007 	mov	r0, r7
+   127a0:	ebfff79b 	bl	10614 <OS_CPU_SR_Restore>
+   127a4:	e3a03007 	mov	r3, #7
+   127a8:	e1a00004 	mov	r0, r4
+   127ac:	e5c53000 	strb	r3, [r5]
+   127b0:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   127b4:	e3560001 	cmp	r6, #1
+   127b8:	1afffff7 	bne	1279c <OSMutexDel+0xe4>
+   127bc:	e3a02010 	mov	r2, #16
+   127c0:	e3a01000 	mov	r1, #0
+   127c4:	e1a00004 	mov	r0, r4
+   127c8:	ebfff927 	bl	10c6c <OS_EventTaskRdy>
+   127cc:	e5d43001 	ldrb	r3, [r4, #1]
+   127d0:	e3530000 	cmp	r3, #0
+   127d4:	1afffff8 	bne	127bc <OSMutexDel+0x104>
+   127d8:	e3a06001 	mov	r6, #1
+   127dc:	eaffffda 	b	1274c <OSMutexDel+0x94>
+   127e0:	e3a03004 	mov	r3, #4
+   127e4:	e5c23000 	strb	r3, [r2]
+   127e8:	e12fff1e 	bx	lr
+   127ec:	ebfff982 	bl	10dfc <OS_Sched>
+   127f0:	eaffffe5 	b	1278c <OSMutexDel+0xd4>
+   127f4:	e1d410b2 	ldrh	r1, [r4, #2]
+   127f8:	e3052f58 	movw	r2, #24408	; 0x5f58
+   127fc:	e3402001 	movt	r2, #1
+   12800:	e30532dc 	movw	r3, #21212	; 0x52dc
+   12804:	e3403001 	movt	r3, #1
+   12808:	e1a01421 	lsr	r1, r1, #8
+   1280c:	e7826101 	str	r6, [r2, r1, lsl #2]
+   12810:	e5c46000 	strb	r6, [r4]
+   12814:	e5932000 	ldr	r2, [r3]
+   12818:	e5834000 	str	r4, [r3]
+   1281c:	e5842004 	str	r2, [r4, #4]
+   12820:	ebfff77b 	bl	10614 <OS_CPU_SR_Restore>
+   12824:	e5c56000 	strb	r6, [r5]
+   12828:	e1a00006 	mov	r0, r6
+   1282c:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+
+00012830 <OSMutexPend>:
+   12830:	e30532e1 	movw	r3, #21217	; 0x52e1
+   12834:	e3403001 	movt	r3, #1
+   12838:	e92d4ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, lr}
+   1283c:	e5d37000 	ldrb	r7, [r3]
+   12840:	e24dd014 	sub	sp, sp, #20
+   12844:	e3570000 	cmp	r7, #0
+   12848:	13a03002 	movne	r3, #2
+   1284c:	15c23000 	strbne	r3, [r2]
+   12850:	1a00000d 	bne	1288c <OSMutexPend+0x5c>
+   12854:	e3500000 	cmp	r0, #0
+   12858:	03a03004 	moveq	r3, #4
+   1285c:	05c23000 	strbeq	r3, [r2]
+   12860:	0a000009 	beq	1288c <OSMutexPend+0x5c>
+   12864:	e1a04000 	mov	r4, r0
+   12868:	e1a05002 	mov	r5, r2
+   1286c:	e1a06001 	mov	r6, r1
+   12870:	ebfff75f 	bl	105f4 <OS_CPU_SR_Save>
+   12874:	e1a08000 	mov	r8, r0
+   12878:	e5d43000 	ldrb	r3, [r4]
+   1287c:	e3530004 	cmp	r3, #4
+   12880:	13a03001 	movne	r3, #1
+   12884:	15c53000 	strbne	r3, [r5]
+   12888:	0a000001 	beq	12894 <OSMutexPend+0x64>
+   1288c:	e28dd014 	add	sp, sp, #20
+   12890:	e8bd8ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, pc}
+   12894:	e1d430b2 	ldrh	r3, [r4, #2]
+   12898:	e6efc073 	uxtb	ip, r3
+   1289c:	e35c00ff 	cmp	ip, #255	; 0xff
+   128a0:	0a00006b 	beq	12a54 <OSMutexPend+0x224>
+   128a4:	e5942004 	ldr	r2, [r4, #4]
+   128a8:	e1a03423 	lsr	r3, r3, #8
+   128ac:	e30572e4 	movw	r7, #21220	; 0x52e4
+   128b0:	e3407001 	movt	r7, #1
+   128b4:	e5d2102d 	ldrb	r1, [r2, #45]	; 0x2d
+   128b8:	e1510003 	cmp	r1, r3
+   128bc:	e5971000 	ldr	r1, [r7]
+   128c0:	0a00003c 	beq	129b8 <OSMutexPend+0x188>
+   128c4:	e5d1002d 	ldrb	r0, [r1, #45]	; 0x2d
+   128c8:	e150000c 	cmp	r0, ip
+   128cc:	2a000039 	bcs	129b8 <OSMutexPend+0x188>
+   128d0:	e5d2e02f 	ldrb	lr, [r2, #47]	; 0x2f
+   128d4:	e30502d4 	movw	r0, #21204	; 0x52d4
+   128d8:	e3400001 	movt	r0, #1
+   128dc:	e5d29030 	ldrb	r9, [r2, #48]	; 0x30
+   128e0:	e7d0c00e 	ldrb	ip, [r0, lr]
+   128e4:	e11c0009 	tst	ip, r9
+   128e8:	0a000022 	beq	12978 <OSMutexPend+0x148>
+   128ec:	e1ccc009 	bic	ip, ip, r9
+   128f0:	e305a2d0 	movw	sl, #21200	; 0x52d0
+   128f4:	e340a001 	movt	sl, #1
+   128f8:	e35c0000 	cmp	ip, #0
+   128fc:	e7c0c00e 	strb	ip, [r0, lr]
+   12900:	1a00005e 	bne	12a80 <OSMutexPend+0x250>
+   12904:	e5d2c031 	ldrb	ip, [r2, #49]	; 0x31
+   12908:	e5da9000 	ldrb	r9, [sl]
+   1290c:	e1c9c00c 	bic	ip, r9, ip
+   12910:	e58dc00c 	str	ip, [sp, #12]
+   12914:	e2039007 	and	r9, r3, #7
+   12918:	e1a0c1a3 	lsr	ip, r3, #3
+   1291c:	e1a0b009 	mov	fp, r9
+   12920:	e304e5d0 	movw	lr, #17872	; 0x45d0
+   12924:	e340e001 	movt	lr, #1
+   12928:	e08e900c 	add	r9, lr, ip
+   1292c:	e08ee00b 	add	lr, lr, fp
+   12930:	e58db004 	str	fp, [sp, #4]
+   12934:	e5c2302d 	strb	r3, [r2, #45]	; 0x2d
+   12938:	e5d9b100 	ldrb	fp, [r9, #256]	; 0x100
+   1293c:	e5dee100 	ldrb	lr, [lr, #256]	; 0x100
+   12940:	e59d900c 	ldr	r9, [sp, #12]
+   12944:	e58de008 	str	lr, [sp, #8]
+   12948:	e189900b 	orr	r9, r9, fp
+   1294c:	e7d0e00c 	ldrb	lr, [r0, ip]
+   12950:	e5ca9000 	strb	r9, [sl]
+   12954:	e59da008 	ldr	sl, [sp, #8]
+   12958:	e5dd9004 	ldrb	r9, [sp, #4]
+   1295c:	e18ae00e 	orr	lr, sl, lr
+   12960:	e5c2c02f 	strb	ip, [r2, #47]	; 0x2f
+   12964:	e5c2b031 	strb	fp, [r2, #49]	; 0x31
+   12968:	e5c2a030 	strb	sl, [r2, #48]	; 0x30
+   1296c:	e5c2902e 	strb	r9, [r2, #46]	; 0x2e
+   12970:	e7c0e00c 	strb	lr, [r0, ip]
+   12974:	ea00000c 	b	129ac <OSMutexPend+0x17c>
+   12978:	e1a0e1a3 	lsr	lr, r3, #3
+   1297c:	e203c007 	and	ip, r3, #7
+   12980:	e30405d0 	movw	r0, #17872	; 0x45d0
+   12984:	e3400001 	movt	r0, #1
+   12988:	e080900e 	add	r9, r0, lr
+   1298c:	e080000c 	add	r0, r0, ip
+   12990:	e5c2e02f 	strb	lr, [r2, #47]	; 0x2f
+   12994:	e5c2302d 	strb	r3, [r2, #45]	; 0x2d
+   12998:	e5d9e100 	ldrb	lr, [r9, #256]	; 0x100
+   1299c:	e5d00100 	ldrb	r0, [r0, #256]	; 0x100
+   129a0:	e5c2e031 	strb	lr, [r2, #49]	; 0x31
+   129a4:	e5c20030 	strb	r0, [r2, #48]	; 0x30
+   129a8:	e5c2c02e 	strb	ip, [r2, #46]	; 0x2e
+   129ac:	e3050f58 	movw	r0, #24408	; 0x5f58
+   129b0:	e3400001 	movt	r0, #1
+   129b4:	e7802103 	str	r2, [r0, r3, lsl #2]
+   129b8:	e5d1302c 	ldrb	r3, [r1, #44]	; 0x2c
+   129bc:	e1a00004 	mov	r0, r4
+   129c0:	e1c162ba 	strh	r6, [r1, #42]	; 0x2a
+   129c4:	e3833010 	orr	r3, r3, #16
+   129c8:	e5c1302c 	strb	r3, [r1, #44]	; 0x2c
+   129cc:	ebfff8d1 	bl	10d18 <OS_EventTaskWait>
+   129d0:	e1a00008 	mov	r0, r8
+   129d4:	ebfff70e 	bl	10614 <OS_CPU_SR_Restore>
+   129d8:	ebfff907 	bl	10dfc <OS_Sched>
+   129dc:	ebfff704 	bl	105f4 <OS_CPU_SR_Save>
+   129e0:	e5973000 	ldr	r3, [r7]
+   129e4:	e1a0c000 	mov	ip, r0
+   129e8:	e5d3202c 	ldrb	r2, [r3, #44]	; 0x2c
+   129ec:	e2126010 	ands	r6, r2, #16
+   129f0:	0a000013 	beq	12a44 <OSMutexPend+0x214>
+   129f4:	e5d3202f 	ldrb	r2, [r3, #47]	; 0x2f
+   129f8:	e5d30030 	ldrb	r0, [r3, #48]	; 0x30
+   129fc:	e0842002 	add	r2, r4, r2
+   12a00:	e5d21008 	ldrb	r1, [r2, #8]
+   12a04:	e1c11000 	bic	r1, r1, r0
+   12a08:	e1a0000c 	mov	r0, ip
+   12a0c:	e3510000 	cmp	r1, #0
+   12a10:	e5c21008 	strb	r1, [r2, #8]
+   12a14:	05d42001 	ldrbeq	r2, [r4, #1]
+   12a18:	05d31031 	ldrbeq	r1, [r3, #49]	; 0x31
+   12a1c:	01c22001 	biceq	r2, r2, r1
+   12a20:	05c42001 	strbeq	r2, [r4, #1]
+   12a24:	e3a02000 	mov	r2, #0
+   12a28:	e5c3202c 	strb	r2, [r3, #44]	; 0x2c
+   12a2c:	e583201c 	str	r2, [r3, #28]
+   12a30:	ebfff6f7 	bl	10614 <OS_CPU_SR_Restore>
+   12a34:	e3a0300a 	mov	r3, #10
+   12a38:	e5c53000 	strb	r3, [r5]
+   12a3c:	e28dd014 	add	sp, sp, #20
+   12a40:	e8bd8ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, pc}
+   12a44:	e583601c 	str	r6, [r3, #28]
+   12a48:	ebfff6f1 	bl	10614 <OS_CPU_SR_Restore>
+   12a4c:	e5c56000 	strb	r6, [r5]
+   12a50:	eaffff8d 	b	1288c <OSMutexPend+0x5c>
+   12a54:	e30522e4 	movw	r2, #21220	; 0x52e4
+   12a58:	e3402001 	movt	r2, #1
+   12a5c:	e3c330ff 	bic	r3, r3, #255	; 0xff
+   12a60:	e5921000 	ldr	r1, [r2]
+   12a64:	e5d1202d 	ldrb	r2, [r1, #45]	; 0x2d
+   12a68:	e5841004 	str	r1, [r4, #4]
+   12a6c:	e1823003 	orr	r3, r2, r3
+   12a70:	e1c430b2 	strh	r3, [r4, #2]
+   12a74:	ebfff6e6 	bl	10614 <OS_CPU_SR_Restore>
+   12a78:	e5c57000 	strb	r7, [r5]
+   12a7c:	eaffff82 	b	1288c <OSMutexPend+0x5c>
+   12a80:	e5dac000 	ldrb	ip, [sl]
+   12a84:	e58dc00c 	str	ip, [sp, #12]
+   12a88:	eaffffa1 	b	12914 <OSMutexPend+0xe4>
+
+00012a8c <OSMutexPost>:
+   12a8c:	e92d4ff8 	push	{r3, r4, r5, r6, r7, r8, r9, sl, fp, lr}
+   12a90:	e30532e1 	movw	r3, #21217	; 0x52e1
+   12a94:	e3403001 	movt	r3, #1
+   12a98:	e5d33000 	ldrb	r3, [r3]
+   12a9c:	e3530000 	cmp	r3, #0
+   12aa0:	13a04005 	movne	r4, #5
+   12aa4:	0a000001 	beq	12ab0 <OSMutexPost+0x24>
+   12aa8:	e1a00004 	mov	r0, r4
+   12aac:	e8bd8ff8 	pop	{r3, r4, r5, r6, r7, r8, r9, sl, fp, pc}
+   12ab0:	e3500000 	cmp	r0, #0
+   12ab4:	03a04004 	moveq	r4, #4
+   12ab8:	0afffffa 	beq	12aa8 <OSMutexPost+0x1c>
+   12abc:	e5d03000 	ldrb	r3, [r0]
+   12ac0:	e3530004 	cmp	r3, #4
+   12ac4:	13a04001 	movne	r4, #1
+   12ac8:	1afffff6 	bne	12aa8 <OSMutexPost+0x1c>
+   12acc:	e1a05000 	mov	r5, r0
+   12ad0:	ebfff6c7 	bl	105f4 <OS_CPU_SR_Save>
+   12ad4:	e30532e4 	movw	r3, #21220	; 0x52e4
+   12ad8:	e3403001 	movt	r3, #1
+   12adc:	e1a06000 	mov	r6, r0
+   12ae0:	e1d520b2 	ldrh	r2, [r5, #2]
+   12ae4:	e5933000 	ldr	r3, [r3]
+   12ae8:	e1a0c422 	lsr	ip, r2, #8
+   12aec:	e6efe072 	uxtb	lr, r2
+   12af0:	e5d3102d 	ldrb	r1, [r3, #45]	; 0x2d
+   12af4:	e15c0001 	cmp	ip, r1
+   12af8:	0a000006 	beq	12b18 <OSMutexPost+0x8c>
+   12afc:	e15e0001 	cmp	lr, r1
+   12b00:	03057f58 	movweq	r7, #24408	; 0x5f58
+   12b04:	03407001 	movteq	r7, #1
+   12b08:	0a000025 	beq	12ba4 <OSMutexPost+0x118>
+   12b0c:	ebfff6c0 	bl	10614 <OS_CPU_SR_Restore>
+   12b10:	e3a04078 	mov	r4, #120	; 0x78
+   12b14:	eaffffe3 	b	12aa8 <OSMutexPost+0x1c>
+   12b18:	e5d3402f 	ldrb	r4, [r3, #47]	; 0x2f
+   12b1c:	e30512d4 	movw	r1, #21204	; 0x52d4
+   12b20:	e3401001 	movt	r1, #1
+   12b24:	e5d37030 	ldrb	r7, [r3, #48]	; 0x30
+   12b28:	e30582d0 	movw	r8, #21200	; 0x52d0
+   12b2c:	e3408001 	movt	r8, #1
+   12b30:	e7d10004 	ldrb	r0, [r1, r4]
+   12b34:	e20ea007 	and	sl, lr, #7
+   12b38:	e5c3e02d 	strb	lr, [r3, #45]	; 0x2d
+   12b3c:	e1c00007 	bic	r0, r0, r7
+   12b40:	e3057f58 	movw	r7, #24408	; 0x5f58
+   12b44:	e3407001 	movt	r7, #1
+   12b48:	e3500000 	cmp	r0, #0
+   12b4c:	e7c10004 	strb	r0, [r1, r4]
+   12b50:	e1a041ae 	lsr	r4, lr, #3
+   12b54:	e5c3a02e 	strb	sl, [r3, #46]	; 0x2e
+   12b58:	e5c3402f 	strb	r4, [r3, #47]	; 0x2f
+   12b5c:	05d30031 	ldrbeq	r0, [r3, #49]	; 0x31
+   12b60:	05d89000 	ldrbeq	r9, [r8]
+   12b64:	15d89000 	ldrbne	r9, [r8]
+   12b68:	01c99000 	biceq	r9, r9, r0
+   12b6c:	e30405d0 	movw	r0, #17872	; 0x45d0
+   12b70:	e3400001 	movt	r0, #1
+   12b74:	e080b004 	add	fp, r0, r4
+   12b78:	e080000a 	add	r0, r0, sl
+   12b7c:	e5dbb100 	ldrb	fp, [fp, #256]	; 0x100
+   12b80:	e5d00100 	ldrb	r0, [r0, #256]	; 0x100
+   12b84:	e18b9009 	orr	r9, fp, r9
+   12b88:	e5c3b031 	strb	fp, [r3, #49]	; 0x31
+   12b8c:	e5c89000 	strb	r9, [r8]
+   12b90:	e7d18004 	ldrb	r8, [r1, r4]
+   12b94:	e5c30030 	strb	r0, [r3, #48]	; 0x30
+   12b98:	e1808008 	orr	r8, r0, r8
+   12b9c:	e787310e 	str	r3, [r7, lr, lsl #2]
+   12ba0:	e7c18004 	strb	r8, [r1, r4]
+   12ba4:	e3a03001 	mov	r3, #1
+   12ba8:	e787310c 	str	r3, [r7, ip, lsl #2]
+   12bac:	e5d54001 	ldrb	r4, [r5, #1]
+   12bb0:	e3540000 	cmp	r4, #0
+   12bb4:	1a000005 	bne	12bd0 <OSMutexPost+0x144>
+   12bb8:	e38220ff 	orr	r2, r2, #255	; 0xff
+   12bbc:	e5854004 	str	r4, [r5, #4]
+   12bc0:	e1c520b2 	strh	r2, [r5, #2]
+   12bc4:	e1a00006 	mov	r0, r6
+   12bc8:	ebfff691 	bl	10614 <OS_CPU_SR_Restore>
+   12bcc:	eaffffb5 	b	12aa8 <OSMutexPost+0x1c>
+   12bd0:	e3a01000 	mov	r1, #0
+   12bd4:	e3a02010 	mov	r2, #16
+   12bd8:	e1a00005 	mov	r0, r5
+   12bdc:	e1a04001 	mov	r4, r1
+   12be0:	ebfff821 	bl	10c6c <OS_EventTaskRdy>
+   12be4:	e1a02000 	mov	r2, r0
+   12be8:	e1d530b2 	ldrh	r3, [r5, #2]
+   12bec:	e1a00006 	mov	r0, r6
+   12bf0:	e7971102 	ldr	r1, [r7, r2, lsl #2]
+   12bf4:	e3c330ff 	bic	r3, r3, #255	; 0xff
+   12bf8:	e1833002 	orr	r3, r3, r2
+   12bfc:	e5851004 	str	r1, [r5, #4]
+   12c00:	e1c530b2 	strh	r3, [r5, #2]
+   12c04:	ebfff682 	bl	10614 <OS_CPU_SR_Restore>
+   12c08:	ebfff87b 	bl	10dfc <OS_Sched>
+   12c0c:	eaffffa5 	b	12aa8 <OSMutexPost+0x1c>
+
+00012c10 <OSMutexQuery>:
+   12c10:	e30532e1 	movw	r3, #21217	; 0x52e1
+   12c14:	e3403001 	movt	r3, #1
+   12c18:	e92d4070 	push	{r4, r5, r6, lr}
+   12c1c:	e5d34000 	ldrb	r4, [r3]
+   12c20:	e3540000 	cmp	r4, #0
+   12c24:	13a04006 	movne	r4, #6
+   12c28:	0a000001 	beq	12c34 <OSMutexQuery+0x24>
+   12c2c:	e1a00004 	mov	r0, r4
+   12c30:	e8bd8070 	pop	{r4, r5, r6, pc}
+   12c34:	e3500000 	cmp	r0, #0
+   12c38:	03a04004 	moveq	r4, #4
+   12c3c:	0afffffa 	beq	12c2c <OSMutexQuery+0x1c>
+   12c40:	e5d03000 	ldrb	r3, [r0]
+   12c44:	e3530004 	cmp	r3, #4
+   12c48:	13a04001 	movne	r4, #1
+   12c4c:	1afffff6 	bne	12c2c <OSMutexQuery+0x1c>
+   12c50:	e1a05000 	mov	r5, r0
+   12c54:	e1a06001 	mov	r6, r1
+   12c58:	ebfff665 	bl	105f4 <OS_CPU_SR_Save>
+   12c5c:	e1d530b2 	ldrh	r3, [r5, #2]
+   12c60:	e6ef2073 	uxtb	r2, r3
+   12c64:	e1a03423 	lsr	r3, r3, #8
+   12c68:	e35200ff 	cmp	r2, #255	; 0xff
+   12c6c:	e5c6300b 	strb	r3, [r6, #11]
+   12c70:	e5c6200a 	strb	r2, [r6, #10]
+   12c74:	15c64009 	strbne	r4, [r6, #9]
+   12c78:	03a03001 	moveq	r3, #1
+   12c7c:	05c63009 	strbeq	r3, [r6, #9]
+   12c80:	e5d53001 	ldrb	r3, [r5, #1]
+   12c84:	e5c63008 	strb	r3, [r6, #8]
+   12c88:	e5d53008 	ldrb	r3, [r5, #8]
+   12c8c:	e5c63000 	strb	r3, [r6]
+   12c90:	e5d53009 	ldrb	r3, [r5, #9]
+   12c94:	e5c63001 	strb	r3, [r6, #1]
+   12c98:	e5d5300a 	ldrb	r3, [r5, #10]
+   12c9c:	e5c63002 	strb	r3, [r6, #2]
+   12ca0:	e5d5300b 	ldrb	r3, [r5, #11]
+   12ca4:	e5c63003 	strb	r3, [r6, #3]
+   12ca8:	e5d5300c 	ldrb	r3, [r5, #12]
+   12cac:	e5c63004 	strb	r3, [r6, #4]
+   12cb0:	e5d5300d 	ldrb	r3, [r5, #13]
+   12cb4:	e5c63005 	strb	r3, [r6, #5]
+   12cb8:	e5d5300e 	ldrb	r3, [r5, #14]
+   12cbc:	e5c63006 	strb	r3, [r6, #6]
+   12cc0:	e5d5300f 	ldrb	r3, [r5, #15]
+   12cc4:	e5c63007 	strb	r3, [r6, #7]
+   12cc8:	ebfff651 	bl	10614 <OS_CPU_SR_Restore>
+   12ccc:	eaffffd6 	b	12c2c <OSMutexQuery+0x1c>
+
+00012cd0 <OSQAccept>:
+   12cd0:	e92d4010 	push	{r4, lr}
+   12cd4:	e2504000 	subs	r4, r0, #0
+   12cd8:	0a000009 	beq	12d04 <OSQAccept+0x34>
+   12cdc:	e5d43000 	ldrb	r3, [r4]
+   12ce0:	e3530002 	cmp	r3, #2
+   12ce4:	13a04000 	movne	r4, #0
+   12ce8:	1a000005 	bne	12d04 <OSQAccept+0x34>
+   12cec:	ebfff640 	bl	105f4 <OS_CPU_SR_Save>
+   12cf0:	e5943004 	ldr	r3, [r4, #4]
+   12cf4:	e1d341b6 	ldrh	r4, [r3, #22]
+   12cf8:	e3540000 	cmp	r4, #0
+   12cfc:	1a000002 	bne	12d0c <OSQAccept+0x3c>
+   12d00:	ebfff643 	bl	10614 <OS_CPU_SR_Restore>
+   12d04:	e1a00004 	mov	r0, r4
+   12d08:	e8bd8010 	pop	{r4, pc}
+   12d0c:	e5932010 	ldr	r2, [r3, #16]
+   12d10:	e244c001 	sub	ip, r4, #1
+   12d14:	e593e008 	ldr	lr, [r3, #8]
+   12d18:	e2821004 	add	r1, r2, #4
+   12d1c:	e151000e 	cmp	r1, lr
+   12d20:	e5831010 	str	r1, [r3, #16]
+   12d24:	e5924000 	ldr	r4, [r2]
+   12d28:	05932004 	ldreq	r2, [r3, #4]
+   12d2c:	e1c3c1b6 	strh	ip, [r3, #22]
+   12d30:	05832010 	streq	r2, [r3, #16]
+   12d34:	eafffff1 	b	12d00 <OSQAccept+0x30>
+
+00012d38 <OSQCreate>:
+   12d38:	e30532e1 	movw	r3, #21217	; 0x52e1
+   12d3c:	e3403001 	movt	r3, #1
+   12d40:	e92d47f0 	push	{r4, r5, r6, r7, r8, r9, sl, lr}
+   12d44:	e5d35000 	ldrb	r5, [r3]
+   12d48:	e3550000 	cmp	r5, #0
+   12d4c:	13a04000 	movne	r4, #0
+   12d50:	1a000027 	bne	12df4 <OSQCreate+0xbc>
+   12d54:	e30582dc 	movw	r8, #21212	; 0x52dc
+   12d58:	e3408001 	movt	r8, #1
+   12d5c:	e1a09001 	mov	r9, r1
+   12d60:	e1a07000 	mov	r7, r0
+   12d64:	ebfff622 	bl	105f4 <OS_CPU_SR_Save>
+   12d68:	e5984000 	ldr	r4, [r8]
+   12d6c:	e3540000 	cmp	r4, #0
+   12d70:	0a000021 	beq	12dfc <OSQCreate+0xc4>
+   12d74:	e5943004 	ldr	r3, [r4, #4]
+   12d78:	e5883000 	str	r3, [r8]
+   12d7c:	ebfff624 	bl	10614 <OS_CPU_SR_Restore>
+   12d80:	ebfff61b 	bl	105f4 <OS_CPU_SR_Save>
+   12d84:	e30532cc 	movw	r3, #21196	; 0x52cc
+   12d88:	e3403001 	movt	r3, #1
+   12d8c:	e5936000 	ldr	r6, [r3]
+   12d90:	e3560000 	cmp	r6, #0
+   12d94:	0a00001b 	beq	12e08 <OSQCreate+0xd0>
+   12d98:	e5962000 	ldr	r2, [r6]
+   12d9c:	e5832000 	str	r2, [r3]
+   12da0:	ebfff61b 	bl	10614 <OS_CPU_SR_Restore>
+   12da4:	e3a03002 	mov	r3, #2
+   12da8:	e5867004 	str	r7, [r6, #4]
+   12dac:	e586700c 	str	r7, [r6, #12]
+   12db0:	e0872319 	add	r2, r7, r9, lsl r3
+   12db4:	e5867010 	str	r7, [r6, #16]
+   12db8:	e5862008 	str	r2, [r6, #8]
+   12dbc:	e1c691b4 	strh	r9, [r6, #20]
+   12dc0:	e1c651b6 	strh	r5, [r6, #22]
+   12dc4:	e1c450b2 	strh	r5, [r4, #2]
+   12dc8:	e5846004 	str	r6, [r4, #4]
+   12dcc:	e5c45001 	strb	r5, [r4, #1]
+   12dd0:	e5c45008 	strb	r5, [r4, #8]
+   12dd4:	e5c45009 	strb	r5, [r4, #9]
+   12dd8:	e5c4500a 	strb	r5, [r4, #10]
+   12ddc:	e5c4500b 	strb	r5, [r4, #11]
+   12de0:	e5c4500c 	strb	r5, [r4, #12]
+   12de4:	e5c4500d 	strb	r5, [r4, #13]
+   12de8:	e5c4500e 	strb	r5, [r4, #14]
+   12dec:	e5c4500f 	strb	r5, [r4, #15]
+   12df0:	e5c43000 	strb	r3, [r4]
+   12df4:	e1a00004 	mov	r0, r4
+   12df8:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+   12dfc:	ebfff604 	bl	10614 <OS_CPU_SR_Restore>
+   12e00:	e1a00004 	mov	r0, r4
+   12e04:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+   12e08:	e5983000 	ldr	r3, [r8]
+   12e0c:	e5884000 	str	r4, [r8]
+   12e10:	e5843004 	str	r3, [r4, #4]
+   12e14:	e1a04006 	mov	r4, r6
+   12e18:	ebfff5fd 	bl	10614 <OS_CPU_SR_Restore>
+   12e1c:	eafffff4 	b	12df4 <OSQCreate+0xbc>
+
+00012e20 <OSQDel>:
+   12e20:	e30532e1 	movw	r3, #21217	; 0x52e1
+   12e24:	e3403001 	movt	r3, #1
+   12e28:	e5d33000 	ldrb	r3, [r3]
+   12e2c:	e3530000 	cmp	r3, #0
+   12e30:	1a000017 	bne	12e94 <OSQDel+0x74>
+   12e34:	e3500000 	cmp	r0, #0
+   12e38:	0a000019 	beq	12ea4 <OSQDel+0x84>
+   12e3c:	e5d03000 	ldrb	r3, [r0]
+   12e40:	e3530002 	cmp	r3, #2
+   12e44:	0a000002 	beq	12e54 <OSQDel+0x34>
+   12e48:	e3a03001 	mov	r3, #1
+   12e4c:	e5c23000 	strb	r3, [r2]
+   12e50:	e12fff1e 	bx	lr
+   12e54:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   12e58:	e1a04000 	mov	r4, r0
+   12e5c:	e1a05002 	mov	r5, r2
+   12e60:	e1a06001 	mov	r6, r1
+   12e64:	ebfff5e2 	bl	105f4 <OS_CPU_SR_Save>
+   12e68:	e5d43001 	ldrb	r3, [r4, #1]
+   12e6c:	e1a07000 	mov	r7, r0
+   12e70:	e3530000 	cmp	r3, #0
+   12e74:	0a00000d 	beq	12eb0 <OSQDel+0x90>
+   12e78:	e3560000 	cmp	r6, #0
+   12e7c:	1a00002b 	bne	12f30 <OSQDel+0x110>
+   12e80:	ebfff5e3 	bl	10614 <OS_CPU_SR_Restore>
+   12e84:	e3a03008 	mov	r3, #8
+   12e88:	e1a00004 	mov	r0, r4
+   12e8c:	e5c53000 	strb	r3, [r5]
+   12e90:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   12e94:	e3e03073 	mvn	r3, #115	; 0x73
+   12e98:	e3a00000 	mov	r0, #0
+   12e9c:	e5c23000 	strb	r3, [r2]
+   12ea0:	e12fff1e 	bx	lr
+   12ea4:	e3a03004 	mov	r3, #4
+   12ea8:	e5c23000 	strb	r3, [r2]
+   12eac:	e12fff1e 	bx	lr
+   12eb0:	e3560000 	cmp	r6, #0
+   12eb4:	0a00002a 	beq	12f64 <OSQDel+0x144>
+   12eb8:	e3560001 	cmp	r6, #1
+   12ebc:	1a000015 	bne	12f18 <OSQDel+0xf8>
+   12ec0:	e1a06003 	mov	r6, r3
+   12ec4:	e30522cc 	movw	r2, #21196	; 0x52cc
+   12ec8:	e3402001 	movt	r2, #1
+   12ecc:	e5941004 	ldr	r1, [r4, #4]
+   12ed0:	e3a0c000 	mov	ip, #0
+   12ed4:	e30532dc 	movw	r3, #21212	; 0x52dc
+   12ed8:	e3403001 	movt	r3, #1
+   12edc:	e592e000 	ldr	lr, [r2]
+   12ee0:	e1a00007 	mov	r0, r7
+   12ee4:	e581e000 	str	lr, [r1]
+   12ee8:	e5821000 	str	r1, [r2]
+   12eec:	e5c4c000 	strb	ip, [r4]
+   12ef0:	e5932000 	ldr	r2, [r3]
+   12ef4:	e5834000 	str	r4, [r3]
+   12ef8:	e5842004 	str	r2, [r4, #4]
+   12efc:	ebfff5c4 	bl	10614 <OS_CPU_SR_Restore>
+   12f00:	e3560001 	cmp	r6, #1
+   12f04:	0a000014 	beq	12f5c <OSQDel+0x13c>
+   12f08:	e3a03000 	mov	r3, #0
+   12f0c:	e1a00003 	mov	r0, r3
+   12f10:	e5c53000 	strb	r3, [r5]
+   12f14:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   12f18:	e1a00007 	mov	r0, r7
+   12f1c:	ebfff5bc 	bl	10614 <OS_CPU_SR_Restore>
+   12f20:	e3a03007 	mov	r3, #7
+   12f24:	e1a00004 	mov	r0, r4
+   12f28:	e5c53000 	strb	r3, [r5]
+   12f2c:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   12f30:	e3560001 	cmp	r6, #1
+   12f34:	1afffff7 	bne	12f18 <OSQDel+0xf8>
+   12f38:	e3a02004 	mov	r2, #4
+   12f3c:	e3a01000 	mov	r1, #0
+   12f40:	e1a00004 	mov	r0, r4
+   12f44:	ebfff748 	bl	10c6c <OS_EventTaskRdy>
+   12f48:	e5d43001 	ldrb	r3, [r4, #1]
+   12f4c:	e3530000 	cmp	r3, #0
+   12f50:	1afffff8 	bne	12f38 <OSQDel+0x118>
+   12f54:	e3a06001 	mov	r6, #1
+   12f58:	eaffffd9 	b	12ec4 <OSQDel+0xa4>
+   12f5c:	ebfff7a6 	bl	10dfc <OS_Sched>
+   12f60:	eaffffe8 	b	12f08 <OSQDel+0xe8>
+   12f64:	e30522cc 	movw	r2, #21196	; 0x52cc
+   12f68:	e3402001 	movt	r2, #1
+   12f6c:	e5941004 	ldr	r1, [r4, #4]
+   12f70:	e30532dc 	movw	r3, #21212	; 0x52dc
+   12f74:	e3403001 	movt	r3, #1
+   12f78:	e592c000 	ldr	ip, [r2]
+   12f7c:	e581c000 	str	ip, [r1]
+   12f80:	e5821000 	str	r1, [r2]
+   12f84:	e5c46000 	strb	r6, [r4]
+   12f88:	e5932000 	ldr	r2, [r3]
+   12f8c:	e5834000 	str	r4, [r3]
+   12f90:	e5842004 	str	r2, [r4, #4]
+   12f94:	ebfff59e 	bl	10614 <OS_CPU_SR_Restore>
+   12f98:	e5c56000 	strb	r6, [r5]
+   12f9c:	e1a00006 	mov	r0, r6
+   12fa0:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+
+00012fa4 <OSQFlush>:
+   12fa4:	e92d4010 	push	{r4, lr}
+   12fa8:	e2504000 	subs	r4, r0, #0
+   12fac:	0a000004 	beq	12fc4 <OSQFlush+0x20>
+   12fb0:	e5d43000 	ldrb	r3, [r4]
+   12fb4:	e3530002 	cmp	r3, #2
+   12fb8:	0a000003 	beq	12fcc <OSQFlush+0x28>
+   12fbc:	e3a00001 	mov	r0, #1
+   12fc0:	e8bd8010 	pop	{r4, pc}
+   12fc4:	e3a00004 	mov	r0, #4
+   12fc8:	e8bd8010 	pop	{r4, pc}
+   12fcc:	ebfff588 	bl	105f4 <OS_CPU_SR_Save>
+   12fd0:	e5943004 	ldr	r3, [r4, #4]
+   12fd4:	e3a04000 	mov	r4, #0
+   12fd8:	e5932004 	ldr	r2, [r3, #4]
+   12fdc:	e1c341b6 	strh	r4, [r3, #22]
+   12fe0:	e583200c 	str	r2, [r3, #12]
+   12fe4:	e5832010 	str	r2, [r3, #16]
+   12fe8:	ebfff589 	bl	10614 <OS_CPU_SR_Restore>
+   12fec:	e1a00004 	mov	r0, r4
+   12ff0:	e8bd8010 	pop	{r4, pc}
+
+00012ff4 <OSQPend>:
+   12ff4:	e30532e1 	movw	r3, #21217	; 0x52e1
+   12ff8:	e3403001 	movt	r3, #1
+   12ffc:	e92d47f0 	push	{r4, r5, r6, r7, r8, r9, sl, lr}
+   13000:	e5d33000 	ldrb	r3, [r3]
+   13004:	e3530000 	cmp	r3, #0
+   13008:	13a03002 	movne	r3, #2
+   1300c:	13a05000 	movne	r5, #0
+   13010:	15c23000 	strbne	r3, [r2]
+   13014:	1a00001e 	bne	13094 <OSQPend+0xa0>
+   13018:	e3500000 	cmp	r0, #0
+   1301c:	01a05000 	moveq	r5, r0
+   13020:	03a03004 	moveq	r3, #4
+   13024:	05c23000 	strbeq	r3, [r2]
+   13028:	0a000019 	beq	13094 <OSQPend+0xa0>
+   1302c:	e5d0c000 	ldrb	ip, [r0]
+   13030:	e35c0002 	cmp	ip, #2
+   13034:	1a000018 	bne	1309c <OSQPend+0xa8>
+   13038:	e1a04000 	mov	r4, r0
+   1303c:	e1a07002 	mov	r7, r2
+   13040:	e1a08001 	mov	r8, r1
+   13044:	ebfff56a 	bl	105f4 <OS_CPU_SR_Save>
+   13048:	e1a09000 	mov	r9, r0
+   1304c:	e5943004 	ldr	r3, [r4, #4]
+   13050:	e1d361b6 	ldrh	r6, [r3, #22]
+   13054:	e3560000 	cmp	r6, #0
+   13058:	0a000014 	beq	130b0 <OSQPend+0xbc>
+   1305c:	e5932010 	ldr	r2, [r3, #16]
+   13060:	e2466001 	sub	r6, r6, #1
+   13064:	e5930008 	ldr	r0, [r3, #8]
+   13068:	e2821004 	add	r1, r2, #4
+   1306c:	e1510000 	cmp	r1, r0
+   13070:	e5831010 	str	r1, [r3, #16]
+   13074:	e1a00009 	mov	r0, r9
+   13078:	e5925000 	ldr	r5, [r2]
+   1307c:	05932004 	ldreq	r2, [r3, #4]
+   13080:	e1c361b6 	strh	r6, [r3, #22]
+   13084:	05832010 	streq	r2, [r3, #16]
+   13088:	ebfff561 	bl	10614 <OS_CPU_SR_Restore>
+   1308c:	e3a03000 	mov	r3, #0
+   13090:	e5c73000 	strb	r3, [r7]
+   13094:	e1a00005 	mov	r0, r5
+   13098:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+   1309c:	e3a01001 	mov	r1, #1
+   130a0:	e1a05003 	mov	r5, r3
+   130a4:	e1a00005 	mov	r0, r5
+   130a8:	e5c21000 	strb	r1, [r2]
+   130ac:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+   130b0:	e30552e4 	movw	r5, #21220	; 0x52e4
+   130b4:	e3405001 	movt	r5, #1
+   130b8:	e1a00004 	mov	r0, r4
+   130bc:	e5953000 	ldr	r3, [r5]
+   130c0:	e5d3202c 	ldrb	r2, [r3, #44]	; 0x2c
+   130c4:	e1c382ba 	strh	r8, [r3, #42]	; 0x2a
+   130c8:	e3822004 	orr	r2, r2, #4
+   130cc:	e5c3202c 	strb	r2, [r3, #44]	; 0x2c
+   130d0:	ebfff710 	bl	10d18 <OS_EventTaskWait>
+   130d4:	e1a00009 	mov	r0, r9
+   130d8:	ebfff54d 	bl	10614 <OS_CPU_SR_Restore>
+   130dc:	ebfff746 	bl	10dfc <OS_Sched>
+   130e0:	ebfff543 	bl	105f4 <OS_CPU_SR_Save>
+   130e4:	e5953000 	ldr	r3, [r5]
+   130e8:	e1a02000 	mov	r2, r0
+   130ec:	e5935020 	ldr	r5, [r3, #32]
+   130f0:	e3550000 	cmp	r5, #0
+   130f4:	0a000006 	beq	13114 <OSQPend+0x120>
+   130f8:	e5836020 	str	r6, [r3, #32]
+   130fc:	e5c3602c 	strb	r6, [r3, #44]	; 0x2c
+   13100:	e583601c 	str	r6, [r3, #28]
+   13104:	ebfff542 	bl	10614 <OS_CPU_SR_Restore>
+   13108:	e5c76000 	strb	r6, [r7]
+   1310c:	e1a00005 	mov	r0, r5
+   13110:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+   13114:	e5d3102f 	ldrb	r1, [r3, #47]	; 0x2f
+   13118:	e5d3c030 	ldrb	ip, [r3, #48]	; 0x30
+   1311c:	e0841001 	add	r1, r4, r1
+   13120:	e5d10008 	ldrb	r0, [r1, #8]
+   13124:	e1c0000c 	bic	r0, r0, ip
+   13128:	e3500000 	cmp	r0, #0
+   1312c:	e5c10008 	strb	r0, [r1, #8]
+   13130:	05d41001 	ldrbeq	r1, [r4, #1]
+   13134:	05d30031 	ldrbeq	r0, [r3, #49]	; 0x31
+   13138:	01c11000 	biceq	r1, r1, r0
+   1313c:	e1a00002 	mov	r0, r2
+   13140:	05c41001 	strbeq	r1, [r4, #1]
+   13144:	e3a01000 	mov	r1, #0
+   13148:	e5c3102c 	strb	r1, [r3, #44]	; 0x2c
+   1314c:	e583101c 	str	r1, [r3, #28]
+   13150:	ebfff52f 	bl	10614 <OS_CPU_SR_Restore>
+   13154:	e3a0300a 	mov	r3, #10
+   13158:	e5c73000 	strb	r3, [r7]
+   1315c:	eaffffcc 	b	13094 <OSQPend+0xa0>
+
+00013160 <OSQPost>:
+   13160:	e3500000 	cmp	r0, #0
+   13164:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   13168:	03a04004 	moveq	r4, #4
+   1316c:	0a000006 	beq	1318c <OSQPost+0x2c>
+   13170:	e3510000 	cmp	r1, #0
+   13174:	03a04003 	moveq	r4, #3
+   13178:	0a000003 	beq	1318c <OSQPost+0x2c>
+   1317c:	e5d03000 	ldrb	r3, [r0]
+   13180:	e3530002 	cmp	r3, #2
+   13184:	13a04001 	movne	r4, #1
+   13188:	0a000001 	beq	13194 <OSQPost+0x34>
+   1318c:	e1a00004 	mov	r0, r4
+   13190:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   13194:	e1a05000 	mov	r5, r0
+   13198:	e1a06001 	mov	r6, r1
+   1319c:	ebfff514 	bl	105f4 <OS_CPU_SR_Save>
+   131a0:	e1a07000 	mov	r7, r0
+   131a4:	e5d54001 	ldrb	r4, [r5, #1]
+   131a8:	e3540000 	cmp	r4, #0
+   131ac:	1a000015 	bne	13208 <OSQPost+0xa8>
+   131b0:	e5953004 	ldr	r3, [r5, #4]
+   131b4:	e1d321b6 	ldrh	r2, [r3, #22]
+   131b8:	e1d311b4 	ldrh	r1, [r3, #20]
+   131bc:	e1510002 	cmp	r1, r2
+   131c0:	9a00000d 	bls	131fc <OSQPost+0x9c>
+   131c4:	e593100c 	ldr	r1, [r3, #12]
+   131c8:	e2822001 	add	r2, r2, #1
+   131cc:	e2810004 	add	r0, r1, #4
+   131d0:	e583000c 	str	r0, [r3, #12]
+   131d4:	e1a00007 	mov	r0, r7
+   131d8:	e5816000 	str	r6, [r1]
+   131dc:	e1c321b6 	strh	r2, [r3, #22]
+   131e0:	e593100c 	ldr	r1, [r3, #12]
+   131e4:	e5932008 	ldr	r2, [r3, #8]
+   131e8:	e1510002 	cmp	r1, r2
+   131ec:	05932004 	ldreq	r2, [r3, #4]
+   131f0:	0583200c 	streq	r2, [r3, #12]
+   131f4:	ebfff506 	bl	10614 <OS_CPU_SR_Restore>
+   131f8:	eaffffe3 	b	1318c <OSQPost+0x2c>
+   131fc:	ebfff504 	bl	10614 <OS_CPU_SR_Restore>
+   13200:	e3a0401e 	mov	r4, #30
+   13204:	eaffffe0 	b	1318c <OSQPost+0x2c>
+   13208:	e1a01006 	mov	r1, r6
+   1320c:	e3a02004 	mov	r2, #4
+   13210:	e1a00005 	mov	r0, r5
+   13214:	e3a04000 	mov	r4, #0
+   13218:	ebfff693 	bl	10c6c <OS_EventTaskRdy>
+   1321c:	e1a00007 	mov	r0, r7
+   13220:	ebfff4fb 	bl	10614 <OS_CPU_SR_Restore>
+   13224:	ebfff6f4 	bl	10dfc <OS_Sched>
+   13228:	eaffffd7 	b	1318c <OSQPost+0x2c>
+
+0001322c <OSQPostFront>:
+   1322c:	e3500000 	cmp	r0, #0
+   13230:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   13234:	03a04004 	moveq	r4, #4
+   13238:	0a000006 	beq	13258 <OSQPostFront+0x2c>
+   1323c:	e3510000 	cmp	r1, #0
+   13240:	03a04003 	moveq	r4, #3
+   13244:	0a000003 	beq	13258 <OSQPostFront+0x2c>
+   13248:	e5d03000 	ldrb	r3, [r0]
+   1324c:	e3530002 	cmp	r3, #2
+   13250:	13a04001 	movne	r4, #1
+   13254:	0a000001 	beq	13260 <OSQPostFront+0x34>
+   13258:	e1a00004 	mov	r0, r4
+   1325c:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   13260:	e1a05000 	mov	r5, r0
+   13264:	e1a06001 	mov	r6, r1
+   13268:	ebfff4e1 	bl	105f4 <OS_CPU_SR_Save>
+   1326c:	e1a07000 	mov	r7, r0
+   13270:	e5d54001 	ldrb	r4, [r5, #1]
+   13274:	e3540000 	cmp	r4, #0
+   13278:	1a000013 	bne	132cc <OSQPostFront+0xa0>
+   1327c:	e5953004 	ldr	r3, [r5, #4]
+   13280:	e1d321b6 	ldrh	r2, [r3, #22]
+   13284:	e1d311b4 	ldrh	r1, [r3, #20]
+   13288:	e1510002 	cmp	r1, r2
+   1328c:	9a00000b 	bls	132c0 <OSQPostFront+0x94>
+   13290:	e5931010 	ldr	r1, [r3, #16]
+   13294:	e2822001 	add	r2, r2, #1
+   13298:	e5930004 	ldr	r0, [r3, #4]
+   1329c:	e1510000 	cmp	r1, r0
+   132a0:	e1a00007 	mov	r0, r7
+   132a4:	05931008 	ldreq	r1, [r3, #8]
+   132a8:	e241c004 	sub	ip, r1, #4
+   132ac:	e583c010 	str	ip, [r3, #16]
+   132b0:	e5016004 	str	r6, [r1, #-4]
+   132b4:	e1c321b6 	strh	r2, [r3, #22]
+   132b8:	ebfff4d5 	bl	10614 <OS_CPU_SR_Restore>
+   132bc:	eaffffe5 	b	13258 <OSQPostFront+0x2c>
+   132c0:	ebfff4d3 	bl	10614 <OS_CPU_SR_Restore>
+   132c4:	e3a0401e 	mov	r4, #30
+   132c8:	eaffffe2 	b	13258 <OSQPostFront+0x2c>
+   132cc:	e1a01006 	mov	r1, r6
+   132d0:	e3a02004 	mov	r2, #4
+   132d4:	e1a00005 	mov	r0, r5
+   132d8:	e3a04000 	mov	r4, #0
+   132dc:	ebfff662 	bl	10c6c <OS_EventTaskRdy>
+   132e0:	e1a00007 	mov	r0, r7
+   132e4:	ebfff4ca 	bl	10614 <OS_CPU_SR_Restore>
+   132e8:	ebfff6c3 	bl	10dfc <OS_Sched>
+   132ec:	eaffffd9 	b	13258 <OSQPostFront+0x2c>
+
+000132f0 <OSQPostOpt>:
+   132f0:	e3500000 	cmp	r0, #0
+   132f4:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   132f8:	03a05004 	moveq	r5, #4
+   132fc:	0a000006 	beq	1331c <OSQPostOpt+0x2c>
+   13300:	e3510000 	cmp	r1, #0
+   13304:	03a05003 	moveq	r5, #3
+   13308:	0a000003 	beq	1331c <OSQPostOpt+0x2c>
+   1330c:	e5d03000 	ldrb	r3, [r0]
+   13310:	e3530002 	cmp	r3, #2
+   13314:	13a05001 	movne	r5, #1
+   13318:	0a000001 	beq	13324 <OSQPostOpt+0x34>
+   1331c:	e1a00005 	mov	r0, r5
+   13320:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   13324:	e1a04000 	mov	r4, r0
+   13328:	e1a07002 	mov	r7, r2
+   1332c:	e1a06001 	mov	r6, r1
+   13330:	ebfff4af 	bl	105f4 <OS_CPU_SR_Save>
+   13334:	e1a08000 	mov	r8, r0
+   13338:	e5d45001 	ldrb	r5, [r4, #1]
+   1333c:	e3550000 	cmp	r5, #0
+   13340:	0a00000d 	beq	1337c <OSQPostOpt+0x8c>
+   13344:	e3170001 	tst	r7, #1
+   13348:	0a000021 	beq	133d4 <OSQPostOpt+0xe4>
+   1334c:	e3a02004 	mov	r2, #4
+   13350:	e1a01006 	mov	r1, r6
+   13354:	e1a00004 	mov	r0, r4
+   13358:	ebfff643 	bl	10c6c <OS_EventTaskRdy>
+   1335c:	e5d43001 	ldrb	r3, [r4, #1]
+   13360:	e3530000 	cmp	r3, #0
+   13364:	1afffff8 	bne	1334c <OSQPostOpt+0x5c>
+   13368:	e1a00008 	mov	r0, r8
+   1336c:	e3a05000 	mov	r5, #0
+   13370:	ebfff4a7 	bl	10614 <OS_CPU_SR_Restore>
+   13374:	ebfff6a0 	bl	10dfc <OS_Sched>
+   13378:	eaffffe7 	b	1331c <OSQPostOpt+0x2c>
+   1337c:	e5943004 	ldr	r3, [r4, #4]
+   13380:	e1d321b6 	ldrh	r2, [r3, #22]
+   13384:	e1d311b4 	ldrh	r1, [r3, #20]
+   13388:	e1510002 	cmp	r1, r2
+   1338c:	9a00000d 	bls	133c8 <OSQPostOpt+0xd8>
+   13390:	e3170002 	tst	r7, #2
+   13394:	0a000013 	beq	133e8 <OSQPostOpt+0xf8>
+   13398:	e5931010 	ldr	r1, [r3, #16]
+   1339c:	e5930004 	ldr	r0, [r3, #4]
+   133a0:	e1510000 	cmp	r1, r0
+   133a4:	05931008 	ldreq	r1, [r3, #8]
+   133a8:	e2410004 	sub	r0, r1, #4
+   133ac:	e5830010 	str	r0, [r3, #16]
+   133b0:	e5016004 	str	r6, [r1, #-4]
+   133b4:	e2822001 	add	r2, r2, #1
+   133b8:	e1a00008 	mov	r0, r8
+   133bc:	e1c321b6 	strh	r2, [r3, #22]
+   133c0:	ebfff493 	bl	10614 <OS_CPU_SR_Restore>
+   133c4:	eaffffd4 	b	1331c <OSQPostOpt+0x2c>
+   133c8:	ebfff491 	bl	10614 <OS_CPU_SR_Restore>
+   133cc:	e3a0501e 	mov	r5, #30
+   133d0:	eaffffd1 	b	1331c <OSQPostOpt+0x2c>
+   133d4:	e1a01006 	mov	r1, r6
+   133d8:	e1a00004 	mov	r0, r4
+   133dc:	e3a02004 	mov	r2, #4
+   133e0:	ebfff621 	bl	10c6c <OS_EventTaskRdy>
+   133e4:	eaffffdf 	b	13368 <OSQPostOpt+0x78>
+   133e8:	e593100c 	ldr	r1, [r3, #12]
+   133ec:	e2810004 	add	r0, r1, #4
+   133f0:	e583000c 	str	r0, [r3, #12]
+   133f4:	e5816000 	str	r6, [r1]
+   133f8:	e5931008 	ldr	r1, [r3, #8]
+   133fc:	e593000c 	ldr	r0, [r3, #12]
+   13400:	e1500001 	cmp	r0, r1
+   13404:	05931004 	ldreq	r1, [r3, #4]
+   13408:	0583100c 	streq	r1, [r3, #12]
+   1340c:	eaffffe8 	b	133b4 <OSQPostOpt+0xc4>
+
+00013410 <OSQQuery>:
+   13410:	e92d4070 	push	{r4, r5, r6, lr}
+   13414:	e2504000 	subs	r4, r0, #0
+   13418:	0a000004 	beq	13430 <OSQQuery+0x20>
+   1341c:	e5d43000 	ldrb	r3, [r4]
+   13420:	e3530002 	cmp	r3, #2
+   13424:	0a000003 	beq	13438 <OSQQuery+0x28>
+   13428:	e3a00001 	mov	r0, #1
+   1342c:	e8bd8070 	pop	{r4, r5, r6, pc}
+   13430:	e3a00004 	mov	r0, #4
+   13434:	e8bd8070 	pop	{r4, r5, r6, pc}
+   13438:	e1a05001 	mov	r5, r1
+   1343c:	ebfff46c 	bl	105f4 <OS_CPU_SR_Save>
+   13440:	e5d43001 	ldrb	r3, [r4, #1]
+   13444:	e5c53010 	strb	r3, [r5, #16]
+   13448:	e5d43008 	ldrb	r3, [r4, #8]
+   1344c:	e5c53008 	strb	r3, [r5, #8]
+   13450:	e5d43009 	ldrb	r3, [r4, #9]
+   13454:	e5c53009 	strb	r3, [r5, #9]
+   13458:	e5d4300a 	ldrb	r3, [r4, #10]
+   1345c:	e5c5300a 	strb	r3, [r5, #10]
+   13460:	e5d4300b 	ldrb	r3, [r4, #11]
+   13464:	e5c5300b 	strb	r3, [r5, #11]
+   13468:	e5d4300c 	ldrb	r3, [r4, #12]
+   1346c:	e5c5300c 	strb	r3, [r5, #12]
+   13470:	e5d4300d 	ldrb	r3, [r4, #13]
+   13474:	e5c5300d 	strb	r3, [r5, #13]
+   13478:	e5d4300e 	ldrb	r3, [r4, #14]
+   1347c:	e5c5300e 	strb	r3, [r5, #14]
+   13480:	e5d4300f 	ldrb	r3, [r4, #15]
+   13484:	e5c5300f 	strb	r3, [r5, #15]
+   13488:	e5942004 	ldr	r2, [r4, #4]
+   1348c:	e1d231b6 	ldrh	r3, [r2, #22]
+   13490:	e3530000 	cmp	r3, #0
+   13494:	05853000 	streq	r3, [r5]
+   13498:	15921010 	ldrne	r1, [r2, #16]
+   1349c:	e1d221b4 	ldrh	r2, [r2, #20]
+   134a0:	15911000 	ldrne	r1, [r1]
+   134a4:	e1c530b4 	strh	r3, [r5, #4]
+   134a8:	15851000 	strne	r1, [r5]
+   134ac:	e1c520b6 	strh	r2, [r5, #6]
+   134b0:	ebfff457 	bl	10614 <OS_CPU_SR_Restore>
+   134b4:	e3a00000 	mov	r0, #0
+   134b8:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+000134bc <OS_QInit>:
+   134bc:	e3053250 	movw	r3, #21072	; 0x5250
+   134c0:	e3403001 	movt	r3, #1
+   134c4:	e1a02003 	mov	r2, r3
+   134c8:	e283c018 	add	ip, r3, #24
+   134cc:	e30512cc 	movw	r1, #21196	; 0x52cc
+   134d0:	e3401001 	movt	r1, #1
+   134d4:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+   134d8:	e3a00000 	mov	r0, #0
+   134dc:	e283e048 	add	lr, r3, #72	; 0x48
+   134e0:	e482c030 	str	ip, [r2], #48	; 0x30
+   134e4:	e283c060 	add	ip, r3, #96	; 0x60
+   134e8:	e583e030 	str	lr, [r3, #48]	; 0x30
+   134ec:	e583c048 	str	ip, [r3, #72]	; 0x48
+   134f0:	e5830060 	str	r0, [r3, #96]	; 0x60
+   134f4:	e5813000 	str	r3, [r1]
+   134f8:	e5832018 	str	r2, [r3, #24]
+   134fc:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+
+00013500 <OSSemAccept>:
+   13500:	e92d4070 	push	{r4, r5, r6, lr}
+   13504:	e2504000 	subs	r4, r0, #0
+   13508:	0a000002 	beq	13518 <OSSemAccept+0x18>
+   1350c:	e5d43000 	ldrb	r3, [r4]
+   13510:	e3530003 	cmp	r3, #3
+   13514:	0a000002 	beq	13524 <OSSemAccept+0x24>
+   13518:	e3a05000 	mov	r5, #0
+   1351c:	e1a00005 	mov	r0, r5
+   13520:	e8bd8070 	pop	{r4, r5, r6, pc}
+   13524:	ebfff432 	bl	105f4 <OS_CPU_SR_Save>
+   13528:	e1d450b2 	ldrh	r5, [r4, #2]
+   1352c:	e3550000 	cmp	r5, #0
+   13530:	12453001 	subne	r3, r5, #1
+   13534:	11c430b2 	strhne	r3, [r4, #2]
+   13538:	ebfff435 	bl	10614 <OS_CPU_SR_Restore>
+   1353c:	e1a00005 	mov	r0, r5
+   13540:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+00013544 <OSSemCreate>:
+   13544:	e30532e1 	movw	r3, #21217	; 0x52e1
+   13548:	e3403001 	movt	r3, #1
+   1354c:	e92d4070 	push	{r4, r5, r6, lr}
+   13550:	e5d35000 	ldrb	r5, [r3]
+   13554:	e3550000 	cmp	r5, #0
+   13558:	13a04000 	movne	r4, #0
+   1355c:	1a000016 	bne	135bc <OSSemCreate+0x78>
+   13560:	e1a06000 	mov	r6, r0
+   13564:	ebfff422 	bl	105f4 <OS_CPU_SR_Save>
+   13568:	e30532dc 	movw	r3, #21212	; 0x52dc
+   1356c:	e3403001 	movt	r3, #1
+   13570:	e5934000 	ldr	r4, [r3]
+   13574:	e3540000 	cmp	r4, #0
+   13578:	0a000011 	beq	135c4 <OSSemCreate+0x80>
+   1357c:	e5942004 	ldr	r2, [r4, #4]
+   13580:	e5832000 	str	r2, [r3]
+   13584:	ebfff422 	bl	10614 <OS_CPU_SR_Restore>
+   13588:	e3a03003 	mov	r3, #3
+   1358c:	e1c460b2 	strh	r6, [r4, #2]
+   13590:	e5845004 	str	r5, [r4, #4]
+   13594:	e5c45001 	strb	r5, [r4, #1]
+   13598:	e5c45008 	strb	r5, [r4, #8]
+   1359c:	e5c45009 	strb	r5, [r4, #9]
+   135a0:	e5c4500a 	strb	r5, [r4, #10]
+   135a4:	e5c4500b 	strb	r5, [r4, #11]
+   135a8:	e5c4500c 	strb	r5, [r4, #12]
+   135ac:	e5c4500d 	strb	r5, [r4, #13]
+   135b0:	e5c4500e 	strb	r5, [r4, #14]
+   135b4:	e5c4500f 	strb	r5, [r4, #15]
+   135b8:	e5c43000 	strb	r3, [r4]
+   135bc:	e1a00004 	mov	r0, r4
+   135c0:	e8bd8070 	pop	{r4, r5, r6, pc}
+   135c4:	ebfff412 	bl	10614 <OS_CPU_SR_Restore>
+   135c8:	e1a00004 	mov	r0, r4
+   135cc:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+000135d0 <OSSemDel>:
+   135d0:	e30532e1 	movw	r3, #21217	; 0x52e1
+   135d4:	e3403001 	movt	r3, #1
+   135d8:	e5d33000 	ldrb	r3, [r3]
+   135dc:	e3530000 	cmp	r3, #0
+   135e0:	1a000007 	bne	13604 <OSSemDel+0x34>
+   135e4:	e3500000 	cmp	r0, #0
+   135e8:	0a000018 	beq	13650 <OSSemDel+0x80>
+   135ec:	e5d03000 	ldrb	r3, [r0]
+   135f0:	e3530003 	cmp	r3, #3
+   135f4:	0a000005 	beq	13610 <OSSemDel+0x40>
+   135f8:	e3a03001 	mov	r3, #1
+   135fc:	e5c23000 	strb	r3, [r2]
+   13600:	e12fff1e 	bx	lr
+   13604:	e3e03073 	mvn	r3, #115	; 0x73
+   13608:	e5c23000 	strb	r3, [r2]
+   1360c:	e12fff1e 	bx	lr
+   13610:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   13614:	e1a04000 	mov	r4, r0
+   13618:	e1a05002 	mov	r5, r2
+   1361c:	e1a06001 	mov	r6, r1
+   13620:	ebfff3f3 	bl	105f4 <OS_CPU_SR_Save>
+   13624:	e5d43001 	ldrb	r3, [r4, #1]
+   13628:	e1a07000 	mov	r7, r0
+   1362c:	e3530000 	cmp	r3, #0
+   13630:	0a000009 	beq	1365c <OSSemDel+0x8c>
+   13634:	e3560000 	cmp	r6, #0
+   13638:	1a000021 	bne	136c4 <OSSemDel+0xf4>
+   1363c:	ebfff3f4 	bl	10614 <OS_CPU_SR_Restore>
+   13640:	e3a03008 	mov	r3, #8
+   13644:	e1a00004 	mov	r0, r4
+   13648:	e5c53000 	strb	r3, [r5]
+   1364c:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   13650:	e3a03004 	mov	r3, #4
+   13654:	e5c23000 	strb	r3, [r2]
+   13658:	e12fff1e 	bx	lr
+   1365c:	e3560000 	cmp	r6, #0
+   13660:	0a000024 	beq	136f8 <OSSemDel+0x128>
+   13664:	e3560001 	cmp	r6, #1
+   13668:	1a00000f 	bne	136ac <OSSemDel+0xdc>
+   1366c:	e1a06003 	mov	r6, r3
+   13670:	e3a02000 	mov	r2, #0
+   13674:	e30532dc 	movw	r3, #21212	; 0x52dc
+   13678:	e3403001 	movt	r3, #1
+   1367c:	e5c42000 	strb	r2, [r4]
+   13680:	e1a00007 	mov	r0, r7
+   13684:	e5932000 	ldr	r2, [r3]
+   13688:	e5834000 	str	r4, [r3]
+   1368c:	e5842004 	str	r2, [r4, #4]
+   13690:	ebfff3df 	bl	10614 <OS_CPU_SR_Restore>
+   13694:	e3560001 	cmp	r6, #1
+   13698:	0a000014 	beq	136f0 <OSSemDel+0x120>
+   1369c:	e3a03000 	mov	r3, #0
+   136a0:	e1a00003 	mov	r0, r3
+   136a4:	e5c53000 	strb	r3, [r5]
+   136a8:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   136ac:	e1a00007 	mov	r0, r7
+   136b0:	ebfff3d7 	bl	10614 <OS_CPU_SR_Restore>
+   136b4:	e3a03007 	mov	r3, #7
+   136b8:	e1a00004 	mov	r0, r4
+   136bc:	e5c53000 	strb	r3, [r5]
+   136c0:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   136c4:	e3560001 	cmp	r6, #1
+   136c8:	1afffff7 	bne	136ac <OSSemDel+0xdc>
+   136cc:	e3a02001 	mov	r2, #1
+   136d0:	e3a01000 	mov	r1, #0
+   136d4:	e1a00004 	mov	r0, r4
+   136d8:	ebfff563 	bl	10c6c <OS_EventTaskRdy>
+   136dc:	e5d43001 	ldrb	r3, [r4, #1]
+   136e0:	e3530000 	cmp	r3, #0
+   136e4:	1afffff8 	bne	136cc <OSSemDel+0xfc>
+   136e8:	e3a06001 	mov	r6, #1
+   136ec:	eaffffdf 	b	13670 <OSSemDel+0xa0>
+   136f0:	ebfff5c1 	bl	10dfc <OS_Sched>
+   136f4:	eaffffe8 	b	1369c <OSSemDel+0xcc>
+   136f8:	e30532dc 	movw	r3, #21212	; 0x52dc
+   136fc:	e3403001 	movt	r3, #1
+   13700:	e5c46000 	strb	r6, [r4]
+   13704:	e5932000 	ldr	r2, [r3]
+   13708:	e5834000 	str	r4, [r3]
+   1370c:	e5842004 	str	r2, [r4, #4]
+   13710:	ebfff3bf 	bl	10614 <OS_CPU_SR_Restore>
+   13714:	e5c56000 	strb	r6, [r5]
+   13718:	e1a00006 	mov	r0, r6
+   1371c:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+
+00013720 <OSSemPend>:
+   13720:	e30532e1 	movw	r3, #21217	; 0x52e1
+   13724:	e3403001 	movt	r3, #1
+   13728:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   1372c:	e5d35000 	ldrb	r5, [r3]
+   13730:	e3550000 	cmp	r5, #0
+   13734:	1a000007 	bne	13758 <OSSemPend+0x38>
+   13738:	e3500000 	cmp	r0, #0
+   1373c:	0a000035 	beq	13818 <OSSemPend+0xf8>
+   13740:	e5d03000 	ldrb	r3, [r0]
+   13744:	e3530003 	cmp	r3, #3
+   13748:	0a000005 	beq	13764 <OSSemPend+0x44>
+   1374c:	e3a03001 	mov	r3, #1
+   13750:	e5c23000 	strb	r3, [r2]
+   13754:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   13758:	e3a03002 	mov	r3, #2
+   1375c:	e5c23000 	strb	r3, [r2]
+   13760:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   13764:	e1a04000 	mov	r4, r0
+   13768:	e1a06002 	mov	r6, r2
+   1376c:	e1a07001 	mov	r7, r1
+   13770:	ebfff39f 	bl	105f4 <OS_CPU_SR_Save>
+   13774:	e1a08000 	mov	r8, r0
+   13778:	e1d430b2 	ldrh	r3, [r4, #2]
+   1377c:	e3530000 	cmp	r3, #0
+   13780:	1a00002b 	bne	13834 <OSSemPend+0x114>
+   13784:	e30552e4 	movw	r5, #21220	; 0x52e4
+   13788:	e3405001 	movt	r5, #1
+   1378c:	e1a00004 	mov	r0, r4
+   13790:	e5953000 	ldr	r3, [r5]
+   13794:	e5d3202c 	ldrb	r2, [r3, #44]	; 0x2c
+   13798:	e1c372ba 	strh	r7, [r3, #42]	; 0x2a
+   1379c:	e3822001 	orr	r2, r2, #1
+   137a0:	e5c3202c 	strb	r2, [r3, #44]	; 0x2c
+   137a4:	ebfff55b 	bl	10d18 <OS_EventTaskWait>
+   137a8:	e1a00008 	mov	r0, r8
+   137ac:	ebfff398 	bl	10614 <OS_CPU_SR_Restore>
+   137b0:	ebfff591 	bl	10dfc <OS_Sched>
+   137b4:	ebfff38e 	bl	105f4 <OS_CPU_SR_Save>
+   137b8:	e5953000 	ldr	r3, [r5]
+   137bc:	e1a0c000 	mov	ip, r0
+   137c0:	e5d3202c 	ldrb	r2, [r3, #44]	; 0x2c
+   137c4:	e2125001 	ands	r5, r2, #1
+   137c8:	0a000015 	beq	13824 <OSSemPend+0x104>
+   137cc:	e5d3202f 	ldrb	r2, [r3, #47]	; 0x2f
+   137d0:	e5d30030 	ldrb	r0, [r3, #48]	; 0x30
+   137d4:	e0842002 	add	r2, r4, r2
+   137d8:	e5d21008 	ldrb	r1, [r2, #8]
+   137dc:	e1c11000 	bic	r1, r1, r0
+   137e0:	e1a0000c 	mov	r0, ip
+   137e4:	e3510000 	cmp	r1, #0
+   137e8:	e5c21008 	strb	r1, [r2, #8]
+   137ec:	05d42001 	ldrbeq	r2, [r4, #1]
+   137f0:	05d31031 	ldrbeq	r1, [r3, #49]	; 0x31
+   137f4:	01c22001 	biceq	r2, r2, r1
+   137f8:	05c42001 	strbeq	r2, [r4, #1]
+   137fc:	e3a02000 	mov	r2, #0
+   13800:	e5c3202c 	strb	r2, [r3, #44]	; 0x2c
+   13804:	e583201c 	str	r2, [r3, #28]
+   13808:	ebfff381 	bl	10614 <OS_CPU_SR_Restore>
+   1380c:	e3a0300a 	mov	r3, #10
+   13810:	e5c63000 	strb	r3, [r6]
+   13814:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   13818:	e3a03004 	mov	r3, #4
+   1381c:	e5c23000 	strb	r3, [r2]
+   13820:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   13824:	e583501c 	str	r5, [r3, #28]
+   13828:	ebfff379 	bl	10614 <OS_CPU_SR_Restore>
+   1382c:	e5c65000 	strb	r5, [r6]
+   13830:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   13834:	e2433001 	sub	r3, r3, #1
+   13838:	e1c430b2 	strh	r3, [r4, #2]
+   1383c:	ebfff374 	bl	10614 <OS_CPU_SR_Restore>
+   13840:	e5c65000 	strb	r5, [r6]
+   13844:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+
+00013848 <OSSemPost>:
+   13848:	e92d4070 	push	{r4, r5, r6, lr}
+   1384c:	e2504000 	subs	r4, r0, #0
+   13850:	03a05004 	moveq	r5, #4
+   13854:	0a000003 	beq	13868 <OSSemPost+0x20>
+   13858:	e5d43000 	ldrb	r3, [r4]
+   1385c:	e3530003 	cmp	r3, #3
+   13860:	13a05001 	movne	r5, #1
+   13864:	0a000001 	beq	13870 <OSSemPost+0x28>
+   13868:	e1a00005 	mov	r0, r5
+   1386c:	e8bd8070 	pop	{r4, r5, r6, pc}
+   13870:	ebfff35f 	bl	105f4 <OS_CPU_SR_Save>
+   13874:	e5d45001 	ldrb	r5, [r4, #1]
+   13878:	e1a06000 	mov	r6, r0
+   1387c:	e3550000 	cmp	r5, #0
+   13880:	1a00000a 	bne	138b0 <OSSemPost+0x68>
+   13884:	e1d430b2 	ldrh	r3, [r4, #2]
+   13888:	e30f2fff 	movw	r2, #65535	; 0xffff
+   1388c:	e1530002 	cmp	r3, r2
+   13890:	0a000003 	beq	138a4 <OSSemPost+0x5c>
+   13894:	e2833001 	add	r3, r3, #1
+   13898:	e1c430b2 	strh	r3, [r4, #2]
+   1389c:	ebfff35c 	bl	10614 <OS_CPU_SR_Restore>
+   138a0:	eafffff0 	b	13868 <OSSemPost+0x20>
+   138a4:	ebfff35a 	bl	10614 <OS_CPU_SR_Restore>
+   138a8:	e3a05032 	mov	r5, #50	; 0x32
+   138ac:	eaffffed 	b	13868 <OSSemPost+0x20>
+   138b0:	e3a01000 	mov	r1, #0
+   138b4:	e3a02001 	mov	r2, #1
+   138b8:	e1a00004 	mov	r0, r4
+   138bc:	e1a05001 	mov	r5, r1
+   138c0:	ebfff4e9 	bl	10c6c <OS_EventTaskRdy>
+   138c4:	e1a00006 	mov	r0, r6
+   138c8:	ebfff351 	bl	10614 <OS_CPU_SR_Restore>
+   138cc:	ebfff54a 	bl	10dfc <OS_Sched>
+   138d0:	eaffffe4 	b	13868 <OSSemPost+0x20>
+
+000138d4 <OSSemQuery>:
+   138d4:	e92d4070 	push	{r4, r5, r6, lr}
+   138d8:	e2504000 	subs	r4, r0, #0
+   138dc:	0a000004 	beq	138f4 <OSSemQuery+0x20>
+   138e0:	e5d43000 	ldrb	r3, [r4]
+   138e4:	e3530003 	cmp	r3, #3
+   138e8:	0a000003 	beq	138fc <OSSemQuery+0x28>
+   138ec:	e3a00001 	mov	r0, #1
+   138f0:	e8bd8070 	pop	{r4, r5, r6, pc}
+   138f4:	e3a00004 	mov	r0, #4
+   138f8:	e8bd8070 	pop	{r4, r5, r6, pc}
+   138fc:	e1a05001 	mov	r5, r1
+   13900:	ebfff33b 	bl	105f4 <OS_CPU_SR_Save>
+   13904:	e5d43001 	ldrb	r3, [r4, #1]
+   13908:	e5c5300a 	strb	r3, [r5, #10]
+   1390c:	e5d43008 	ldrb	r3, [r4, #8]
+   13910:	e5c53002 	strb	r3, [r5, #2]
+   13914:	e5d43009 	ldrb	r3, [r4, #9]
+   13918:	e5c53003 	strb	r3, [r5, #3]
+   1391c:	e5d4300a 	ldrb	r3, [r4, #10]
+   13920:	e5c53004 	strb	r3, [r5, #4]
+   13924:	e5d4300b 	ldrb	r3, [r4, #11]
+   13928:	e5c53005 	strb	r3, [r5, #5]
+   1392c:	e5d4300c 	ldrb	r3, [r4, #12]
+   13930:	e5c53006 	strb	r3, [r5, #6]
+   13934:	e5d4300d 	ldrb	r3, [r4, #13]
+   13938:	e5c53007 	strb	r3, [r5, #7]
+   1393c:	e5d4300e 	ldrb	r3, [r4, #14]
+   13940:	e5c53008 	strb	r3, [r5, #8]
+   13944:	e5d4300f 	ldrb	r3, [r4, #15]
+   13948:	e5c53009 	strb	r3, [r5, #9]
+   1394c:	e1d430b2 	ldrh	r3, [r4, #2]
+   13950:	e1c530b0 	strh	r3, [r5]
+   13954:	ebfff32e 	bl	10614 <OS_CPU_SR_Restore>
+   13958:	e3a00000 	mov	r0, #0
+   1395c:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+00013960 <OSTaskChangePrio>:
+   13960:	e351003e 	cmp	r1, #62	; 0x3e
+   13964:	e240203f 	sub	r2, r0, #63	; 0x3f
+   13968:	e6ef2072 	uxtb	r2, r2
+   1396c:	93a03000 	movls	r3, #0
+   13970:	83a03001 	movhi	r3, #1
+   13974:	e35200bf 	cmp	r2, #191	; 0xbf
+   13978:	93833001 	orrls	r3, r3, #1
+   1397c:	e3530000 	cmp	r3, #0
+   13980:	0a000001 	beq	1398c <OSTaskChangePrio+0x2c>
+   13984:	e3a0002a 	mov	r0, #42	; 0x2a
+   13988:	e12fff1e 	bx	lr
+   1398c:	e92d43f0 	push	{r4, r5, r6, r7, r8, r9, lr}
+   13990:	e1a04000 	mov	r4, r0
+   13994:	e3055f58 	movw	r5, #24408	; 0x5f58
+   13998:	e3405001 	movt	r5, #1
+   1399c:	e24dd00c 	sub	sp, sp, #12
+   139a0:	e58d1004 	str	r1, [sp, #4]
+   139a4:	ebfff312 	bl	105f4 <OS_CPU_SR_Save>
+   139a8:	e59d1004 	ldr	r1, [sp, #4]
+   139ac:	e7953101 	ldr	r3, [r5, r1, lsl #2]
+   139b0:	e3530000 	cmp	r3, #0
+   139b4:	0a000003 	beq	139c8 <OSTaskChangePrio+0x68>
+   139b8:	ebfff315 	bl	10614 <OS_CPU_SR_Restore>
+   139bc:	e3a00028 	mov	r0, #40	; 0x28
+   139c0:	e28dd00c 	add	sp, sp, #12
+   139c4:	e8bd83f0 	pop	{r4, r5, r6, r7, r8, r9, pc}
+   139c8:	e3a03001 	mov	r3, #1
+   139cc:	e1a061a1 	lsr	r6, r1, #3
+   139d0:	e2017007 	and	r7, r1, #7
+   139d4:	e58d1004 	str	r1, [sp, #4]
+   139d8:	e7853101 	str	r3, [r5, r1, lsl #2]
+   139dc:	ebfff30c 	bl	10614 <OS_CPU_SR_Restore>
+   139e0:	e30435d0 	movw	r3, #17872	; 0x45d0
+   139e4:	e3403001 	movt	r3, #1
+   139e8:	e0832006 	add	r2, r3, r6
+   139ec:	e0833007 	add	r3, r3, r7
+   139f0:	e5d28100 	ldrb	r8, [r2, #256]	; 0x100
+   139f4:	e5d39100 	ldrb	r9, [r3, #256]	; 0x100
+   139f8:	ebfff2fd 	bl	105f4 <OS_CPU_SR_Save>
+   139fc:	e35400ff 	cmp	r4, #255	; 0xff
+   13a00:	e59d1004 	ldr	r1, [sp, #4]
+   13a04:	030532e4 	movweq	r3, #21220	; 0x52e4
+   13a08:	03403001 	movteq	r3, #1
+   13a0c:	05933000 	ldreq	r3, [r3]
+   13a10:	05d3402d 	ldrbeq	r4, [r3, #45]	; 0x2d
+   13a14:	e7953104 	ldr	r3, [r5, r4, lsl #2]
+   13a18:	e3530000 	cmp	r3, #0
+   13a1c:	0a000034 	beq	13af4 <OSTaskChangePrio+0x194>
+   13a20:	e3a0c000 	mov	ip, #0
+   13a24:	e30522d4 	movw	r2, #21204	; 0x52d4
+   13a28:	e3402001 	movt	r2, #1
+   13a2c:	e785c104 	str	ip, [r5, r4, lsl #2]
+   13a30:	e5d3c02f 	ldrb	ip, [r3, #47]	; 0x2f
+   13a34:	e5d34030 	ldrb	r4, [r3, #48]	; 0x30
+   13a38:	e7d2e00c 	ldrb	lr, [r2, ip]
+   13a3c:	e11e0004 	tst	lr, r4
+   13a40:	0a000017 	beq	13aa4 <OSTaskChangePrio+0x144>
+   13a44:	e1cee004 	bic	lr, lr, r4
+   13a48:	e7c2e00c 	strb	lr, [r2, ip]
+   13a4c:	e35e0000 	cmp	lr, #0
+   13a50:	e305c2d0 	movw	ip, #21200	; 0x52d0
+   13a54:	e340c001 	movt	ip, #1
+   13a58:	05d34031 	ldrbeq	r4, [r3, #49]	; 0x31
+   13a5c:	05dce000 	ldrbeq	lr, [ip]
+   13a60:	15dce000 	ldrbne	lr, [ip]
+   13a64:	01cee004 	biceq	lr, lr, r4
+   13a68:	e7d24006 	ldrb	r4, [r2, r6]
+   13a6c:	e188e00e 	orr	lr, r8, lr
+   13a70:	e5cce000 	strb	lr, [ip]
+   13a74:	e189c004 	orr	ip, r9, r4
+   13a78:	e7c2c006 	strb	ip, [r2, r6]
+   13a7c:	e7853101 	str	r3, [r5, r1, lsl #2]
+   13a80:	e5c3102d 	strb	r1, [r3, #45]	; 0x2d
+   13a84:	e5c3602f 	strb	r6, [r3, #47]	; 0x2f
+   13a88:	e5c3702e 	strb	r7, [r3, #46]	; 0x2e
+   13a8c:	e5c38031 	strb	r8, [r3, #49]	; 0x31
+   13a90:	e5c39030 	strb	r9, [r3, #48]	; 0x30
+   13a94:	ebfff2de 	bl	10614 <OS_CPU_SR_Restore>
+   13a98:	ebfff4d7 	bl	10dfc <OS_Sched>
+   13a9c:	e3a00000 	mov	r0, #0
+   13aa0:	eaffffc6 	b	139c0 <OSTaskChangePrio+0x60>
+   13aa4:	e593201c 	ldr	r2, [r3, #28]
+   13aa8:	e3520000 	cmp	r2, #0
+   13aac:	0afffff2 	beq	13a7c <OSTaskChangePrio+0x11c>
+   13ab0:	e082c00c 	add	ip, r2, ip
+   13ab4:	e5dce008 	ldrb	lr, [ip, #8]
+   13ab8:	e1cee004 	bic	lr, lr, r4
+   13abc:	e35e0000 	cmp	lr, #0
+   13ac0:	e5cce008 	strb	lr, [ip, #8]
+   13ac4:	05d2c001 	ldrbeq	ip, [r2, #1]
+   13ac8:	05d3e031 	ldrbeq	lr, [r3, #49]	; 0x31
+   13acc:	01ccc00e 	biceq	ip, ip, lr
+   13ad0:	e082e006 	add	lr, r2, r6
+   13ad4:	05c2c001 	strbeq	ip, [r2, #1]
+   13ad8:	e5d2c001 	ldrb	ip, [r2, #1]
+   13adc:	e188c00c 	orr	ip, r8, ip
+   13ae0:	e5c2c001 	strb	ip, [r2, #1]
+   13ae4:	e5de2008 	ldrb	r2, [lr, #8]
+   13ae8:	e1892002 	orr	r2, r9, r2
+   13aec:	e5ce2008 	strb	r2, [lr, #8]
+   13af0:	eaffffe1 	b	13a7c <OSTaskChangePrio+0x11c>
+   13af4:	e7853101 	str	r3, [r5, r1, lsl #2]
+   13af8:	ebfff2c5 	bl	10614 <OS_CPU_SR_Restore>
+   13afc:	e3a00029 	mov	r0, #41	; 0x29
+   13b00:	eaffffae 	b	139c0 <OSTaskChangePrio+0x60>
+
+00013b04 <OSTaskCreate>:
+   13b04:	e353003f 	cmp	r3, #63	; 0x3f
+   13b08:	e92d43f0 	push	{r4, r5, r6, r7, r8, r9, lr}
+   13b0c:	e24dd014 	sub	sp, sp, #20
+   13b10:	83a0502a 	movhi	r5, #42	; 0x2a
+   13b14:	9a000002 	bls	13b24 <OSTaskCreate+0x20>
+   13b18:	e1a00005 	mov	r0, r5
+   13b1c:	e28dd014 	add	sp, sp, #20
+   13b20:	e8bd83f0 	pop	{r4, r5, r6, r7, r8, r9, pc}
+   13b24:	e1a04003 	mov	r4, r3
+   13b28:	e3058f58 	movw	r8, #24408	; 0x5f58
+   13b2c:	e3408001 	movt	r8, #1
+   13b30:	e1a07002 	mov	r7, r2
+   13b34:	e1a06001 	mov	r6, r1
+   13b38:	e1a05000 	mov	r5, r0
+   13b3c:	ebfff2ac 	bl	105f4 <OS_CPU_SR_Save>
+   13b40:	e7989104 	ldr	r9, [r8, r4, lsl #2]
+   13b44:	e3590000 	cmp	r9, #0
+   13b48:	0a000004 	beq	13b60 <OSTaskCreate+0x5c>
+   13b4c:	e3a05028 	mov	r5, #40	; 0x28
+   13b50:	ebfff2af 	bl	10614 <OS_CPU_SR_Restore>
+   13b54:	e1a00005 	mov	r0, r5
+   13b58:	e28dd014 	add	sp, sp, #20
+   13b5c:	e8bd83f0 	pop	{r4, r5, r6, r7, r8, r9, pc}
+   13b60:	e3a03001 	mov	r3, #1
+   13b64:	e7883104 	str	r3, [r8, r4, lsl #2]
+   13b68:	ebfff2a9 	bl	10614 <OS_CPU_SR_Restore>
+   13b6c:	e1a03009 	mov	r3, r9
+   13b70:	e1a02007 	mov	r2, r7
+   13b74:	e1a01006 	mov	r1, r6
+   13b78:	e1a00005 	mov	r0, r5
+   13b7c:	ebfff2e5 	bl	10718 <OSTaskStkInit>
+   13b80:	e58d9008 	str	r9, [sp, #8]
+   13b84:	e1a01000 	mov	r1, r0
+   13b88:	e58d9004 	str	r9, [sp, #4]
+   13b8c:	e58d9000 	str	r9, [sp]
+   13b90:	e1a03009 	mov	r3, r9
+   13b94:	e1a02009 	mov	r2, r9
+   13b98:	e1a00004 	mov	r0, r4
+   13b9c:	ebfff547 	bl	110c0 <OS_TCBInit>
+   13ba0:	e2505000 	subs	r5, r0, #0
+   13ba4:	1a00000d 	bne	13be0 <OSTaskCreate+0xdc>
+   13ba8:	ebfff291 	bl	105f4 <OS_CPU_SR_Save>
+   13bac:	e3053249 	movw	r3, #21065	; 0x5249
+   13bb0:	e3403001 	movt	r3, #1
+   13bb4:	e5d32000 	ldrb	r2, [r3]
+   13bb8:	e2822001 	add	r2, r2, #1
+   13bbc:	e5c32000 	strb	r2, [r3]
+   13bc0:	ebfff293 	bl	10614 <OS_CPU_SR_Restore>
+   13bc4:	e3043989 	movw	r3, #18825	; 0x4989
+   13bc8:	e3403001 	movt	r3, #1
+   13bcc:	e5d33000 	ldrb	r3, [r3]
+   13bd0:	e3530001 	cmp	r3, #1
+   13bd4:	1affffcf 	bne	13b18 <OSTaskCreate+0x14>
+   13bd8:	ebfff487 	bl	10dfc <OS_Sched>
+   13bdc:	eaffffcd 	b	13b18 <OSTaskCreate+0x14>
+   13be0:	ebfff283 	bl	105f4 <OS_CPU_SR_Save>
+   13be4:	e7889104 	str	r9, [r8, r4, lsl #2]
+   13be8:	ebfff289 	bl	10614 <OS_CPU_SR_Restore>
+   13bec:	eaffffc9 	b	13b18 <OSTaskCreate+0x14>
+
+00013bf0 <OSTaskCreateExt>:
+   13bf0:	e353003f 	cmp	r3, #63	; 0x3f
+   13bf4:	e92d4070 	push	{r4, r5, r6, lr}
+   13bf8:	e59de014 	ldr	lr, [sp, #20]
+   13bfc:	e1ddc1b0 	ldrh	ip, [sp, #16]
+   13c00:	e59d4018 	ldr	r4, [sp, #24]
+   13c04:	e59d501c 	ldr	r5, [sp, #28]
+   13c08:	e1dd62b0 	ldrh	r6, [sp, #32]
+   13c0c:	9a000001 	bls	13c18 <OSTaskCreateExt+0x28>
+   13c10:	e3a0002a 	mov	r0, #42	; 0x2a
+   13c14:	e8bd8070 	pop	{r4, r5, r6, pc}
+   13c18:	e58d6020 	str	r6, [sp, #32]
+   13c1c:	e58dc010 	str	ip, [sp, #16]
+   13c20:	e8bd4070 	pop	{r4, r5, r6, lr}
+   13c24:	eafff573 	b	111f8 <OSTaskCreateExt.part.0>
+
+00013c28 <OSTaskDel>:
+   13c28:	e30532e1 	movw	r3, #21217	; 0x52e1
+   13c2c:	e3403001 	movt	r3, #1
+   13c30:	e92d47f0 	push	{r4, r5, r6, r7, r8, r9, sl, lr}
+   13c34:	e5d34000 	ldrb	r4, [r3]
+   13c38:	e3540000 	cmp	r4, #0
+   13c3c:	13a0403f 	movne	r4, #63	; 0x3f
+   13c40:	0a000001 	beq	13c4c <OSTaskDel+0x24>
+   13c44:	e1a00004 	mov	r0, r4
+   13c48:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+   13c4c:	e350003f 	cmp	r0, #63	; 0x3f
+   13c50:	e1a05000 	mov	r5, r0
+   13c54:	03a0403d 	moveq	r4, #61	; 0x3d
+   13c58:	0afffff9 	beq	13c44 <OSTaskDel+0x1c>
+   13c5c:	e240303f 	sub	r3, r0, #63	; 0x3f
+   13c60:	e6ef3073 	uxtb	r3, r3
+   13c64:	e35300bf 	cmp	r3, #191	; 0xbf
+   13c68:	93a0402a 	movls	r4, #42	; 0x2a
+   13c6c:	9afffff4 	bls	13c44 <OSTaskDel+0x1c>
+   13c70:	ebfff25f 	bl	105f4 <OS_CPU_SR_Save>
+   13c74:	e35500ff 	cmp	r5, #255	; 0xff
+   13c78:	e3058f58 	movw	r8, #24408	; 0x5f58
+   13c7c:	e3408001 	movt	r8, #1
+   13c80:	030532e4 	movweq	r3, #21220	; 0x52e4
+   13c84:	03403001 	movteq	r3, #1
+   13c88:	05933000 	ldreq	r3, [r3]
+   13c8c:	05d3502d 	ldrbeq	r5, [r3, #45]	; 0x2d
+   13c90:	e7986105 	ldr	r6, [r8, r5, lsl #2]
+   13c94:	e3560000 	cmp	r6, #0
+   13c98:	0a000056 	beq	13df8 <OSTaskDel+0x1d0>
+   13c9c:	e5d6202f 	ldrb	r2, [r6, #47]	; 0x2f
+   13ca0:	e30512d4 	movw	r1, #21204	; 0x52d4
+   13ca4:	e3401001 	movt	r1, #1
+   13ca8:	e1d633d0 	ldrsb	r3, [r6, #48]	; 0x30
+   13cac:	e7d1c002 	ldrb	ip, [r1, r2]
+   13cb0:	e1e03003 	mvn	r3, r3
+   13cb4:	e00cc003 	and	ip, ip, r3
+   13cb8:	e35c0000 	cmp	ip, #0
+   13cbc:	e7c1c002 	strb	ip, [r1, r2]
+   13cc0:	1a000005 	bne	13cdc <OSTaskDel+0xb4>
+   13cc4:	e30512d0 	movw	r1, #21200	; 0x52d0
+   13cc8:	e3401001 	movt	r1, #1
+   13ccc:	e5d6e031 	ldrb	lr, [r6, #49]	; 0x31
+   13cd0:	e5d1c000 	ldrb	ip, [r1]
+   13cd4:	e1ccc00e 	bic	ip, ip, lr
+   13cd8:	e5c1c000 	strb	ip, [r1]
+   13cdc:	e596101c 	ldr	r1, [r6, #28]
+   13ce0:	e3510000 	cmp	r1, #0
+   13ce4:	0a000008 	beq	13d0c <OSTaskDel+0xe4>
+   13ce8:	e0812002 	add	r2, r1, r2
+   13cec:	e5d2c008 	ldrb	ip, [r2, #8]
+   13cf0:	e003300c 	and	r3, r3, ip
+   13cf4:	e3530000 	cmp	r3, #0
+   13cf8:	e5c23008 	strb	r3, [r2, #8]
+   13cfc:	05d62031 	ldrbeq	r2, [r6, #49]	; 0x31
+   13d00:	05d13001 	ldrbeq	r3, [r1, #1]
+   13d04:	01c33002 	biceq	r3, r3, r2
+   13d08:	05c13001 	strbeq	r3, [r1, #1]
+   13d0c:	e5963024 	ldr	r3, [r6, #36]	; 0x24
+   13d10:	e3530000 	cmp	r3, #0
+   13d14:	0a00000a 	beq	13d44 <OSTaskDel+0x11c>
+   13d18:	e5931004 	ldr	r1, [r3, #4]
+   13d1c:	e5932000 	ldr	r2, [r3]
+   13d20:	e3510000 	cmp	r1, #0
+   13d24:	0a000036 	beq	13e04 <OSTaskDel+0x1dc>
+   13d28:	e3520000 	cmp	r2, #0
+   13d2c:	e5812000 	str	r2, [r1]
+   13d30:	0a000000 	beq	13d38 <OSTaskDel+0x110>
+   13d34:	e5821004 	str	r1, [r2, #4]
+   13d38:	e5933008 	ldr	r3, [r3, #8]
+   13d3c:	e3a02000 	mov	r2, #0
+   13d40:	e5832024 	str	r2, [r3, #36]	; 0x24
+   13d44:	e3047988 	movw	r7, #18824	; 0x4988
+   13d48:	e3407001 	movt	r7, #1
+   13d4c:	e3a02000 	mov	r2, #0
+   13d50:	e5d73000 	ldrb	r3, [r7]
+   13d54:	e1c622ba 	strh	r2, [r6, #42]	; 0x2a
+   13d58:	e35300ff 	cmp	r3, #255	; 0xff
+   13d5c:	e5c6202c 	strb	r2, [r6, #44]	; 0x2c
+   13d60:	12833001 	addne	r3, r3, #1
+   13d64:	15c73000 	strbne	r3, [r7]
+   13d68:	ebfff229 	bl	10614 <OS_CPU_SR_Restore>
+   13d6c:	ebfff220 	bl	105f4 <OS_CPU_SR_Save>
+   13d70:	e5d73000 	ldrb	r3, [r7]
+   13d74:	e1a09000 	mov	r9, r0
+   13d78:	e1a00006 	mov	r0, r6
+   13d7c:	e3530000 	cmp	r3, #0
+   13d80:	12433001 	subne	r3, r3, #1
+   13d84:	15c73000 	strbne	r3, [r7]
+   13d88:	ebfff292 	bl	107d8 <OSTaskDelHook>
+   13d8c:	e3a02000 	mov	r2, #0
+   13d90:	e3053249 	movw	r3, #21065	; 0x5249
+   13d94:	e3403001 	movt	r3, #1
+   13d98:	e7882105 	str	r2, [r8, r5, lsl #2]
+   13d9c:	e1a00009 	mov	r0, r9
+   13da0:	e5961018 	ldr	r1, [r6, #24]
+   13da4:	e5d32000 	ldrb	r2, [r3]
+   13da8:	e3510000 	cmp	r1, #0
+   13dac:	e2422001 	sub	r2, r2, #1
+   13db0:	e5c32000 	strb	r2, [r3]
+   13db4:	15963014 	ldrne	r3, [r6, #20]
+   13db8:	030439d4 	movweq	r3, #18900	; 0x49d4
+   13dbc:	03403001 	movteq	r3, #1
+   13dc0:	05962014 	ldreq	r2, [r6, #20]
+   13dc4:	15813014 	strne	r3, [r1, #20]
+   13dc8:	15963014 	ldrne	r3, [r6, #20]
+   13dcc:	05832000 	streq	r2, [r3]
+   13dd0:	05821018 	streq	r1, [r2, #24]
+   13dd4:	15831018 	strne	r1, [r3, #24]
+   13dd8:	e3053244 	movw	r3, #21060	; 0x5244
+   13ddc:	e3403001 	movt	r3, #1
+   13de0:	e5932000 	ldr	r2, [r3]
+   13de4:	e5836000 	str	r6, [r3]
+   13de8:	e5862014 	str	r2, [r6, #20]
+   13dec:	ebfff208 	bl	10614 <OS_CPU_SR_Restore>
+   13df0:	ebfff401 	bl	10dfc <OS_Sched>
+   13df4:	eaffff92 	b	13c44 <OSTaskDel+0x1c>
+   13df8:	e3a0403c 	mov	r4, #60	; 0x3c
+   13dfc:	ebfff204 	bl	10614 <OS_CPU_SR_Restore>
+   13e00:	eaffff8f 	b	13c44 <OSTaskDel+0x1c>
+   13e04:	e593c00c 	ldr	ip, [r3, #12]
+   13e08:	e3520000 	cmp	r2, #0
+   13e0c:	e58c2004 	str	r2, [ip, #4]
+   13e10:	1affffc7 	bne	13d34 <OSTaskDel+0x10c>
+   13e14:	eaffffc7 	b	13d38 <OSTaskDel+0x110>
+
+00013e18 <OSTaskDelReq>:
+   13e18:	e350003f 	cmp	r0, #63	; 0x3f
+   13e1c:	e92d4010 	push	{r4, lr}
+   13e20:	03a0403d 	moveq	r4, #61	; 0x3d
+   13e24:	0a000004 	beq	13e3c <OSTaskDelReq+0x24>
+   13e28:	e240303f 	sub	r3, r0, #63	; 0x3f
+   13e2c:	e6ef3073 	uxtb	r3, r3
+   13e30:	e35300bf 	cmp	r3, #191	; 0xbf
+   13e34:	93a0402a 	movls	r4, #42	; 0x2a
+   13e38:	8a000001 	bhi	13e44 <OSTaskDelReq+0x2c>
+   13e3c:	e1a00004 	mov	r0, r4
+   13e40:	e8bd8010 	pop	{r4, pc}
+   13e44:	e35000ff 	cmp	r0, #255	; 0xff
+   13e48:	e1a04000 	mov	r4, r0
+   13e4c:	0a00000b 	beq	13e80 <OSTaskDelReq+0x68>
+   13e50:	ebfff1e7 	bl	105f4 <OS_CPU_SR_Save>
+   13e54:	e3053f58 	movw	r3, #24408	; 0x5f58
+   13e58:	e3403001 	movt	r3, #1
+   13e5c:	e7933104 	ldr	r3, [r3, r4, lsl #2]
+   13e60:	e3530000 	cmp	r3, #0
+   13e64:	13a0203e 	movne	r2, #62	; 0x3e
+   13e68:	13a04000 	movne	r4, #0
+   13e6c:	03a0400b 	moveq	r4, #11
+   13e70:	15c32032 	strbne	r2, [r3, #50]	; 0x32
+   13e74:	ebfff1e6 	bl	10614 <OS_CPU_SR_Restore>
+   13e78:	e1a00004 	mov	r0, r4
+   13e7c:	e8bd8010 	pop	{r4, pc}
+   13e80:	ebfff1db 	bl	105f4 <OS_CPU_SR_Save>
+   13e84:	e30532e4 	movw	r3, #21220	; 0x52e4
+   13e88:	e3403001 	movt	r3, #1
+   13e8c:	e5933000 	ldr	r3, [r3]
+   13e90:	e5d34032 	ldrb	r4, [r3, #50]	; 0x32
+   13e94:	ebfff1de 	bl	10614 <OS_CPU_SR_Restore>
+   13e98:	eaffffe7 	b	13e3c <OSTaskDelReq+0x24>
+
+00013e9c <OSTaskResume>:
+   13e9c:	e350003e 	cmp	r0, #62	; 0x3e
+   13ea0:	e92d4070 	push	{r4, r5, r6, lr}
+   13ea4:	83a0402a 	movhi	r4, #42	; 0x2a
+   13ea8:	9a000001 	bls	13eb4 <OSTaskResume+0x18>
+   13eac:	e1a00004 	mov	r0, r4
+   13eb0:	e8bd8070 	pop	{r4, r5, r6, pc}
+   13eb4:	e1a04000 	mov	r4, r0
+   13eb8:	ebfff1cd 	bl	105f4 <OS_CPU_SR_Save>
+   13ebc:	e3053f58 	movw	r3, #24408	; 0x5f58
+   13ec0:	e3403001 	movt	r3, #1
+   13ec4:	e1a02000 	mov	r2, r0
+   13ec8:	e7933104 	ldr	r3, [r3, r4, lsl #2]
+   13ecc:	e3530000 	cmp	r3, #0
+   13ed0:	0a000020 	beq	13f58 <OSTaskResume+0xbc>
+   13ed4:	e5d3402c 	ldrb	r4, [r3, #44]	; 0x2c
+   13ed8:	e3140008 	tst	r4, #8
+   13edc:	0a00000a 	beq	13f0c <OSTaskResume+0x70>
+   13ee0:	e20440f7 	and	r4, r4, #247	; 0xf7
+   13ee4:	e3540000 	cmp	r4, #0
+   13ee8:	e5c3402c 	strb	r4, [r3, #44]	; 0x2c
+   13eec:	1a000002 	bne	13efc <OSTaskResume+0x60>
+   13ef0:	e1d312ba 	ldrh	r1, [r3, #42]	; 0x2a
+   13ef4:	e3510000 	cmp	r1, #0
+   13ef8:	0a000006 	beq	13f18 <OSTaskResume+0x7c>
+   13efc:	e1a00002 	mov	r0, r2
+   13f00:	e3a04000 	mov	r4, #0
+   13f04:	ebfff1c2 	bl	10614 <OS_CPU_SR_Restore>
+   13f08:	eaffffe7 	b	13eac <OSTaskResume+0x10>
+   13f0c:	ebfff1c0 	bl	10614 <OS_CPU_SR_Restore>
+   13f10:	e3a04065 	mov	r4, #101	; 0x65
+   13f14:	eaffffe4 	b	13eac <OSTaskResume+0x10>
+   13f18:	e5d3e02f 	ldrb	lr, [r3, #47]	; 0x2f
+   13f1c:	e30512d0 	movw	r1, #21200	; 0x52d0
+   13f20:	e3401001 	movt	r1, #1
+   13f24:	e30522d4 	movw	r2, #21204	; 0x52d4
+   13f28:	e3402001 	movt	r2, #1
+   13f2c:	e5d35030 	ldrb	r5, [r3, #48]	; 0x30
+   13f30:	e5d16000 	ldrb	r6, [r1]
+   13f34:	e5d3c031 	ldrb	ip, [r3, #49]	; 0x31
+   13f38:	e7d2300e 	ldrb	r3, [r2, lr]
+   13f3c:	e18cc006 	orr	ip, ip, r6
+   13f40:	e1833005 	orr	r3, r3, r5
+   13f44:	e5c1c000 	strb	ip, [r1]
+   13f48:	e7c2300e 	strb	r3, [r2, lr]
+   13f4c:	ebfff1b0 	bl	10614 <OS_CPU_SR_Restore>
+   13f50:	ebfff3a9 	bl	10dfc <OS_Sched>
+   13f54:	eaffffd4 	b	13eac <OSTaskResume+0x10>
+   13f58:	ebfff1ad 	bl	10614 <OS_CPU_SR_Restore>
+   13f5c:	e3a04064 	mov	r4, #100	; 0x64
+   13f60:	eaffffd1 	b	13eac <OSTaskResume+0x10>
+
+00013f64 <OSTaskStkChk>:
+   13f64:	e2403040 	sub	r3, r0, #64	; 0x40
+   13f68:	e6ef3073 	uxtb	r3, r3
+   13f6c:	e35300be 	cmp	r3, #190	; 0xbe
+   13f70:	8a000001 	bhi	13f7c <OSTaskStkChk+0x18>
+   13f74:	e3a0002a 	mov	r0, #42	; 0x2a
+   13f78:	e12fff1e 	bx	lr
+   13f7c:	e3a03000 	mov	r3, #0
+   13f80:	e92d4070 	push	{r4, r5, r6, lr}
+   13f84:	e1a04000 	mov	r4, r0
+   13f88:	e5813000 	str	r3, [r1]
+   13f8c:	e1a05001 	mov	r5, r1
+   13f90:	e5813004 	str	r3, [r1, #4]
+   13f94:	ebfff196 	bl	105f4 <OS_CPU_SR_Save>
+   13f98:	e35400ff 	cmp	r4, #255	; 0xff
+   13f9c:	030532e4 	movweq	r3, #21220	; 0x52e4
+   13fa0:	03403001 	movteq	r3, #1
+   13fa4:	05933000 	ldreq	r3, [r3]
+   13fa8:	05d3402d 	ldrbeq	r4, [r3, #45]	; 0x2d
+   13fac:	e3053f58 	movw	r3, #24408	; 0x5f58
+   13fb0:	e3403001 	movt	r3, #1
+   13fb4:	e7933104 	ldr	r3, [r3, r4, lsl #2]
+   13fb8:	e3530000 	cmp	r3, #0
+   13fbc:	0a000017 	beq	14020 <OSTaskStkChk+0xbc>
+   13fc0:	e1d321b0 	ldrh	r2, [r3, #16]
+   13fc4:	e3120001 	tst	r2, #1
+   13fc8:	1a000002 	bne	13fd8 <OSTaskStkChk+0x74>
+   13fcc:	ebfff190 	bl	10614 <OS_CPU_SR_Restore>
+   13fd0:	e3a00082 	mov	r0, #130	; 0x82
+   13fd4:	e8bd8070 	pop	{r4, r5, r6, pc}
+   13fd8:	e5936008 	ldr	r6, [r3, #8]
+   13fdc:	e593400c 	ldr	r4, [r3, #12]
+   13fe0:	ebfff18b 	bl	10614 <OS_CPU_SR_Restore>
+   13fe4:	e2862004 	add	r2, r6, #4
+   13fe8:	e5963000 	ldr	r3, [r6]
+   13fec:	e3530000 	cmp	r3, #0
+   13ff0:	1a00000d 	bne	1402c <OSTaskStkChk+0xc8>
+   13ff4:	e4921004 	ldr	r1, [r2], #4
+   13ff8:	e2833001 	add	r3, r3, #1
+   13ffc:	e3510000 	cmp	r1, #0
+   14000:	0afffffb 	beq	13ff4 <OSTaskStkChk+0x90>
+   14004:	e1a02103 	lsl	r2, r3, #2
+   14008:	e0443003 	sub	r3, r4, r3
+   1400c:	e5852000 	str	r2, [r5]
+   14010:	e3a00000 	mov	r0, #0
+   14014:	e1a03103 	lsl	r3, r3, #2
+   14018:	e5853004 	str	r3, [r5, #4]
+   1401c:	e8bd8070 	pop	{r4, r5, r6, pc}
+   14020:	ebfff17b 	bl	10614 <OS_CPU_SR_Restore>
+   14024:	e3a0000b 	mov	r0, #11
+   14028:	e8bd8070 	pop	{r4, r5, r6, pc}
+   1402c:	e3a02000 	mov	r2, #0
+   14030:	e1a03002 	mov	r3, r2
+   14034:	eafffff3 	b	14008 <OSTaskStkChk+0xa4>
+
+00014038 <OSTaskSuspend>:
+   14038:	e350003f 	cmp	r0, #63	; 0x3f
+   1403c:	0a000007 	beq	14060 <OSTaskSuspend+0x28>
+   14040:	e240303f 	sub	r3, r0, #63	; 0x3f
+   14044:	e92d4070 	push	{r4, r5, r6, lr}
+   14048:	e1a04000 	mov	r4, r0
+   1404c:	e6ef3073 	uxtb	r3, r3
+   14050:	e35300bf 	cmp	r3, #191	; 0xbf
+   14054:	8a000003 	bhi	14068 <OSTaskSuspend+0x30>
+   14058:	e3a0002a 	mov	r0, #42	; 0x2a
+   1405c:	e8bd8070 	pop	{r4, r5, r6, pc}
+   14060:	e3a0005b 	mov	r0, #91	; 0x5b
+   14064:	e12fff1e 	bx	lr
+   14068:	ebfff161 	bl	105f4 <OS_CPU_SR_Save>
+   1406c:	e35400ff 	cmp	r4, #255	; 0xff
+   14070:	e30532e4 	movw	r3, #21220	; 0x52e4
+   14074:	e3403001 	movt	r3, #1
+   14078:	03a05001 	moveq	r5, #1
+   1407c:	05933000 	ldreq	r3, [r3]
+   14080:	15933000 	ldrne	r3, [r3]
+   14084:	05d3402d 	ldrbeq	r4, [r3, #45]	; 0x2d
+   14088:	15d3502d 	ldrbne	r5, [r3, #45]	; 0x2d
+   1408c:	e3053f58 	movw	r3, #24408	; 0x5f58
+   14090:	e3403001 	movt	r3, #1
+   14094:	10455004 	subne	r5, r5, r4
+   14098:	116f5f15 	clzne	r5, r5
+   1409c:	e7933104 	ldr	r3, [r3, r4, lsl #2]
+   140a0:	11a052a5 	lsrne	r5, r5, #5
+   140a4:	e3530000 	cmp	r3, #0
+   140a8:	0a00001a 	beq	14118 <OSTaskSuspend+0xe0>
+   140ac:	e5d3c02f 	ldrb	ip, [r3, #47]	; 0x2f
+   140b0:	e30522d4 	movw	r2, #21204	; 0x52d4
+   140b4:	e3402001 	movt	r2, #1
+   140b8:	e5d3e030 	ldrb	lr, [r3, #48]	; 0x30
+   140bc:	e7d2100c 	ldrb	r1, [r2, ip]
+   140c0:	e1c1100e 	bic	r1, r1, lr
+   140c4:	e3510000 	cmp	r1, #0
+   140c8:	e7c2100c 	strb	r1, [r2, ip]
+   140cc:	0a000007 	beq	140f0 <OSTaskSuspend+0xb8>
+   140d0:	e5d3202c 	ldrb	r2, [r3, #44]	; 0x2c
+   140d4:	e3822008 	orr	r2, r2, #8
+   140d8:	e5c3202c 	strb	r2, [r3, #44]	; 0x2c
+   140dc:	ebfff14c 	bl	10614 <OS_CPU_SR_Restore>
+   140e0:	e3550001 	cmp	r5, #1
+   140e4:	0a000008 	beq	1410c <OSTaskSuspend+0xd4>
+   140e8:	e3a00000 	mov	r0, #0
+   140ec:	e8bd8070 	pop	{r4, r5, r6, pc}
+   140f0:	e30522d0 	movw	r2, #21200	; 0x52d0
+   140f4:	e3402001 	movt	r2, #1
+   140f8:	e5d3c031 	ldrb	ip, [r3, #49]	; 0x31
+   140fc:	e5d21000 	ldrb	r1, [r2]
+   14100:	e1c1100c 	bic	r1, r1, ip
+   14104:	e5c21000 	strb	r1, [r2]
+   14108:	eafffff0 	b	140d0 <OSTaskSuspend+0x98>
+   1410c:	ebfff33a 	bl	10dfc <OS_Sched>
+   14110:	e3a00000 	mov	r0, #0
+   14114:	e8bd8070 	pop	{r4, r5, r6, pc}
+   14118:	ebfff13d 	bl	10614 <OS_CPU_SR_Restore>
+   1411c:	e3a0005a 	mov	r0, #90	; 0x5a
+   14120:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+00014124 <OSTaskQuery>:
+   14124:	e2403040 	sub	r3, r0, #64	; 0x40
+   14128:	e6ef3073 	uxtb	r3, r3
+   1412c:	e35300be 	cmp	r3, #190	; 0xbe
+   14130:	8a000001 	bhi	1413c <OSTaskQuery+0x18>
+   14134:	e3a0002a 	mov	r0, #42	; 0x2a
+   14138:	e12fff1e 	bx	lr
+   1413c:	e92d4070 	push	{r4, r5, r6, lr}
+   14140:	e1a04000 	mov	r4, r0
+   14144:	e1a05001 	mov	r5, r1
+   14148:	ebfff129 	bl	105f4 <OS_CPU_SR_Save>
+   1414c:	e35400ff 	cmp	r4, #255	; 0xff
+   14150:	e1a06000 	mov	r6, r0
+   14154:	030532e4 	movweq	r3, #21220	; 0x52e4
+   14158:	03403001 	movteq	r3, #1
+   1415c:	05933000 	ldreq	r3, [r3]
+   14160:	05d3402d 	ldrbeq	r4, [r3, #45]	; 0x2d
+   14164:	e3053f58 	movw	r3, #24408	; 0x5f58
+   14168:	e3403001 	movt	r3, #1
+   1416c:	e7931104 	ldr	r1, [r3, r4, lsl #2]
+   14170:	e3510000 	cmp	r1, #0
+   14174:	0a000006 	beq	14194 <OSTaskQuery+0x70>
+   14178:	e3a02034 	mov	r2, #52	; 0x34
+   1417c:	e1a00005 	mov	r0, r5
+   14180:	eb000097 	bl	143e4 <memcpy>
+   14184:	e1a00006 	mov	r0, r6
+   14188:	ebfff121 	bl	10614 <OS_CPU_SR_Restore>
+   1418c:	e3a00000 	mov	r0, #0
+   14190:	e8bd8070 	pop	{r4, r5, r6, pc}
+   14194:	ebfff11e 	bl	10614 <OS_CPU_SR_Restore>
+   14198:	e3a00029 	mov	r0, #41	; 0x29
+   1419c:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+000141a0 <OSTimeDly>:
+   141a0:	e3500000 	cmp	r0, #0
+   141a4:	012fff1e 	bxeq	lr
+   141a8:	eafff364 	b	10f40 <OSTimeDly.part.1>
+
+000141ac <OSTimeDlyHMSM>:
+   141ac:	e181c002 	orr	ip, r1, r2
+   141b0:	e190c00c 	orrs	ip, r0, ip
+   141b4:	13a0c001 	movne	ip, #1
+   141b8:	03a0c000 	moveq	ip, #0
+   141bc:	e3530000 	cmp	r3, #0
+   141c0:	138cc001 	orrne	ip, ip, #1
+   141c4:	e35c0000 	cmp	ip, #0
+   141c8:	1a000001 	bne	141d4 <OSTimeDlyHMSM+0x28>
+   141cc:	e3a00054 	mov	r0, #84	; 0x54
+   141d0:	e12fff1e 	bx	lr
+   141d4:	e351003b 	cmp	r1, #59	; 0x3b
+   141d8:	9a000001 	bls	141e4 <OSTimeDlyHMSM+0x38>
+   141dc:	e3a00051 	mov	r0, #81	; 0x51
+   141e0:	e12fff1e 	bx	lr
+   141e4:	e352003b 	cmp	r2, #59	; 0x3b
+   141e8:	9a000001 	bls	141f4 <OSTimeDlyHMSM+0x48>
+   141ec:	e3a00052 	mov	r0, #82	; 0x52
+   141f0:	e12fff1e 	bx	lr
+   141f4:	e3530ffa 	cmp	r3, #1000	; 0x3e8
+   141f8:	3a000001 	bcc	14204 <OSTimeDlyHMSM+0x58>
+   141fc:	e3a00053 	mov	r0, #83	; 0x53
+   14200:	e12fff1e 	bx	lr
+   14204:	e3a0c064 	mov	ip, #100	; 0x64
+   14208:	e92d4070 	push	{r4, r5, r6, lr}
+   1420c:	e3a0403c 	mov	r4, #60	; 0x3c
+   14210:	e003039c 	mul	r3, ip, r3
+   14214:	e304edd3 	movw	lr, #19923	; 0x4dd3
+   14218:	e341e062 	movt	lr, #4194	; 0x1062
+   1421c:	e2833f7d 	add	r3, r3, #500	; 0x1f4
+   14220:	e3a05ee1 	mov	r5, #3600	; 0xe10
+   14224:	e1012184 	smlabb	r1, r4, r1, r2
+   14228:	e0241095 	mla	r4, r5, r0, r1
+   1422c:	e083239e 	umull	r2, r3, lr, r3
+   14230:	e1a03323 	lsr	r3, r3, #6
+   14234:	e023349c 	mla	r3, ip, r4, r3
+   14238:	e6ff0073 	uxth	r0, r3
+   1423c:	e1a04823 	lsr	r4, r3, #16
+   14240:	e3500000 	cmp	r0, #0
+   14244:	e6ff5074 	uxth	r5, r4
+   14248:	1a00000b 	bne	1427c <OSTimeDlyHMSM+0xd0>
+   1424c:	e3540000 	cmp	r4, #0
+   14250:	0a000007 	beq	14274 <OSTimeDlyHMSM+0xc8>
+   14254:	e2455001 	sub	r5, r5, #1
+   14258:	e3a00902 	mov	r0, #32768	; 0x8000
+   1425c:	ebfff337 	bl	10f40 <OSTimeDly.part.1>
+   14260:	e3a00902 	mov	r0, #32768	; 0x8000
+   14264:	e6ff5075 	uxth	r5, r5
+   14268:	ebfff334 	bl	10f40 <OSTimeDly.part.1>
+   1426c:	e3550000 	cmp	r5, #0
+   14270:	1afffff7 	bne	14254 <OSTimeDlyHMSM+0xa8>
+   14274:	e3a00000 	mov	r0, #0
+   14278:	e8bd8070 	pop	{r4, r5, r6, pc}
+   1427c:	ebfff32f 	bl	10f40 <OSTimeDly.part.1>
+   14280:	eafffff1 	b	1424c <OSTimeDlyHMSM+0xa0>
+
+00014284 <OSTimeDlyResume>:
+   14284:	e350003e 	cmp	r0, #62	; 0x3e
+   14288:	9a000001 	bls	14294 <OSTimeDlyResume+0x10>
+   1428c:	e3a0002a 	mov	r0, #42	; 0x2a
+   14290:	e12fff1e 	bx	lr
+   14294:	e92d4070 	push	{r4, r5, r6, lr}
+   14298:	e1a04000 	mov	r4, r0
+   1429c:	ebfff0d4 	bl	105f4 <OS_CPU_SR_Save>
+   142a0:	e3053f58 	movw	r3, #24408	; 0x5f58
+   142a4:	e3403001 	movt	r3, #1
+   142a8:	e7933104 	ldr	r3, [r3, r4, lsl #2]
+   142ac:	e3530000 	cmp	r3, #0
+   142b0:	0a00001e 	beq	14330 <OSTimeDlyResume+0xac>
+   142b4:	e1d322ba 	ldrh	r2, [r3, #42]	; 0x2a
+   142b8:	e3520000 	cmp	r2, #0
+   142bc:	0a000015 	beq	14318 <OSTimeDlyResume+0x94>
+   142c0:	e5d3202c 	ldrb	r2, [r3, #44]	; 0x2c
+   142c4:	e3a04000 	mov	r4, #0
+   142c8:	e2125008 	ands	r5, r2, #8
+   142cc:	e1c342ba 	strh	r4, [r3, #42]	; 0x2a
+   142d0:	1a000013 	bne	14324 <OSTimeDlyResume+0xa0>
+   142d4:	e5d3e02f 	ldrb	lr, [r3, #47]	; 0x2f
+   142d8:	e30512d0 	movw	r1, #21200	; 0x52d0
+   142dc:	e3401001 	movt	r1, #1
+   142e0:	e30522d4 	movw	r2, #21204	; 0x52d4
+   142e4:	e3402001 	movt	r2, #1
+   142e8:	e5d34030 	ldrb	r4, [r3, #48]	; 0x30
+   142ec:	e5d16000 	ldrb	r6, [r1]
+   142f0:	e5d3c031 	ldrb	ip, [r3, #49]	; 0x31
+   142f4:	e7d2300e 	ldrb	r3, [r2, lr]
+   142f8:	e18cc006 	orr	ip, ip, r6
+   142fc:	e1833004 	orr	r3, r3, r4
+   14300:	e5c1c000 	strb	ip, [r1]
+   14304:	e7c2300e 	strb	r3, [r2, lr]
+   14308:	ebfff0c1 	bl	10614 <OS_CPU_SR_Restore>
+   1430c:	ebfff2ba 	bl	10dfc <OS_Sched>
+   14310:	e1a00005 	mov	r0, r5
+   14314:	e8bd8070 	pop	{r4, r5, r6, pc}
+   14318:	ebfff0bd 	bl	10614 <OS_CPU_SR_Restore>
+   1431c:	e3a00050 	mov	r0, #80	; 0x50
+   14320:	e8bd8070 	pop	{r4, r5, r6, pc}
+   14324:	ebfff0ba 	bl	10614 <OS_CPU_SR_Restore>
+   14328:	e1a00004 	mov	r0, r4
+   1432c:	e8bd8070 	pop	{r4, r5, r6, pc}
+   14330:	ebfff0b7 	bl	10614 <OS_CPU_SR_Restore>
+   14334:	e3a0000b 	mov	r0, #11
+   14338:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+0001433c <OSTimeGet>:
+   1433c:	e92d4010 	push	{r4, lr}
+   14340:	ebfff0ab 	bl	105f4 <OS_CPU_SR_Save>
+   14344:	e30532e8 	movw	r3, #21224	; 0x52e8
+   14348:	e3403001 	movt	r3, #1
+   1434c:	e5934000 	ldr	r4, [r3]
+   14350:	ebfff0af 	bl	10614 <OS_CPU_SR_Restore>
+   14354:	e1a00004 	mov	r0, r4
+   14358:	e8bd8010 	pop	{r4, pc}
+
+0001435c <OSTimeSet>:
+   1435c:	e92d4010 	push	{r4, lr}
+   14360:	e1a04000 	mov	r4, r0
+   14364:	ebfff0a2 	bl	105f4 <OS_CPU_SR_Save>
+   14368:	e30532e8 	movw	r3, #21224	; 0x52e8
+   1436c:	e3403001 	movt	r3, #1
+   14370:	e5834000 	str	r4, [r3]
+   14374:	e8bd4010 	pop	{r4, lr}
+   14378:	eafff0a5 	b	10614 <OS_CPU_SR_Restore>
+
+0001437c <userApp2>:
+   1437c:	e92d4010 	push	{r4, lr}
+   14380:	e3a0501c 	mov	r5, #28
+   14384:	e3435f20 	movt	r5, #16160	; 0x3f20
+   14388:	e30446d8 	movw	r4, #18136	; 0x46d8
+   1438c:	e3404001 	movt	r4, #1
+   14390:	e3a01801 	mov	r1, #65536	; 0x10000
+   14394:	e1a00005 	mov	r0, r5
+   14398:	ebffef1f 	bl	1001c <PUT32>
+   1439c:	e1a00004 	mov	r0, r4
+   143a0:	ebffefa2 	bl	10230 <uart_string>
+   143a4:	e3a00064 	mov	r0, #100	; 0x64
+   143a8:	ebffff7c 	bl	141a0 <OSTimeDly>
+   143ac:	eafffff7 	b	14390 <userApp2+0x14>
+
+000143b0 <userApp1>:
+   143b0:	e92d4010 	push	{r4, lr}
+   143b4:	e3a05028 	mov	r5, #40	; 0x28
+   143b8:	e3435f20 	movt	r5, #16160	; 0x3f20
+   143bc:	e30446e4 	movw	r4, #18148	; 0x46e4
+   143c0:	e3404001 	movt	r4, #1
+   143c4:	e1a00004 	mov	r0, r4
+   143c8:	ebffef98 	bl	10230 <uart_string>
+   143cc:	e3a00064 	mov	r0, #100	; 0x64
+   143d0:	ebffff72 	bl	141a0 <OSTimeDly>
+   143d4:	e3a01801 	mov	r1, #65536	; 0x10000
+   143d8:	e1a00005 	mov	r0, r5
+   143dc:	ebffef0e 	bl	1001c <PUT32>
+   143e0:	eafffff7 	b	143c4 <userApp1+0x14>
+
+000143e4 <memcpy>:
+   143e4:	e352000f 	cmp	r2, #15
+   143e8:	e92d00f0 	push	{r4, r5, r6, r7}
+   143ec:	9a00002a 	bls	1449c <memcpy+0xb8>
+   143f0:	e1813000 	orr	r3, r1, r0
+   143f4:	e3130003 	tst	r3, #3
+   143f8:	1a000032 	bne	144c8 <memcpy+0xe4>
+   143fc:	e1a0c001 	mov	ip, r1
+   14400:	e1a03000 	mov	r3, r0
+   14404:	e1a04002 	mov	r4, r2
+   14408:	e59c5000 	ldr	r5, [ip]
+   1440c:	e5835000 	str	r5, [r3]
+   14410:	e59c5004 	ldr	r5, [ip, #4]
+   14414:	e5835004 	str	r5, [r3, #4]
+   14418:	e59c5008 	ldr	r5, [ip, #8]
+   1441c:	e5835008 	str	r5, [r3, #8]
+   14420:	e2444010 	sub	r4, r4, #16
+   14424:	e59c500c 	ldr	r5, [ip, #12]
+   14428:	e354000f 	cmp	r4, #15
+   1442c:	e583500c 	str	r5, [r3, #12]
+   14430:	e28cc010 	add	ip, ip, #16
+   14434:	e2833010 	add	r3, r3, #16
+   14438:	8afffff2 	bhi	14408 <memcpy+0x24>
+   1443c:	e2424010 	sub	r4, r2, #16
+   14440:	e3c4400f 	bic	r4, r4, #15
+   14444:	e202c00f 	and	ip, r2, #15
+   14448:	e2844010 	add	r4, r4, #16
+   1444c:	e35c0003 	cmp	ip, #3
+   14450:	e0803004 	add	r3, r0, r4
+   14454:	e0811004 	add	r1, r1, r4
+   14458:	9a00001c 	bls	144d0 <memcpy+0xec>
+   1445c:	e24cc004 	sub	ip, ip, #4
+   14460:	e1a0712c 	lsr	r7, ip, #2
+   14464:	e0816107 	add	r6, r1, r7, lsl #2
+   14468:	e1a0c001 	mov	ip, r1
+   1446c:	e2866004 	add	r6, r6, #4
+   14470:	e1a04003 	mov	r4, r3
+   14474:	e49c5004 	ldr	r5, [ip], #4
+   14478:	e15c0006 	cmp	ip, r6
+   1447c:	e4845004 	str	r5, [r4], #4
+   14480:	1afffffb 	bne	14474 <memcpy+0x90>
+   14484:	e287c001 	add	ip, r7, #1
+   14488:	e1a0c10c 	lsl	ip, ip, #2
+   1448c:	e2022003 	and	r2, r2, #3
+   14490:	e081100c 	add	r1, r1, ip
+   14494:	e083300c 	add	r3, r3, ip
+   14498:	ea000000 	b	144a0 <memcpy+0xbc>
+   1449c:	e1a03000 	mov	r3, r0
+   144a0:	e3520000 	cmp	r2, #0
+   144a4:	0a000005 	beq	144c0 <memcpy+0xdc>
+   144a8:	e2411001 	sub	r1, r1, #1
+   144ac:	e0832002 	add	r2, r3, r2
+   144b0:	e5f1c001 	ldrb	ip, [r1, #1]!
+   144b4:	e4c3c001 	strb	ip, [r3], #1
+   144b8:	e1530002 	cmp	r3, r2
+   144bc:	1afffffb 	bne	144b0 <memcpy+0xcc>
+   144c0:	e8bd00f0 	pop	{r4, r5, r6, r7}
+   144c4:	e12fff1e 	bx	lr
+   144c8:	e1a03000 	mov	r3, r0
+   144cc:	eafffff5 	b	144a8 <memcpy+0xc4>
+   144d0:	e1a0200c 	mov	r2, ip
+   144d4:	eafffff1 	b	144a0 <memcpy+0xbc>
+
+000144d8 <memset>:
+   144d8:	e3100003 	tst	r0, #3
+   144dc:	e92d0030 	push	{r4, r5}
+   144e0:	e1a03000 	mov	r3, r0
+   144e4:	0a000037 	beq	145c8 <memset+0xf0>
+   144e8:	e3520000 	cmp	r2, #0
+   144ec:	e2422001 	sub	r2, r2, #1
+   144f0:	0a000032 	beq	145c0 <memset+0xe8>
+   144f4:	e20140ff 	and	r4, r1, #255	; 0xff
+   144f8:	ea000002 	b	14508 <memset+0x30>
+   144fc:	e3520000 	cmp	r2, #0
+   14500:	e2422001 	sub	r2, r2, #1
+   14504:	0a00002d 	beq	145c0 <memset+0xe8>
+   14508:	e4c34001 	strb	r4, [r3], #1
+   1450c:	e3130003 	tst	r3, #3
+   14510:	e1a0c003 	mov	ip, r3
+   14514:	1afffff8 	bne	144fc <memset+0x24>
+   14518:	e3520003 	cmp	r2, #3
+   1451c:	9a000020 	bls	145a4 <memset+0xcc>
+   14520:	e20140ff 	and	r4, r1, #255	; 0xff
+   14524:	e352000f 	cmp	r2, #15
+   14528:	e1844404 	orr	r4, r4, r4, lsl #8
+   1452c:	e1844804 	orr	r4, r4, r4, lsl #16
+   14530:	81a0300c 	movhi	r3, ip
+   14534:	81a05002 	movhi	r5, r2
+   14538:	9a00000e 	bls	14578 <memset+0xa0>
+   1453c:	e2455010 	sub	r5, r5, #16
+   14540:	e355000f 	cmp	r5, #15
+   14544:	e5834000 	str	r4, [r3]
+   14548:	e5834004 	str	r4, [r3, #4]
+   1454c:	e5834008 	str	r4, [r3, #8]
+   14550:	e583400c 	str	r4, [r3, #12]
+   14554:	e2833010 	add	r3, r3, #16
+   14558:	8afffff7 	bhi	1453c <memset+0x64>
+   1455c:	e2423010 	sub	r3, r2, #16
+   14560:	e3c3300f 	bic	r3, r3, #15
+   14564:	e202200f 	and	r2, r2, #15
+   14568:	e2833010 	add	r3, r3, #16
+   1456c:	e3520003 	cmp	r2, #3
+   14570:	e08cc003 	add	ip, ip, r3
+   14574:	9a00000a 	bls	145a4 <memset+0xcc>
+   14578:	e1a0500c 	mov	r5, ip
+   1457c:	e1a03002 	mov	r3, r2
+   14580:	e2433004 	sub	r3, r3, #4
+   14584:	e3530003 	cmp	r3, #3
+   14588:	e4854004 	str	r4, [r5], #4
+   1458c:	8afffffb 	bhi	14580 <memset+0xa8>
+   14590:	e2423004 	sub	r3, r2, #4
+   14594:	e3c33003 	bic	r3, r3, #3
+   14598:	e2833004 	add	r3, r3, #4
+   1459c:	e2022003 	and	r2, r2, #3
+   145a0:	e08cc003 	add	ip, ip, r3
+   145a4:	e3520000 	cmp	r2, #0
+   145a8:	120110ff 	andne	r1, r1, #255	; 0xff
+   145ac:	108c2002 	addne	r2, ip, r2
+   145b0:	0a000002 	beq	145c0 <memset+0xe8>
+   145b4:	e4cc1001 	strb	r1, [ip], #1
+   145b8:	e15c0002 	cmp	ip, r2
+   145bc:	1afffffc 	bne	145b4 <memset+0xdc>
+   145c0:	e8bd0030 	pop	{r4, r5}
+   145c4:	e12fff1e 	bx	lr
+   145c8:	e1a0c000 	mov	ip, r0
+   145cc:	eaffffd1 	b	14518 <memset+0x40>
+
+Disassembly of section .text.startup:
+
+000146f0 <main>:
+   146f0:	e92d4010 	push	{r4, lr}
+   146f4:	ebffee87 	bl	10118 <uart_init>
+   146f8:	ebffef20 	bl	10380 <InitInterruptController>
+   146fc:	ebffef54 	bl	10454 <DisableInterrupts>
+   14700:	ebffeedf 	bl	10284 <timer_init>
+   14704:	ebfff6df 	bl	12288 <OSInit>
+   14708:	e3a03005 	mov	r3, #5
+   1470c:	e59f202c 	ldr	r2, [pc, #44]	; 14740 <main+0x50>
+   14710:	e3a01000 	mov	r1, #0
+   14714:	e30403b0 	movw	r0, #17328	; 0x43b0
+   14718:	e3400001 	movt	r0, #1
+   1471c:	ebfffcf8 	bl	13b04 <OSTaskCreate>
+   14720:	e304037c 	movw	r0, #17276	; 0x437c
+   14724:	e3400001 	movt	r0, #1
+   14728:	e3a03006 	mov	r3, #6
+   1472c:	e59f2010 	ldr	r2, [pc, #16]	; 14744 <main+0x54>
+   14730:	e3a01000 	mov	r1, #0
+   14734:	ebfffcf2 	bl	13b04 <OSTaskCreate>
+   14738:	ebfff0f2 	bl	10b08 <OSStart>
+   1473c:	eafffffe 	b	1473c <main+0x4c>
+   14740:	00016ff8 	.word	0x00016ff8
+   14744:	00017f98 	.word	0x00017f98
