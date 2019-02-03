@@ -27,6 +27,24 @@ static void irqDisable() {
      __value; })
 
 
+static void handleRange (unsigned long pending, const unsigned int base)
+{
+	while (pending)
+	{
+		// Get index of first set bit:
+		unsigned int bit = 31 - __builtin_clz(pending);
+
+		// Map to IRQ number:
+		unsigned int irq = base + bit;
+
+		// Call interrupt handler, if enabled:
+		if (g_VectorTable[irq].pfnHandler)
+			g_VectorTable[irq].pfnHandler(irq, g_VectorTable[irq].pParam);
+
+		// Clear bit in bitfield:
+		pending &= ~(1UL << bit);
+	}
+}
 /**
  *	This is the global IRQ handler  on this platform!
  *	It is based on the assembler code found in the Broadcom datasheet.
@@ -47,58 +65,40 @@ void OS_CPU_IRQ_ISR_Handler() {
 	ulMaskedStatus = intcRegs->IRQBasic;
 	tmp = ulMaskedStatus & 0x00000300;			// Check if anything pending in pr1/pr2.   
 
-	if(ulMaskedStatus & 0x00080000){
-		uart_string("uart_int");
-	}
-
-	hexstring(ulMaskedStatus);
+	//hexstring(ulMaskedStatus);
 
 	if(ulMaskedStatus & ~0xFFFFF300) {			// Note how we mask out the GPU interrupt Aliases.
-		//uart_string("other");
-		irqNumber = 64 + 31;						// Shifting the basic ARM IRQs to be IRQ# 64 +
-		goto emit_interrupt;
+		handleRange(ulMaskedStatus & 0xFF & intcRegs->EnableBasic, 64);
 	}
 
 	if(tmp & 0x100) {
-		ulMaskedStatus = intcRegs->Pending1;
-		irqNumber = 0 + 31;
-		uart_string("Pending1");
-		// Clear the interrupts also available in basic IRQ pending reg.
-		//ulMaskedStatus &= ~((1 << 7) | (1 << 9) | (1 << 10) | (1 << 18) | (1 << 19));
-		if(ulMaskedStatus) {
-			goto emit_interrupt;
-		}
+		handleRange(intcRegs->Pending1 & intcRegs->Enable1, 0);
 	}
 
 	if(tmp & 0x200) {
-		ulMaskedStatus + intcRegs->Pending2;
-		irqNumber = 32 + 31;
-		uart_string("Pending1");
-		// Don't clear the interrupts in the basic pending, simply allow them to processed here!
-		if(ulMaskedStatus) {
-			goto emit_interrupt;
-		}				
+		handleRange(intcRegs->Pending2 & intcRegs->Enable2, 32);			
 	}
 
 	return;
 
-emit_interrupt:
+// emit_interrupt:
 
-	tmp = ulMaskedStatus - 1;
-	ulMaskedStatus = ulMaskedStatus ^ tmp;
+// 	tmp = ulMaskedStatus - 1;
+// 	ulMaskedStatus = ulMaskedStatus ^ tmp;
 
-	unsigned long lz = clz(ulMaskedStatus);
+// 	unsigned long lz = clz(ulMaskedStatus);
 
-	//irqNumber = irqNumber - 
+// 	//irqNumber = irqNumber - 
 
-	//__asm volatile("clz	r7,r5");				// r5 is the ulMaskedStatus register. Leaving result in r6!
-	//__asm volatile("sub r6,r7");
+// 	//__asm volatile("clz	r7,r5");				// r5 is the ulMaskedStatus register. Leaving result in r6!
+// 	//__asm volatile("sub r6,r7");
 
-	//uart_string(irqNumber-lz);
+// 	//uart_string(irqNumber-lz);
 
-	if(g_VectorTable[irqNumber-lz].pfnHandler) {
-		g_VectorTable[irqNumber-lz].pfnHandler(irqNumber, g_VectorTable[irqNumber].pParam);
-	}
+// 	if(g_VectorTable[irqNumber-lz].pfnHandler) {
+// 		g_VectorTable[irqNumber-lz].pfnHandler(irqNumber, g_VectorTable[irqNumber].pParam);
+// 	}
+
 }
 
 

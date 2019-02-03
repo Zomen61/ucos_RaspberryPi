@@ -58,4 +58,10 @@ typedef struct _BCM2835_TIMER_REGS {
 
 static volatile TIMER_REGS * const timerRegs = (TIMER_REGS *) (portTIMER_BASE);
 
+//uart rx queue
+volatile unsigned int rxhead;
+volatile unsigned int rxtail;
+#define RXBUFMASK 0xFFF
+volatile unsigned char rxbuffer[RXBUFMASK+1];
+
 #endif /* REGS_H_ */

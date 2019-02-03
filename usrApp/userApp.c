@@ -1,5 +1,7 @@
 #include "uart.h"
 #include "ucos/includes.h"
+
+
 extern void PUT32(unsigned int, unsigned int);
 extern unsigned int GET32(unsigned int);
 #define GPSETO 0x3F20001C
@@ -23,5 +25,16 @@ void userApp1(void * args)
 		uart_string("in userApp1");
 		OSTimeDly(100);
 		PUT32(GPCLR0, 1 << 16);
+	}
+}
+
+void uartrxApp(void * args){
+	unsigned int rx;
+	while(1){
+		while(rxtail!=rxhead){
+            uart_send(rxbuffer[rxtail]);
+            rxtail=(rxtail+1)&RXBUFMASK;
+            rx++;
+        }
 	}
 }

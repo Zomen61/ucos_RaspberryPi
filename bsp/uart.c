@@ -7,9 +7,19 @@ extern void PUT32 ( unsigned int, unsigned int );
 extern unsigned int GET32 ( unsigned int );
 extern void dummy ( unsigned int );
 
+
+
 void uart_irq_handler(){
-    uart_string("test int");
-    
+    unsigned int rb,rc;
+
+    rb=GET32(AUX_MU_IIR_REG);
+    if((rb&1)==1) return; //no more interrupts
+    if((rb&6)==4){
+        //receiver holds a valid byte
+        rc=GET32(AUX_MU_IO_REG); //read byte from rx fifo
+        rxbuffer[rxhead]=rc&0xFF;
+        rxhead=(rxhead+1)&RXBUFMASK;
+    }
 }
 
 unsigned int uart_lcr ( void )

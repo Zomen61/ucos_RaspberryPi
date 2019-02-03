@@ -2,6 +2,12 @@
 #ifndef UART_H_
 #define UART_H_
 
+//uart rx queue
+volatile unsigned int rxhead;
+volatile unsigned int rxtail;
+#define RXBUFMASK 0xFFF
+volatile unsigned char rxbuffer[RXBUFMASK+1];
+
 unsigned int uart_lcr ( void );
 unsigned int uart_recv ( void );
 void uart_send ( unsigned int );
