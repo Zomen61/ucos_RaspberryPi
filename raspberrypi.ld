@@ -56,14 +56,9 @@ SECTIONS {
 		__bss_start = .;	
 		*(.bss)
 		*(.bss.*)
-<<<<<<< HEAD
 		__bss_end = .;	
 	} > RAM
 	
-=======
-	} > RAM
-	__bss_end = .;	
->>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 	/**
 	 *	Place HEAP here???
 	 **/

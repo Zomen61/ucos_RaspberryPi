@@ -32,7 +32,6 @@ irq_handler:        .word OS_CPU_IRQ_ISR//irqHandler to be modified
 fiq_handler:        .word fiq
 
 reset:
-<<<<<<< HEAD
 	;@ important , copy for FreeRTOS with raspberry pi 3
 	;@ change to hyperVistor mode 
 	mrs r0,cpsr
@@ -43,8 +42,6 @@ reset:
     msr ELR_hyp,r0
     eret
 
-=======
->>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 	;@	In the reset handler, we need to copy our interrupt vector table to 0x0000, its currently at 0x8000
 
 	mov r0,#0x8000								;@ Store the source pointer
@@ -59,21 +56,15 @@ reset:
     stmia r1!,{r2,r3,r4,r5,r6,r7,r8,r9}			;@ Store this extra set of data.
 
 
-<<<<<<< HEAD
 	;@ Set up the various STACK pointers for different CPU modes
 	;@ Every cpu mode user self sp reg,so need set different position 
     ;@ (PSR_IRQ_MODE|PSR_FIQ_DIS|PSR_IRQ_DIS)
 	;@ IRQ mode sp
-=======
-	;@	Set up the various STACK pointers for different CPU modes
-    ;@ (PSR_IRQ_MODE|PSR_FIQ_DIS|PSR_IRQ_DIS)
->>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
     mov r0,#0xD2
     msr cpsr_c,r0
     mov sp,#0x8000
 
     ;@ (PSR_FIQ_MODE|PSR_FIQ_DIS|PSR_IRQ_DIS)
-<<<<<<< HEAD
 	;@ set FIQ mode sp
     mov r0,#0xD1
    	msr cpsr_c,r0
@@ -84,16 +75,6 @@ reset:
     mov r0,#0xD3
     msr cpsr_c,r0
 	mov sp,#0x8000000
-=======
-//    mov r0,#0xD1
-//   msr cpsr_c,r0
-//  mov sp,#0x4000
-
-    ;@ (PSR_SYS_MODE|PSR_FIQ_DIS|PSR_IRQ_DIS)
-    mov r0,#0xDF
-    msr cpsr_c,r0
-	mov sp,#0x4000
->>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 
 	ldr r0, =__bss_start
 	ldr r1, =__bss_end
@@ -102,7 +83,6 @@ reset:
 
 zero_loop:
 	cmp 	r0,r1
-<<<<<<< HEAD
 	;@ it instruction like if ,it can put four instruction in if
 	;@ lt is mean less than
 	;@ there compare bss_start is less than bss_end 
@@ -111,17 +91,6 @@ zero_loop:
 	blt		zero_loop
 	bl 		DisableInterrupts //to be modified
 	b main	;@ We're ready?? Lets start main execution!
-=======
-	it		lt
-	strlt	r2,[r0], #4
-	blt		zero_loop
-
-	bl 		DisableInterrupts//to be modified
-	
-	
-	;@ 	mov	sp,#0x1000000
-	b main									;@ We're ready?? Lets start main execution!
->>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 	.section .text
 
 undefined_instruction:
@@ -157,8 +126,4 @@ GET32:
 
 .globl dummy
 dummy:
-<<<<<<< HEAD
     bx lr
-=======
-    bx lr
->>>>>>> d8ff05da3870937dbbeac3718388976c9f504724

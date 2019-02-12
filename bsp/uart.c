@@ -1,16 +1,12 @@
 #include "regs.h"
-<<<<<<< HEAD
 #include "interrupts.h"
 
 extern INTERRUPT_VECTOR g_VectorTable[BCM2835_INTC_TOTAL_IRQ];
-=======
->>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 
 extern void PUT32 ( unsigned int, unsigned int );
 extern unsigned int GET32 ( unsigned int );
 extern void dummy ( unsigned int );
 
-<<<<<<< HEAD
 
 
 void uart_irq_handler(){
@@ -26,8 +22,6 @@ void uart_irq_handler(){
     }
 }
 
-=======
->>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 unsigned int uart_lcr ( void )
 {
     return(GET32(AUX_MU_LSR_REG));
@@ -95,11 +89,7 @@ void uart_init ( void )
     PUT32(AUX_MU_CNTL_REG,0);
     PUT32(AUX_MU_LCR_REG,3);
     PUT32(AUX_MU_MCR_REG,0);
-<<<<<<< HEAD
     PUT32(AUX_MU_IER_REG,0x5);
-=======
-    PUT32(AUX_MU_IER_REG,0);
->>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
     PUT32(AUX_MU_IIR_REG,0xC6);
     PUT32(AUX_MU_BAUD_REG,270);
     ra=GET32(GPFSEL1);
@@ -108,7 +98,6 @@ void uart_init ( void )
     ra&=~(7<<15); //gpio15
     ra|=2<<15;    //alt5
     PUT32(GPFSEL1,ra);
-<<<<<<< HEAD
 
     /*
     change GPPUD need sop:
@@ -119,15 +108,12 @@ void uart_init ( void )
     5.clear GPPUD
     6.clear GPPUDCLK0/1
     */
-=======
->>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
     PUT32(GPPUD,0);
     for(ra=0;ra<150;ra++) dummy(ra);
     PUT32(GPPUDCLK0,(1<<14)|(1<<15));
     for(ra=0;ra<150;ra++) dummy(ra);
     PUT32(GPPUDCLK0,0);
     PUT32(AUX_MU_CNTL_REG,3);
-<<<<<<< HEAD
 
     DisableInterrupt(29);
 
@@ -137,8 +123,6 @@ void uart_init ( void )
 
 	//RegisterInterrupt(83,uart_irq_handler,(void *)0);
     //EnableInterrupt(83);
-=======
->>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 }
 
 void uart_string (char* s)
@@ -151,8 +135,5 @@ void uart_string (char* s)
 	uart_send(0x0D);
 	uart_send(0x0A);
 }
-<<<<<<< HEAD
 
 
-=======
->>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
