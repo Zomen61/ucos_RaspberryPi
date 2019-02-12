@@ -19,3 +19,7 @@ First, you should put the source code of uCOS-II in the fold "ucos".
 
 For Windows: Download the yagarto toolchain. Then you can make directly.
 For Linux: Get the toolchain, You maybe need to rewrite the makefile according to the toolchain used.
+
+## update(2019/02/12)
+在原本的mini uart上加入中斷，並使用生產者與消費者演算法將從uart輸入的字元輸出到console上。
+
