@@ -1,7 +1,10 @@
 
 #include "interrupts.h"
 #include "regs.h"
+<<<<<<< HEAD
 #include "uart.h"
+=======
+>>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 
 INTERRUPT_VECTOR g_VectorTable[BCM2835_INTC_TOTAL_IRQ];
 
@@ -27,6 +30,7 @@ static void irqDisable() {
      __value; })
 
 
+<<<<<<< HEAD
 static void handleRange (unsigned long pending, const unsigned int base)
 {
 	while (pending)
@@ -45,6 +49,8 @@ static void handleRange (unsigned long pending, const unsigned int base)
 		pending &= ~(1UL << bit);
 	}
 }
+=======
+>>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 /**
  *	This is the global IRQ handler  on this platform!
  *	It is based on the assembler code found in the Broadcom datasheet.
@@ -65,6 +71,7 @@ void OS_CPU_IRQ_ISR_Handler() {
 	ulMaskedStatus = intcRegs->IRQBasic;
 	tmp = ulMaskedStatus & 0x00000300;			// Check if anything pending in pr1/pr2.   
 
+<<<<<<< HEAD
 	//hexstring(ulMaskedStatus);
 
 	if(ulMaskedStatus & ~0xFFFFF300) {			// Note how we mask out the GPU interrupt Aliases.
@@ -77,10 +84,35 @@ void OS_CPU_IRQ_ISR_Handler() {
 
 	if(tmp & 0x200) {
 		handleRange(intcRegs->Pending2 & intcRegs->Enable2, 32);			
+=======
+	if(ulMaskedStatus & ~0xFFFFF300) {			// Note how we mask out the GPU interrupt Aliases.
+		irqNumber = 64 + 31;						// Shifting the basic ARM IRQs to be IRQ# 64 +
+		goto emit_interrupt;
+	}
+
+	if(tmp & 0x100) {
+		ulMaskedStatus = intcRegs->Pending1;
+		irqNumber = 0 + 31;
+		// Clear the interrupts also available in basic IRQ pending reg.
+		//ulMaskedStatus &= ~((1 << 7) | (1 << 9) | (1 << 10) | (1 << 18) | (1 << 19));
+		if(ulMaskedStatus) {
+			goto emit_interrupt;
+		}
+	}
+
+	if(tmp & 0x200) {
+		ulMaskedStatus + intcRegs->Pending2;
+		irqNumber = 32 + 31;
+		// Don't clear the interrupts in the basic pending, simply allow them to processed here!
+		if(ulMaskedStatus) {
+			goto emit_interrupt;
+		}				
+>>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 	}
 
 	return;
 
+<<<<<<< HEAD
 // emit_interrupt:
 
 // 	tmp = ulMaskedStatus - 1;
@@ -99,6 +131,24 @@ void OS_CPU_IRQ_ISR_Handler() {
 // 		g_VectorTable[irqNumber-lz].pfnHandler(irqNumber, g_VectorTable[irqNumber].pParam);
 // 	}
 
+=======
+emit_interrupt:
+
+	tmp = ulMaskedStatus - 1;
+	ulMaskedStatus = ulMaskedStatus ^ tmp;
+
+	unsigned long lz = clz(ulMaskedStatus);
+
+	//irqNumber = irqNumber - 
+
+	//__asm volatile("clz	r7,r5");				// r5 is the ulMaskedStatus register. Leaving result in r6!
+	//__asm volatile("sub r6,r7");
+
+
+	if(g_VectorTable[irqNumber-lz].pfnHandler) {
+		g_VectorTable[irqNumber-lz].pfnHandler(irqNumber, g_VectorTable[irqNumber].pParam);
+	}
+>>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 }
 
 
@@ -108,9 +158,12 @@ static void stubHandler(int nIRQ, void *pParam) {
 	 *	otherwise we could lock up this system, as there is nothing to 
 	 *	ackknowledge the interrupt.
 	 **/   
+<<<<<<< HEAD
 	uart_send(nIRQ);
 	uart_send(0x0D);
     uart_send(0x0A);
+=======
+>>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 }
 
 int InitInterruptController() {
@@ -137,6 +190,7 @@ int RegisterInterrupt(int nIRQ, FN_INTERRUPT_HANDLER pfnHandler, void *pParam) {
 
 int EnableInterrupt(int nIRQ) {
 
+<<<<<<< HEAD
 	if(nIRQ >=0 && nIRQ<=31){
 		intcRegs->Enable1 |= 1 << nIRQ;
 	}else if(nIRQ >=32 && nIRQ<=63){
@@ -145,12 +199,25 @@ int EnableInterrupt(int nIRQ) {
 		intcRegs->EnableBasic = 1 << (nIRQ - 64);
 	}
 
+=======
+	unsigned long	ulTMP;
+
+	ulTMP = intcRegs->EnableBasic;
+
+	if(nIRQ >= 64 && nIRQ <= 72) {	// Basic IRQ enables
+		intcRegs->EnableBasic = 1 << (nIRQ - 64);
+	}
+
+	ulTMP = intcRegs->EnableBasic;
+
+>>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 	// Otherwise its a GPU interrupt, and we're not supporting those...yet!
 
 	return 0;
 }
 
 int DisableInterrupt(int nIRQ) {
+<<<<<<< HEAD
 
 	if(nIRQ >=0 && nIRQ<=31){
 		intcRegs->Enable1 &= ~(1 << nIRQ);
@@ -158,6 +225,10 @@ int DisableInterrupt(int nIRQ) {
 		intcRegs->Enable2 &= ~(1 << (nIRQ - 32));
 	}else if(nIRQ >= 64 && nIRQ <= 72) {
 		intcRegs->DisableBasic &= ~(1 << (nIRQ - 64));
+=======
+	if(nIRQ >= 64 && nIRQ <= 72) {
+		intcRegs->DisableBasic = 1 << (nIRQ - 64);
+>>>>>>> d8ff05da3870937dbbeac3718388976c9f504724
 	}
 
 	// I'm currently only supporting the basic IRQs.
