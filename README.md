@@ -26,11 +26,11 @@ For Linux: Get the toolchain, You maybe need to rewrite the makefile according t
 ## update(2019/03/10)
 加入raspberry pi mailbox call，以及framebuffer啟用，目前可以在uart上用鍵盤輸入文字，文字會被顯示到hdmi輸出。
 
-在按下enter時，程式會判斷是否為指令，目前指令有:
-1.homer.img
-印出homer圖。
-2.lena
-印出lena圖。
-3.clear
-將整個畫面清空。
+在按下enter時，程式會判斷是否為指令，目前指令有:<\br>
+1. homer.img<\br>
+印出homer圖。<\br>
+2. lena<\br>
+印出lena圖。<\br>
+3. clear<\br>
+將整個畫面清空。<\br>
 
