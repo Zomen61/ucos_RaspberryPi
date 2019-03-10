@@ -6,7 +6,7 @@ extern INTERRUPT_VECTOR g_VectorTable[BCM2835_INTC_TOTAL_IRQ];
 extern void PUT32 ( unsigned int, unsigned int );
 extern unsigned int GET32 ( unsigned int );
 extern void dummy ( unsigned int );
-
+extern unsigned int GETCPSR ( void );
 
 
 void uart_irq_handler(){
@@ -115,14 +115,22 @@ void uart_init ( void )
     PUT32(GPPUDCLK0,0);
     PUT32(AUX_MU_CNTL_REG,3);
 
+	//RegisterInterrupt(83,uart_irq_handler,(void *)0);
+    //EnableInterrupt(83);
+}
+
+void uart_int_init(){
     DisableInterrupt(29);
+    for(int i=0 ;i< RXBUFMASK+1; i++){
+        rxbuffer[i] = 0;
+    }
+    
+    rxhead = 0;
+    rxtail = 0;
 
     g_VectorTable[29].pfnHandler = uart_irq_handler;
 
     EnableInterrupt(29);
-
-	//RegisterInterrupt(83,uart_irq_handler,(void *)0);
-    //EnableInterrupt(83);
 }
 
 void uart_string (char* s)
@@ -136,4 +144,22 @@ void uart_string (char* s)
 	uart_send(0x0A);
 }
 
+void uart_string_noN (char* s)
+{
+	while(*s!=0)
+    {
+    	uart_send((unsigned int)*s);
+    	s++;
+    }
+}
+
+void printCPSR(){
+    unsigned int ra;
+    
+    ra = GETCPSR();
+
+    uart_string_noN("CPSR:");
+    hexstring(ra);
+
+}
 

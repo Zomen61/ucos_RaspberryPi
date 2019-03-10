@@ -12,6 +12,9 @@ OBJS = build/startup.o
 OBJS += build/uart.o
 OBJS += build/timer.o
 OBJS += build/interrupts.o
+OBJS += build/mbox.o
+OBJS += build/font.o
+OBJS += build/lfb.o
 
 OBJS += build/OS_Cpu_a.o
 OBJS += build/OS_Cpu_c.o
@@ -23,6 +26,8 @@ OBJS += build/userApp.o
 
 OBJS += lib/libc.a
 OBJS += lib/libgcc.a 
+
+
 
 clean :
 	rm -f build/*.o
@@ -50,6 +55,9 @@ build/%.o : usrApp/%.c
 
 build/ucos_ii.o : ucos/ucos_ii.c
 	$(ARMGNU)-gcc $(COPS) ucos/ucos_ii.c -c -o build/ucos_ii.o
+
+build/font.o: font/font.psf
+	$(ARMGNU)-ld -r -b binary -o build/font.o font/font.psf
 
 kernel.img : raspberrypi.ld $(OBJS)
 	$(ARMGNU)-ld $(OBJS) -T raspberrypi.ld -o ucos_bcm2837.elf 

@@ -65,7 +65,12 @@ void OS_CPU_IRQ_ISR_Handler() {
 	ulMaskedStatus = intcRegs->IRQBasic;
 	tmp = ulMaskedStatus & 0x00000300;			// Check if anything pending in pr1/pr2.   
 
-	//hexstring(ulMaskedStatus);
+	// uart_string_noN("pending IRQBasic:");
+	// hexstring(ulMaskedStatus);
+	// uart_string_noN("pending 1:");
+	// hexstring(intcRegs->Pending1);
+	// uart_string_noN("pending 2:");
+	// hexstring(intcRegs->Pending2);
 
 	if(ulMaskedStatus & ~0xFFFFF300) {			// Note how we mask out the GPU interrupt Aliases.
 		handleRange(ulMaskedStatus & 0xFF & intcRegs->EnableBasic, 64);
@@ -153,11 +158,11 @@ int EnableInterrupt(int nIRQ) {
 int DisableInterrupt(int nIRQ) {
 
 	if(nIRQ >=0 && nIRQ<=31){
-		intcRegs->Enable1 &= ~(1 << nIRQ);
+		intcRegs->Disable1 &= (1 << nIRQ);
 	}else if(nIRQ >=32 && nIRQ<=63){
-		intcRegs->Enable2 &= ~(1 << (nIRQ - 32));
+		intcRegs->Disable1 &= (1 << (nIRQ - 32));
 	}else if(nIRQ >= 64 && nIRQ <= 72) {
-		intcRegs->DisableBasic &= ~(1 << (nIRQ - 64));
+		intcRegs->DisableBasic &= (1 << (nIRQ - 64));
 	}
 
 	// I'm currently only supporting the basic IRQs.

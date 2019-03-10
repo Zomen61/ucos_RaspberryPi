@@ -127,3 +127,8 @@ GET32:
 .globl dummy
 dummy:
     bx lr
+
+.globl GETCPSR
+GETCPSR:
+	mrs r0,cpsr
+    bx lr
