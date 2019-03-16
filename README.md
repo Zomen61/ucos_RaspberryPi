@@ -1,3 +1,4 @@
+chinese version: - [中文](https://github.com/Zomen61/ucos_RaspberryPi/blob/master/%E4%B8%AD%E6%96%87README.md)
 # uCOS-II on Raspberry Pi
 
 This is a very basic port of uCOS-II to Raspberry Pi. The version of uCOS-II we have used is V2.52.  
@@ -21,16 +22,18 @@ For Windows: Download the yagarto toolchain. Then you can make directly.
 For Linux: Get the toolchain, You maybe need to rewrite the makefile according to the toolchain used.
 
 ## update(2019/02/12)
-在原本的mini uart上加入中斷，並使用生產者與消費者演算法將從uart輸入的字元輸出到console上。
+Add an interrupt to the original mini uart and use the producer and consumer algorithms to output the characters entered from uart to the console.
 
 ## update(2019/03/10)
-加入raspberry pi mailbox call，以及framebuffer啟用，目前可以在uart上用鍵盤輸入文字，文字會被顯示到hdmi輸出。
+Reference: https://github.com/bztsrc/raspi3-tutorial
 
-在按下enter時，程式會判斷是否為指令，目前指令有:
+Add raspberry pi mailbox call, and framebuffer enable, you can now use the keyboard to enter text on uart, the text will be displayed to hdmi output.
+
+When the enter is pressed, the program will determine if it is an instruction. The current instructions are:
 1. homer.img
-印出homer圖。
+print image "homer"。
 2. lena
-印出lena圖。
+print image "lena"。
 3. clear
-將整個畫面清空。
+clear hdmi outpur(clear screen)。
 
