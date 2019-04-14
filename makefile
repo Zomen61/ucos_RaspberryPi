@@ -15,6 +15,7 @@ OBJS += build/interrupts.o
 OBJS += build/mbox.o
 OBJS += build/font.o
 OBJS += build/lfb.o
+OBJS += build/mmu.o
 
 OBJS += build/OS_Cpu_a.o
 OBJS += build/OS_Cpu_c.o

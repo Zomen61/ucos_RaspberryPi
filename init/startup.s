@@ -103,7 +103,10 @@ prefetch_abort:
 	b prefetch_abort
 
 data_abort:
-	b data_abort
+    mov r7,r0
+    mov r0,#0x10
+    ;@b handler
+    b data_abort_handler
 
 unused:
 	b unused
@@ -113,6 +116,25 @@ fiq:
 	
 hang:
 	b hang
+
+data_abort_handler:
+    mov r6,lr
+    ldr r8,[r6,#-8]
+    mrc p15,0,r4,c5,c0,0 ;@ data/combined
+    mrc p15,0,r5,c5,c0,1 ;@ instruction
+    mov sp,#0x00004000
+    bl hexstring
+    mov r0,r4
+    bl hexstring
+    mov r0,r5
+    bl hexstring
+    mov r0,r6
+    bl hexstring
+    mov r0,r8
+    bl hexstring
+    mov r0,r7
+    bl hexstring
+    b hang
 
 .globl PUT32
 PUT32:
@@ -131,4 +153,43 @@ dummy:
 .globl GETCPSR
 GETCPSR:
 	mrs r0,cpsr
+    bx lr
+
+.globl start_mmu
+start_mmu:
+
+    mov r2,#0
+    mcr p15,0,r2,c7,c6,1 ;@ invalidate caches (arm11 is different arm-a53) 
+    mcr p15,0,r2,c8,c7,0 ;@ invalidate tlb
+    mcr p15,0,r2,c7,c10,4 ;@ DSB ?? (this deprecated in arm-a53) 
+
+    mvn r2,#0
+    bic r2,#0xC
+    mcr p15,0,r2,c3,c0,0 ;@ domain
+
+    orr r0,r0,#1
+
+    mcr p15,0,r0,c2,c0,0 ;@ tlb base (arm11 is different arm-a53)
+    mcr p15,0,r0,c2,c0,1 ;@ tlb base (arm11 is different arm-a53)
+
+    mrc p15,0,r2,c1,c0,0
+    orr r2,r2,r1
+    mcr p15,0,r2,c1,c0,0
+
+    bx lr
+
+.globl stop_mmu
+stop_mmu:
+    mrc p15,0,r2,c1,c0,0
+    bic r2,#0x1000
+    bic r2,#0x0004
+    bic r2,#0x0001
+    mcr p15,0,r2,c1,c0,0
+    bx lr
+
+.globl invalidate_tlbs
+invalidate_tlbs:
+    mov r2,#0
+    mcr p15,0,r2,c8,c7,0  ;@ invalidate tlb
+    mcr p15,0,r2,c7,c10,4 ;@ DSB ??
     bx lr
