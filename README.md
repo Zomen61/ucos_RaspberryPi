@@ -37,3 +37,7 @@ print image "lena"。
 3. clear
 clear hdmi outpur(clear screen)。
 
+## update(2019/04/14)
+enable arm mmu,and test mmu.
+
+
